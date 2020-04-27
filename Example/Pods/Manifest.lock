@@ -1,0 +1,23 @@
+PODS:
+  - JQTools (0.1.0):
+    - SnapKit
+  - SnapKit (4.2.0)
+
+DEPENDENCIES:
+  - JQTools (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - SnapKit
+
+EXTERNAL SOURCES:
+  JQTools:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  JQTools: 89438ca113a667c97a57fa68f3fea7b0dc2178b2
+  SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
+
+PODFILE CHECKSUM: 063a6d85549af69e2faa94b7c643b3a717d5ddf0
+
+COCOAPODS: 1.8.4
