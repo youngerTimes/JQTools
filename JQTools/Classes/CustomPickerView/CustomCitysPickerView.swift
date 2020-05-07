@@ -12,7 +12,7 @@ import UIKit
 
 typealias CustomCitysClouse = (CitysOptionModel,CitysOptionModel,CitysOptionModel)->(Void)
 
-class CustomCitysPickerView: UIView {
+public class CustomCitysPickerView: UIView {
     private var centerView = UIView()
     private var pickerView = UIPickerView()
     private var completeBtn = UIButton()
@@ -34,7 +34,7 @@ class CustomCitysPickerView: UIView {
             let str = try String(contentsOf: URL(fileURLWithPath: path!))
             citysModel = Array<CitysOptionModel>(JSONString: str)!
         } catch  {
-            ShowError(errorStr: "城市列表加载失败")
+            JQ_ShowError(errorStr: "城市列表加载失败")
         }
         
         self.frame = CGRect(x: 0, y: 0, width: JQ_ScreenW, height: JQ_ScreenH)
@@ -131,11 +131,11 @@ class CustomCitysPickerView: UIView {
 }
 
 extension CustomCitysPickerView:UIPickerViewDataSource{
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+    public func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 3
     }
     
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if component == 0 {
             return citysModel.count
         }
@@ -148,11 +148,11 @@ extension CustomCitysPickerView:UIPickerViewDataSource{
         return 0
     }
     
-    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+    public func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         return 61 * JQ_RateW
     }
     
-    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+    public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         
         let label = UILabel()
         label.textAlignment = .center
@@ -177,7 +177,7 @@ extension CustomCitysPickerView:UIPickerViewDataSource{
 }
 
 extension CustomCitysPickerView:UIPickerViewDelegate{
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if component == 0{
             provinceComponent = row
         }

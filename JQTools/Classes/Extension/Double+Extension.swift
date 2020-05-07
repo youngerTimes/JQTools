@@ -8,7 +8,7 @@
 import Foundation
 extension Double{
     public func jq_formatFloat()->String {
-        if fmodl(Float80(Double(self)), 1) == 0 {//如果有一位小数点
+        if fmodl(Double(self), 1) == 0 {//如果有一位小数点
             return (NSString(format: "%.0f", self) as String)
         } else if (fmodf(Float(self*10), 1) == 0) {//如果有两位小数点
             return (NSString(format: "%.1f", self) as String)
@@ -20,7 +20,7 @@ extension Double{
 
 extension CGFloat{
     public func jq_formatFloat()->String {
-        if fmodl(Float80(Double(self)), 1) == 0 {//如果有一位小数点
+        if fmodl(Double(self), 1) == 0 {//如果有一位小数点
             return (NSString(format: "%.0f", self) as String)
         } else if (fmodf(Float(self*10), 1) == 0) {//如果有两位小数点
             return (NSString(format: "%.1f", self) as String)

@@ -22,7 +22,7 @@ public class JQ_DownloadTools:NSObject {
     var path = ""
     
     var currentSession:URLSession?
-    private override init() {
+    public override init() {
         super.init()
         let config = URLSessionConfiguration.default
         currentSession = URLSession(configuration: config,delegate: self,delegateQueue: nil)

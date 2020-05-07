@@ -9,7 +9,7 @@
 #if canImport(ObjectMapper)
 import ObjectMapper
 
-class CitysOptionModel: KYModel {
+public class CitysOptionModel: JQModel {
     var object_id = 0
     var name = ""
     var level = 0
@@ -19,7 +19,7 @@ class CitysOptionModel: KYModel {
     var childs = [CitysOptionModel]()
     var crown = false
     
-    override func mapping(map: Map) {
+    public override func mapping(map: Map) {
         object_id <- map["object_id"]
         name <- map["name"]
         level <- map["level"]

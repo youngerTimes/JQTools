@@ -16,7 +16,7 @@ private let BasicAni_size = "size"
 
 
 //MARK: - TableAnnimation
-enum JQ_TableAniType {
+public enum JQ_TableAniType {
     case moveFromLeft //从左->右
     case moveFromRight //从 右->左
     case fadeDut //显影
@@ -25,7 +25,12 @@ enum JQ_TableAniType {
     case bothway //双向移动
     case fillOne //一个一个填充
 }
-func JQ_AnnimationTableView(tableView:UITableView,type:JQ_TableAniType){
+
+/// tableView的动画
+/// - Parameters:
+///   - tableView: 需要动画的tableView
+///   - type: 类型
+public func JQ_AnnimationTableView(tableView:UITableView,type:JQ_TableAniType){
     
     DispatchQueue.main.async {
         tableView.reloadData()
@@ -56,7 +61,7 @@ func JQ_AnnimationTableView(tableView:UITableView,type:JQ_TableAniType){
     }
 }
 
-fileprivate func JQ_MoveAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
+public func JQ_MoveAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
     cell.transform = CGAffineTransform(translationX: CGFloat(offset), y: 0)
     UIView.animate(withDuration: 0.35, delay: Double(index) * 0.075, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.0, options: .layoutSubviews, animations: {
         cell.transform = .identity
@@ -65,7 +70,7 @@ fileprivate func JQ_MoveAnimation(_ cell:UITableViewCell,_ offset:Double,_ index
     }
 }
 
-fileprivate func JQ_OverturnAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
+public func JQ_OverturnAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
     cell.transform = CGAffineTransform(scaleX: -JQ_ScreenW, y: 0)
     UIView.animate(withDuration: 0.35, delay: Double(index) * 0.075, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.0, options: .layoutSubviews, animations: {
         cell.transform = .identity
@@ -74,7 +79,7 @@ fileprivate func JQ_OverturnAnimation(_ cell:UITableViewCell,_ offset:Double,_ i
     }
 }
 
-fileprivate func JQ_FadeDutAnimation(_ cell:UITableViewCell,_ index:Int){
+public func JQ_FadeDutAnimation(_ cell:UITableViewCell,_ index:Int){
     UIView.animate(withDuration: 0.35, delay: Double(index) * 0.075, options: .curveEaseIn, animations: {
         cell.alpha = 1.0
     }) { (complete) in
@@ -82,7 +87,7 @@ fileprivate func JQ_FadeDutAnimation(_ cell:UITableViewCell,_ index:Int){
     }
 }
 
-fileprivate func JQ_FadeDutAnimationMove(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
+public func JQ_FadeDutAnimationMove(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
     cell.transform = CGAffineTransform(translationX: CGFloat(offset), y: 0)
     UIView.animate(withDuration: 0.35, delay: Double(index) * 0.075, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.1, options: .layoutSubviews, animations: {
         cell.transform = .identity
@@ -92,7 +97,7 @@ fileprivate func JQ_FadeDutAnimationMove(_ cell:UITableViewCell,_ offset:Double,
     }
 }
 
-fileprivate func JQ_BoundsAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
+public func JQ_BoundsAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
     cell.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
     UIView.animate(withDuration: 0.8, delay: Double(index) * 0.075, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.1, options: .layoutSubviews, animations: {
         cell.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
@@ -102,11 +107,11 @@ fileprivate func JQ_BoundsAnimation(_ cell:UITableViewCell,_ offset:Double,_ ind
     }
 }
 
-fileprivate func JQ_BothwayAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
+public func JQ_BothwayAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
     
     var value = offset * 2
     if index % 2 == 0{
-     value = -value
+        value = -value
     }
     cell.transform = CGAffineTransform(translationX: CGFloat(value), y: 0)
     UIView.animate(withDuration:0.9, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.1, options: .layoutSubviews, animations: {
@@ -117,20 +122,23 @@ fileprivate func JQ_BothwayAnimation(_ cell:UITableViewCell,_ offset:Double,_ in
     }
 }
 
-fileprivate func JQ_FillOneAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
+public func JQ_FillOneAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
     
     let frame = CGRect(x: 0, y:cell.frame.origin.y, width: cell.frame.size.width, height: cell.frame.size.height)
     cell.frame = CGRect.zero
     UIView.animate(withDuration: 0.6, delay: Double(index) * 0.5, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.3, options: .layoutSubviews, animations: {
-            cell.frame = frame
+        cell.frame = frame
     }) { (complete) in
         
     }
 }
 
 //MARK: - UILabel
-
-func JQ_AnnimationNumber(_ label:UILabel,maxNumber:Int){
+/// 数值增长
+/// - Parameters:
+///   - label: 增长的Label
+///   - maxNumber: 最大数
+public func JQ_AnnimationNumber(_ label:UILabel,maxNumber:Int){
     
     let interval = maxNumber/100
     var changeValue = 0
@@ -148,7 +156,11 @@ func JQ_AnnimationNumber(_ label:UILabel,maxNumber:Int){
     }
 }
 
-func JQ_AnnimationNumber(_ label:UILabel,maxNumber:Double){
+/// 数值增长
+/// - Parameters:
+///   - label: 增长的Label
+///   - maxNumber: 最大数
+public func JQ_AnnimationNumber(_ label:UILabel,maxNumber:Double){
     
     let interval = 0.02
     var changeValue:Double = maxNumber/2
@@ -168,10 +180,10 @@ func JQ_AnnimationNumber(_ label:UILabel,maxNumber:Double){
 }
 
 //MARK: - UIButton
-
-//放大显影
-func JQ_AnimationScaleHuge(_ btn:UIButton){
-let bgImg = UIImageView(image: btn.imageView?.image)
+/// 放大显影：点击的时候，进行放大的动画
+/// - Parameter btn: 传入按钮
+public func JQ_AnimationScaleHuge(_ btn:UIButton){
+    let bgImg = UIImageView(image: btn.imageView?.image)
     btn.addSubview(bgImg)
     UIView.animate(withDuration: 0.6, animations: {
         bgImg.alpha = 0
@@ -181,8 +193,9 @@ let bgImg = UIImageView(image: btn.imageView?.image)
     }
 }
 
-//缩小显影
-func JQ_AnimationScaleShirk(_ btn:UIButton){
+/// 缩小显影：点击的时候，进行缩小的动画
+/// - Parameter btn: 传入按钮
+public func JQ_AnimationScaleShirk(_ btn:UIButton){
     
     let basicAnimation = CABasicAnimation()
     basicAnimation.keyPath = "transform.scale"
@@ -196,7 +209,15 @@ func JQ_AnimationScaleShirk(_ btn:UIButton){
 }
 
 //MARK: - UIView
-func JQ_AnimationTransition(fromView:UIView,type:CATransitionType,subType:CATransitionSubtype,startProgress:Float = 0,endProgress:Float = 1){
+
+/// UIView的动画封装
+/// - Parameters:
+///   - fromView: 需要进行动画的View
+///   - type: 类型1
+///   - subType: 类型2
+///   - startProgress: 开始
+///   - endProgress: 结束
+public func JQ_AnimationTransition(fromView:UIView,type:CATransitionType,subType:CATransitionSubtype,startProgress:Float = 0,endProgress:Float = 1){
     let transition = CATransition()
     transition.duration = 1.2
     transition.type = type
@@ -207,14 +228,14 @@ func JQ_AnimationTransition(fromView:UIView,type:CATransitionType,subType:CATran
 }
 
 /// 动画集合类
-class JQ_AnisTools{
+public class JQ_AnisTools{
     
     /// 字体动画
     /// - Parameter from: 原大小
     /// - Parameter to: 最终大小
     /// - Parameter repeatCount: 次数 默认 1次
     /// - Parameter duration: 持续时间 默认 0.3s
-    static func JQ_FontAni(from:CGAffineTransform,to:CGAffineTransform,repeatCount:Float = 1,duration:Double = 0.3) -> CABasicAnimation{
+    public static func JQ_FontAni(from:CGAffineTransform,to:CGAffineTransform,repeatCount:Float = 1,duration:Double = 0.3) -> CABasicAnimation{
         let basic = CABasicAnimation()
         basic.fromValue = from
         basic.toValue = to
@@ -231,7 +252,7 @@ class JQ_AnisTools{
     /// - Parameter to: 最终大小
     /// - Parameter repeatCount: 重复次数
     /// - Parameter duration: 持续次数 1
-    static func JQ_SizeAni(from:CGSize,to:CGSize,repeatCount:Float = 1,duration:Double = 0.3)->CABasicAnimation{
+    public static func JQ_SizeAni(from:CGSize,to:CGSize,repeatCount:Float = 1,duration:Double = 0.3)->CABasicAnimation{
         let basic = CABasicAnimation()
         basic.fromValue = from
         basic.toValue = to
@@ -248,7 +269,7 @@ class JQ_AnisTools{
     /// - Parameter offset: 偏移位置，负上浮，正下浮
     /// - Parameter repeatCount: 循环次数 1
     /// - Parameter duration: 持续时间 0.3s
-    static func JQ_FrameYAni(_ view:UIView,offset:CGFloat,repeatCount:Float = 1,duration:Double = 0.3)->CABasicAnimation{
+    public static func JQ_FrameYAni(_ view:UIView,offset:CGFloat,repeatCount:Float = 1,duration:Double = 0.3)->CABasicAnimation{
         let originPoint = view.center
         let changePoint = CGPoint(x: originPoint.x, y: originPoint.y + offset)
         let basic = CABasicAnimation()
@@ -267,7 +288,7 @@ class JQ_AnisTools{
     /// - Parameter to: 需要渐变到的透明度 默认 0.4
     /// - Parameter repeatCount: 循环次数 默认 1
     /// - Parameter duration: 持续时间 默认 0.3s    
-    static func JQ_AlphaAni(from:CGFloat = 1,to:CGFloat = 0.4,repeatCount:Float = MAXFLOAT,duration:Double = 0.3)->CAKeyframeAnimation{
+    public static func JQ_AlphaAni(from:CGFloat = 1,to:CGFloat = 0.4,repeatCount:Float = MAXFLOAT,duration:Double = 0.3)->CAKeyframeAnimation{
         let keyAni = CAKeyframeAnimation()
         keyAni.values = [1.0,0.4,1.0]
         keyAni.duration = duration
@@ -281,7 +302,7 @@ class JQ_AnisTools{
     /// - Parameter repeatCount: 循环次数 1
     /// - Parameter ani1: 动画1
     /// - Parameter others: 其他的动画，可变参数
-    static func JQ_GroupAni(duration:Double = 0.3,repeatCount:Float = 1,ani1:CABasicAnimation,others:CABasicAnimation ...) -> CAAnimationGroup{
+    public static func JQ_GroupAni(duration:Double = 0.3,repeatCount:Float = 1,ani1:CABasicAnimation,others:CABasicAnimation ...) -> CAAnimationGroup{
         let group = CAAnimationGroup()
         var items = [CABasicAnimation]()
         items.append(ani1)
@@ -297,20 +318,27 @@ class JQ_AnisTools{
         return group
     }
     
-    static func JQ_HiddenTabbar(duration:Double = 0.5){
+    /// 隐藏Tabbar
+    /// - Parameter duration: 持续时间
+    public static func JQ_HiddenTabbar(duration:Double = 0.5){
         UIView.animate(withDuration: duration) {
             JQ_currentViewController().tabBarController?.tabBar.jq_y = JQ_ScreenH
         }
     }
     
-    static func JQ_ShowTabbar(duration:Double = 0.5){
+    /// 显示Tabbar
+    /// - Parameter duration: 持续时间
+    public static func JQ_ShowTabbar(duration:Double = 0.5){
         UIView.animate(withDuration: duration) {
             JQ_currentViewController().tabBarController?.tabBar.jq_y = JQ_ScreenH - JQ_TabBarHeight
         }
     }
     
-//    拉伸后并缩放动画
-    static func JQ_SizeElastic(_ view:UIView, duration:Double = 0.3){
+    ///  拉伸后并缩放动画
+    /// - Parameters:
+    ///   - view: 需要被执行的View
+    ///   - duration: 持续时间
+    public static func JQ_SizeElastic(_ view:UIView, duration:Double = 0.3){
         UIView.animate(withDuration: duration) {
             view.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         }
@@ -324,7 +352,7 @@ class JQ_AnisTools{
     ///   - view: 需要渐隐的视图
     ///   - hidden: 隐藏
     ///   - duration: 持续时间
-    static func JQ_ViewFadeOut(_ view:UIView,hidden:Bool,duration:Double = 0.3){
+    public static func JQ_ViewFadeOut(_ view:UIView,hidden:Bool,duration:Double = 0.3){
         if hidden{
             for view in view.subviews{
                 view.alpha = 0

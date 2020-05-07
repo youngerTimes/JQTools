@@ -7,7 +7,7 @@
 //
 
 /// 有固定长度的Array（堆处理）
-protocol JQ_QueueProtocol:IteratorProtocol,Sequence{
+public protocol JQ_QueueProtocol:IteratorProtocol,Sequence{
     var items:Array<Element> {get}
     var length:Int {get}
     var overflow:Bool {get}
@@ -20,20 +20,20 @@ protocol JQ_QueueProtocol:IteratorProtocol,Sequence{
 public struct JQ_Queue<T>:JQ_QueueProtocol{
     
     public typealias Element = T
-    private(set) var items: Array<Element> = Array()
-    private(set) var length = 0
-    private(set) var overflow = true
+    private(set) public var items: Array<Element> = Array()
+    private(set) public var length = 0
+    private(set) public var overflow = true
     
-    init(length:Int,overflow:Bool = true) {
+    public init(length:Int,overflow:Bool = true) {
         self.length = length
         self.overflow = overflow
     }
     
-    mutating func pop() -> Element?{
+    mutating public func pop() -> Element?{
         return items.removeFirst()
     }
     
-    mutating func push(_ item: JQ_Queue<T>.Element) -> Bool {
+    mutating public func push(_ item: JQ_Queue<T>.Element) -> Bool {
         if self.items.count >= length{
             if !overflow {
                 return false
@@ -44,7 +44,7 @@ public struct JQ_Queue<T>:JQ_QueueProtocol{
         return true
     }
     
-    mutating func pushAll(_ items: [Element]) {
+    mutating public func pushAll(_ items: [Element]) {
         self.items.append(contentsOf: items[0...length])
     }
     
@@ -52,7 +52,7 @@ public struct JQ_Queue<T>:JQ_QueueProtocol{
         return self.pop()
     }
     
-    mutating func clear() {
+    mutating public func clear() {
         self.items.removeAll()
     }
     
@@ -66,17 +66,17 @@ public struct JQ_Stack<T>:JQ_QueueProtocol{
     
     public typealias Element = T
     
-    private(set) var items:Array<Element> = Array()
+    private(set) public var items:Array<Element> = Array()
     /// 允许溢出，溢出会删除最早的数据，如果不允许，当达到上限后不会添加任何数据
-    private(set) var overflow = true
-    private(set) var length:Int = 0
-    init(length:Int,overflow:Bool = true) {
+    private(set) public var overflow = true
+    private(set) public var length:Int = 0
+    public init(length:Int,overflow:Bool = true) {
         self.length = length
         self.overflow = overflow
     }
     
     //移除
-    mutating func pop() -> T?{
+    mutating public func pop() -> T?{
         guard !items.isEmpty else {
             return nil
         }
@@ -85,7 +85,7 @@ public struct JQ_Stack<T>:JQ_QueueProtocol{
     
     //新增一条数据
     @discardableResult
-    mutating func push(_ item:Element)->Bool{
+    mutating public func push(_ item:Element)->Bool{
         if self.items.count > length{
             if !overflow {
                 return false
@@ -96,7 +96,7 @@ public struct JQ_Stack<T>:JQ_QueueProtocol{
         return true
     }
     
-    mutating func pushAll(_ items:[Element]){
+    mutating public func pushAll(_ items:[Element]){
         self.items.append(contentsOf: items[0...length])
     }
     
@@ -104,7 +104,7 @@ public struct JQ_Stack<T>:JQ_QueueProtocol{
         return self.pop()
     }
     
-    mutating func clear(){
+    mutating public func clear(){
         self.items.removeAll()
     }
     

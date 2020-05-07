@@ -19,21 +19,7 @@ public extension JQNibView where Self : UIView{
     }
 }
 
-//提示信息
-public func JQ_Log<T>(_ message:T,file:String = #file,funcName:String = #function,lineNum:Int = #line){
-    #if DEBUG
-    let file = (file as NSString).lastPathComponent;
-    print("JQ_Log: \(file):(\(lineNum))-\(funcName)\n\(message)");
-    #endif
-}
 
-//警告信息
-public func JQ_WarningLog<T>(_ message:T,file:String = #file,funcName:String = #function,lineNum:Int = #line){
-    #if DEBUG
-    let file = (file as NSString).lastPathComponent;
-    print("JQ_Warning: \(file):(\(lineNum))-\(funcName)\n\(message)");
-    #endif
-}
 
 //错误信息
 public func JQ_ErrorLog<T>(_ message:T,file:String = #file,funcName:String = #function,lineNum:Int = #line){
@@ -204,10 +190,15 @@ public class JQTool{
     }
     
     #if canImport(ObjectMapper)
-    public static func loadCitys()->Array<CitysOptionModel>!{
+    public static func loadCitys()->Array<CitysOptionModel>?{
         let path = Bundle.main.path(forResource: "citysCode", ofType: "txt")
-        let str = try String(contentsOf: URL(fileURLWithPath: path!))
-        let citysModel = Array<CitysOptionModel>(JSONString: str)!
+        do {
+            let str = try String(contentsOf: URL(fileURLWithPath: path!))
+            let citysModel = Array<CitysOptionModel>(JSONString: str)!
+            return citysModel
+        } catch _ {
+            return nil
+        }
     }
     #endif
     

@@ -8,7 +8,7 @@
 
 import UIKit
 
-typealias CommonSliderRoundClouse = (NSInteger,NSInteger)->(Void)
+public typealias CommonSliderRoundClouse = (NSInteger,NSInteger)->(Void)
 
 /// 双向滑动图
 public class JCommonSliderRoundView: UIView {
@@ -28,13 +28,13 @@ public class JCommonSliderRoundView: UIView {
     private var selectMaxMoney = 0
     private var sliderRoundClouse:CommonSliderRoundClouse?
     
-    private override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.white
         setUI()
     }
     
-    convenience init(max:NSInteger,min:NSInteger,clouse:CommonSliderRoundClouse?){
+    public convenience init(max:NSInteger,min:NSInteger,clouse:CommonSliderRoundClouse?){
         self.init(frame: CGRect.zero)
         minMoney = min
         maxMoney = max

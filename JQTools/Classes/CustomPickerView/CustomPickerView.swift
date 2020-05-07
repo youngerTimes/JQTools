@@ -6,6 +6,9 @@
 //  Copyright © 2019 stitch. All rights reserved.
 //
 
+
+#if canImport(SnapKit)
+import SnapKit
 import UIKit
 
 /// 自定义的选择器
@@ -159,4 +162,4 @@ extension CustomPickerView:UIPickerViewDelegate{
         selectcomponent = component
     }
 }
-
+#endif

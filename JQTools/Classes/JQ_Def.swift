@@ -5,42 +5,52 @@
 //  Created by 杨锴 on 2020/3/15.
 //
 
-#if canImport(UIKit)
 import UIKit
-#endif
-
-#if canImport(SnapKit)
-import SnapKit
-#endif
-
 
 #if canImport(QMUIKit)
 import QMUIKit
 ///显示错误弹框
-func ShowError(errorStr:String) {
-    HideAllView()
+public func JQ_ShowError(errorStr:String) {
+    JQ_HideAllView()
     QMUITips.showError(errorStr, in: JQ_KeyWindow, hideAfterDelay: 2.0)
 }
 ///显示成功
-func ShowSuccuss(succussStr:String) {
-    HideAllView()
+public func JQ_ShowSuccuss(succussStr:String) {
+    JQ_HideAllView()
     QMUITips.showSucceed(succussStr, in: JQ_KeyWindow, hideAfterDelay: 2.0)
 }
 ///普通显示
-func ShowText(textStr:String) {
-    HideAllView()
+public func JQ_ShowText(textStr:String) {
+    JQ_HideAllView()
     QMUITips.show(withText: textStr, in: JQ_KeyWindow, hideAfterDelay: 2.0)
 }
 ///loading
-func ShowLoading(loadingStr:String) {
-    HideAllView()
+public func JQ_ShowLoading(loadingStr:String) {
+    JQ_HideAllView()
     QMUITips.showLoading(loadingStr, in: JQ_KeyWindow)
 }
 ///隐藏所有活动的弹框
-func HideAllView() {
+public func JQ_HideAllView() {
     QMUITips.hideAllToast(in: JQ_KeyWindow, animated: true)
 }
 #endif
+
+
+//提示信息
+public func JQ_Log<T>(_ message:T,file:String = #file,funcName:String = #function,lineNum:Int = #line){
+    #if DEBUG
+    let file = (file as NSString).lastPathComponent;
+    print("JQ_Log: \(file):(\(lineNum))-\(funcName)\n\(message)");
+    #endif
+}
+
+//警告信息
+public func JQ_WarningLog<T>(_ message:T,file:String = #file,funcName:String = #function,lineNum:Int = #line){
+    #if DEBUG
+    let file = (file as NSString).lastPathComponent;
+    print("JQ_Warning: \(file):(\(lineNum))-\(funcName)\n\(message)");
+    #endif
+}
 
 
 #if canImport(ObjectMapper)
@@ -49,6 +59,17 @@ public class JQModel: Mappable {
     required public init?(map: Map) {}
     public func mapping(map: Map) {}
 }
+#endif
+
+#if canImport(SwiftyUserDefaults)
+import SwiftyUserDefaults
+let Defaults = SwiftyUserDefaults.Defaults
+#endif
+
+#if canImport(RxSwift) && canImport(RxCocoa)
+import RxSwift
+import RxCocoa
+public var disposeBag = DisposeBag()
 #endif
 
 

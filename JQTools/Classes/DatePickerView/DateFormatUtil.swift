@@ -9,7 +9,7 @@
 import Foundation
 
 //农历
-class Lunar:NSObject{
+public class Lunar:NSObject{
     //闰月
     var isleap:Bool = false
     //农历 日
@@ -21,7 +21,7 @@ class Lunar:NSObject{
 }
 
 //公历
-class Solar:NSObject{
+public class Solar:NSObject{
     //农历 日
     var solarDay:Int = 0
     //农历 月
@@ -131,7 +131,7 @@ private func SolarFromInt(g:Int)->Solar{
     return solar
 }
 
-func LunarToSolar(lunar:Lunar)->Solar{
+public func LunarToSolar(lunar:Lunar)->Solar{
     let days = lunar_month_days[lunar.lunarYear - lunar_month_days[0]]
     let leap = GetBitInt(data: days, length: 4, shift: 13)
     var offset = 0
@@ -168,7 +168,7 @@ func LunarToSolar(lunar:Lunar)->Solar{
 ///
 /// - Parameter solar: 国历
 /// - Returns: 农历
-func SolarToLunar(solar:Solar)->Lunar{
+public func SolarToLunar(solar:Solar)->Lunar{
     let lunar = Lunar()
     var index = solar.solarYear - solar_1_1[0]
     let data = (solar.solarYear << 9) | (solar.solarMonth << 5) | (solar.solarDay)
@@ -229,7 +229,7 @@ func SolarToLunar(solar:Solar)->Lunar{
 ///   - month: 农历月
 ///   - leapMonth: 是否是闰月
 /// - Returns: 返回天数
-func LunarMonthDays(year:Int,month:Int,leapMonth:Bool)->Int{
+public func LunarMonthDays(year:Int,month:Int,leapMonth:Bool)->Int{
     
     if leapMonth{
         let days = DoubleMonth(year: year)
@@ -247,7 +247,7 @@ func LunarMonthDays(year:Int,month:Int,leapMonth:Bool)->Int{
 ///   - year: 国历年
 ///   - month: 国历月
 /// - Returns: 天数
-func SolarMonthDays(year:Int,month:Int)->Int{
+public func SolarMonthDays(year:Int,month:Int)->Int{
 
     switch month {
     case 1,3,5,7,8,10,12:
@@ -266,7 +266,7 @@ func SolarMonthDays(year:Int,month:Int)->Int{
 ///
 /// - Parameter year: 年份
 /// - Returns: 结果
-func leapYear(year:Int)->Bool{
+public func leapYear(year:Int)->Bool{
     if year % 400 == 0{
         return true
     }
@@ -277,7 +277,7 @@ func leapYear(year:Int)->Bool{
     }
 }
 
-func lunarMonthMap(_ month:String)->Int{
+public func lunarMonthMap(_ month:String)->Int{
     
     switch month {
     case "正月","闰正月","一月","闰一月":
@@ -313,7 +313,7 @@ private func DoubleMonth(year:Int)->Int{
     return solarTolunar[year-1900] & 0xf
 }
 
-func formatlunar(year:Int,month:Int, day:Int)->String{
+public func formatlunar(year:Int,month:Int, day:Int)->String{
     return String(format: "%d年%@%@", year,chineseMonths[month-1],chineseDays[day-1])
 }
 

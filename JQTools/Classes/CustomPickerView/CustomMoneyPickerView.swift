@@ -8,10 +8,13 @@
 
 import UIKit
 
+#if canImport(SnapKit)
+import SnapKit
+import UIKit
 
-typealias MoneyFieldClouse = (NSInteger,NSInteger)->(Void)
+public typealias MoneyFieldClouse = (NSInteger,NSInteger)->(Void)
 
-class CustomMoneyPickerView: UIView {
+public class CustomMoneyPickerView: UIView {
     
     var centerView = UIView()
     var pickerView = UIPickerView()
@@ -77,7 +80,7 @@ class CustomMoneyPickerView: UIView {
         }
     }
     
-    @objc func hiden(){
+     @objc public func hiden(){
         UIView.animate(withDuration: 0.3, animations: {
             self.centerView.frame = CGRect(x: 0, y: self.jq_height, width: JQ_ScreenW, height: 325 * JQ_RateW)
         }) { (complete) in
@@ -85,7 +88,7 @@ class CustomMoneyPickerView: UIView {
         }
     }
     
-    func show(vc:UIViewController,clouse:@escaping MoneyFieldClouse){
+    public func show(vc:UIViewController,clouse:@escaping MoneyFieldClouse){
         vc.view.addSubview(self)
         moneyFieldClouse = clouse
         UIView.animate(withDuration: 0.6, animations: {
@@ -96,7 +99,7 @@ class CustomMoneyPickerView: UIView {
     }
     
     //    改变系统的横线
-    func changesSpearatorLine(){
+    private func changesSpearatorLine(){
         for view in pickerView.subviews {
             if view.frame.size.height <= 1 {
                 view.backgroundColor = UIColor(hexStr: "E9E9E9")
@@ -118,11 +121,11 @@ class CustomMoneyPickerView: UIView {
 }
 
 extension CustomMoneyPickerView:UIPickerViewDataSource{
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+    public  func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 2
     }
     
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    public  func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if component == 0 {
             return moneys.count
         }
@@ -132,11 +135,11 @@ extension CustomMoneyPickerView:UIPickerViewDataSource{
         return 0
     }
     
-    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+    public func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         return 61 * JQ_RateW
     }
     
-    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+     public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         let label = UILabel()
         label.textAlignment = .center
         if #available(iOS 8.2, *) {
@@ -158,7 +161,7 @@ extension CustomMoneyPickerView:UIPickerViewDataSource{
 }
 
 extension CustomMoneyPickerView:UIPickerViewDelegate{
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if component == 0{
             selectComponent_1 = row
             let slice = moneys_1.suffix(from:row)
@@ -170,3 +173,5 @@ extension CustomMoneyPickerView:UIPickerViewDelegate{
         pickerView.reloadAllComponents()
     }
 }
+
+#endif
