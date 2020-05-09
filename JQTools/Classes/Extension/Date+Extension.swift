@@ -151,6 +151,57 @@ extension Date{
         return NSInteger(str) ?? 0
     }
     
+    /// 当前时
+    public func jq_nowHour()->NSInteger{
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = "HH"
+        let str = dateformatter.string(from: self)
+        return NSInteger(str) ?? 0
+    }
+    
+    /// 当前分
+    public func jq_nowMinute()->NSInteger{
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = "mm"
+        let str = dateformatter.string(from: self)
+        return NSInteger(str) ?? 0
+    }
+    
+    /// 当前秒
+    public func jq_nowSecond()->NSInteger{
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = "ss"
+        let str = dateformatter.string(from: self)
+        return NSInteger(str) ?? 0
+    }
+    
+    
+    /// 当天周数
+    public func jq_nowWeekDay()->String{
+        let calendar = Calendar(identifier: .gregorian)
+        let a = calendar.component(Calendar.Component.weekday, from: self)
+        var weekday = "未知"
+        switch a {
+            case 1:
+                weekday = "日"
+            case 2:
+                weekday = "一"
+            case 3:
+                weekday = "二"
+            case 4:
+                weekday = "三"
+            case 5:
+                weekday = "四"
+            case 6:
+                weekday = "五"
+            case 7:
+                weekday = "六"
+            default:break
+        }
+        return weekday
+    }
+    
+    
     /// date实例格式化时间
     public func jq_format(_ formatter:String)->String{
         let dateFormatter = DateFormatter()

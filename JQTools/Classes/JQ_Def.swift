@@ -112,7 +112,7 @@ extension NSLayoutConstraint {
 }
 
 /// 异形屏的安全距离
-var jq_safeEdges:UIEdgeInsets{
+public var jq_safeEdges:UIEdgeInsets{
     get{
         let window = UIApplication.shared.keyWindow
         if window != nil{
@@ -128,11 +128,11 @@ var jq_safeEdges:UIEdgeInsets{
 }
 
 ///判断是否设备>= iPoneX
-var jq_isDiffPhone: Bool  {
+public var jq_isDiffPhone: Bool  {
     get {return UIScreen.main.bounds.size.height >= 812}
 }
 
 ///是否是手机
-var jq_isIpone: Bool {
+public var jq_isIpone: Bool {
     get {return UIDevice.current.userInterfaceIdiom == .phone}
 }

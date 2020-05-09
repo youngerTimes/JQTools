@@ -12,18 +12,18 @@ import SnapKit
 import UIKit
 
 /// 自定义的选择器
-class CustomPickerView: UIView {
+public class CustomPickerView: UIView {
     
-    typealias CallbackSelect = (NSInteger,String)->Void
+    public typealias CallbackSelect = (NSInteger,String)->Void
     
-    var centerView = UIView()
-    var pickerView = UIPickerView()
-    var cancelBtn = UIButton()
-    var completeBtn = UIButton()
-    var callbackSelect:CallbackSelect?
-    var selectcomponent:Int = 0
-    var selectRow:Int = 0
-    var items:Array<Any> = [["我是爸爸","我是妈妈","我是爷爷"]]{
+    private var centerView = UIView()
+    private var pickerView = UIPickerView()
+    private var cancelBtn = UIButton()
+    private var completeBtn = UIButton()
+    public var callbackSelect:CallbackSelect?
+    public var selectcomponent:Int = 0
+    public var selectRow:Int = 0
+    public var items:Array<Any> = [["我是爸爸","我是妈妈","我是爷爷"]]{
         didSet{
             pickerView.reloadAllComponents()
         }
@@ -77,10 +77,10 @@ class CustomPickerView: UIView {
             make.bottom.equalToSuperview().offset(-20 * JQ_RateW)
             make.top.equalToSuperview().offset(50 * JQ_RateW)
         }
-        
     }
     
-   @objc func hiden(){
+   @objc public func hiden(){
+    callbackSelect?(-1,"")
     UIView.animate(withDuration: 0.3, animations: {
         self.centerView.frame = CGRect(x: 0, y: self.jq_height, width: JQ_ScreenW, height: 325 * JQ_RateW)
         }) { (complete) in
@@ -88,7 +88,12 @@ class CustomPickerView: UIView {
         }
     }
     
-    func show(vc:UIViewController,callback:@escaping CallbackSelect){
+    
+    /// 显示
+    /// - Parameters:
+    ///   - vc: 在那个控制展示
+    ///   - callback: 返回index -1 时，是点击了取消，不需要去响应
+    public func show(vc:UIViewController,callback:@escaping CallbackSelect){
         vc.view.addSubview(self)
         callbackSelect  = callback
     
@@ -98,7 +103,7 @@ class CustomPickerView: UIView {
     }
     
     //    改变系统的横线
-    func changesSpearatorLine(){
+    private func changesSpearatorLine(){
         for view in pickerView.subviews {
             if view.frame.size.height <= 1 {
                 view.backgroundColor = UIColor(hexStr: "E9E9E9")
@@ -109,8 +114,14 @@ class CustomPickerView: UIView {
     }
     
     //    MAKR: --Action
-    @objc func completeAction(){
-        hiden()
+    @objc private func completeAction(){
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            self.centerView.frame = CGRect(x: 0, y: self.jq_height, width: JQ_ScreenW, height: 325 * JQ_RateW)
+            }) { (complete) in
+                self.removeFromSuperview()
+            }
+        
         if items.count == 0 {
 //            ShowError(errorStr: "数据发生错误")
             return
@@ -126,20 +137,20 @@ class CustomPickerView: UIView {
 }
 
 extension CustomPickerView:UIPickerViewDataSource{
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+    public func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return items.count
     }
     
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         let item = items[component]
         return (item as AnyObject).count
     }
     
-    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+    public  func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         return 61 * JQ_RateW
     }
     
-    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+    public  func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         let item = items[component]
         let str = (item as! Array<Any>)[row]
         let label = UILabel()
@@ -157,7 +168,7 @@ extension CustomPickerView:UIPickerViewDataSource{
 }
 
 extension CustomPickerView:UIPickerViewDelegate{
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         selectRow = row
         selectcomponent = component
     }

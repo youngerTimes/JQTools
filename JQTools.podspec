@@ -36,7 +36,7 @@ TODO: Add long description of the pod here.
   #   'JQTools' => ['JQTools/Assets/*.png']
   # }
 
-#   s.public_header_files = 'Pod/Classes/Header.h'
+   s.public_header_files = 'Pod/Classes/Header.h'
    s.frameworks = 'UIKit'
    s.dependency 'SnapKit'
    s.dependency 'ObjectMapper'

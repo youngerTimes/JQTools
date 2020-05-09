@@ -13,6 +13,7 @@
 		0ABA3F74887D0AC9C190EC5607FB58AB /* ConstraintMultiplierTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C12038B34951B9B002DAB0D5FE023DA /* ConstraintMultiplierTarget.swift */; };
 		102CFFE9B490DD470AF70EF7B50D5298 /* LayoutConstraintItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D1E72289667D4BA6D946E25320953 /* LayoutConstraintItem.swift */; };
 		11D57DA1800919AC9BC2CDDDB182D50B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14FE473E37EFB8571E729F9B375CE60E /* Foundation.framework */; };
+		135A7C81246534D80052D7ED /* Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 135A7C80246534D80052D7ED /* Header.h */; };
 		136D815DC682454292A327C0CB217AE8 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12EF67130FC414818C204F2500FAA681 /* UIColor+Extension.swift */; };
 		13AC030D24568F96003B19CA /* JQ_CommonCodeBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC030C24568F96003B19CA /* JQ_CommonCodeBlock.swift */; };
 		13AC032124568FB3003B19CA /* CommonSliderRoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC030F24568FB2003B19CA /* CommonSliderRoundView.swift */; };
@@ -111,6 +112,7 @@
 		116DE6EBC4D197C7C3F2A49FE67CAAF8 /* JQTools.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = JQTools.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		11A1147B627018FA7C13744924C0515F /* Pods-JQTools_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-JQTools_Tests-frameworks.sh"; sourceTree = "<group>"; };
 		12EF67130FC414818C204F2500FAA681 /* UIColor+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		135A7C80246534D80052D7ED /* Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Header.h; path = JQTools/Classes/Header.h; sourceTree = "<group>"; };
 		13AC030C24568F96003B19CA /* JQ_CommonCodeBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JQ_CommonCodeBlock.swift; path = JQTools/Classes/JQ_CommonCodeBlock.swift; sourceTree = "<group>"; };
 		13AC030F24568FB2003B19CA /* CommonSliderRoundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonSliderRoundView.swift; sourceTree = "<group>"; };
 		13AC031024568FB2003B19CA /* CustomMoneyPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMoneyPickerView.swift; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 		6B43393BDC3BA5C4898C3BEA98AD899C /* JQTools */ = {
 			isa = PBXGroup;
 			children = (
+				135A7C80246534D80052D7ED /* Header.h */,
 				13AC03312456D952003B19CA /* JQ_JMessageTools.swift */,
 				13AC032F24568FDD003B19CA /* JQ_AnisTools.swift */,
 				13AC030C24568F96003B19CA /* JQ_CommonCodeBlock.swift */,
@@ -501,6 +504,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3493A2A395D0FEC4D5E34F2427801CCF /* JQTools-umbrella.h in Headers */,
+				135A7C81246534D80052D7ED /* Header.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,6 +6,19 @@
 //
 
 extension UIImage{
+    
+    /// 创建一个透明的图片，可用于nav
+    /// - Parameter rect: 尺寸
+    public static func jq_createClarityImg(rect:CGRect)->UIImage{
+        let color = UIColor.clear
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()
+        context?.setFillColor(color.cgColor)
+        context?.fill(rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        return image ?? UIImage()
+    }
+    
     /// 更改图片颜色
     public func jq_imageWithTintColor(color : UIColor) -> UIImage{
         UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)

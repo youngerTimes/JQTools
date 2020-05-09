@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource {
+public class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource {
     
     enum DatePickerType {
         case YM //年月
@@ -172,7 +172,7 @@ class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource {
     }
     
     //    MARK: - UIPickerViewDataSource
-    func numberOfComponents(in pickerView: UIPickerView) -> Int{
+    public func numberOfComponents(in pickerView: UIPickerView) -> Int{
         switch type! {
         case .HM,.YM:
             return 2
@@ -186,7 +186,7 @@ class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource {
     }
     
     //  MAKR: - UIPickerViewDelegate
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
         if type! == .YMD || type! == .YMDHM || type! == .YMDHMS{
             var value:String?
@@ -234,7 +234,7 @@ class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource {
         }
     }
     
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
+    public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
         
         switch type! {
         case .HMS:
@@ -290,7 +290,7 @@ class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource {
         return 0
     }
     
-    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+    public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         
         var label = view as? UILabel
         if label == nil {
@@ -304,7 +304,7 @@ class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource {
         return label!
     }
     
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    public func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         
         switch type! {
         case .YMDHMS:
