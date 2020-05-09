@@ -10,7 +10,7 @@ import UIKit
 
 #if canImport(ObjectMapper)
 
-typealias CustomCitysClouse = (CitysOptionModel,CitysOptionModel,CitysOptionModel)->(Void)
+public typealias CustomCitysClouse = (CitysOptionModel,CitysOptionModel,CitysOptionModel)->(Void)
 
 public class CustomCitysPickerView: UIView {
     private var centerView = UIView()
@@ -28,14 +28,17 @@ public class CustomCitysPickerView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         do {
-            let path = Bundle.main.path(forResource: "citysCode", ofType: "txt")
-            let str = try String(contentsOf: URL(fileURLWithPath: path!))
+            let mainBundle  = Bundle(for: type(of: self))
+            let path = mainBundle.path(forResource: "JQToolsRes", ofType: "bundle")
+            let jqToolsBundle = Bundle(path: path!)
+            let filePath = jqToolsBundle?.path(forResource: "citysCode", ofType: "txt")
+            let str = try String(contentsOf: URL(fileURLWithPath: filePath!))
             citysModel = Array<CitysOptionModel>(JSONString: str)!
         } catch  {
             JQ_ShowError(errorStr: "城市列表加载失败")
         }
+        
         
         self.frame = CGRect(x: 0, y: 0, width: JQ_ScreenW, height: JQ_ScreenH)
         self.backgroundColor = UIColor(hexStr: "000000").withAlphaComponent(0.6)
@@ -93,7 +96,7 @@ public class CustomCitysPickerView: UIView {
         }
     }
     
-    func show(vc:UIViewController,callback:@escaping CustomCitysClouse){
+    public func show(vc:UIViewController,callback:@escaping CustomCitysClouse){
         vc.view.addSubview(self)
         customCitysClouse  = callback
         UIView.animate(withDuration: 0.6, animations: {

@@ -32,9 +32,9 @@ TODO: Add long description of the pod here.
 
   s.source_files = 'JQTools/Classes/**/*'
   
-  # s.resource_bundles = {
-  #   'JQTools' => ['JQTools/Assets/*.png']
-  # }
+   s.resource_bundles = {
+     'JQToolsRes' => ['JQTools/Assets/*']
+   }
 
    s.public_header_files = 'Pod/Classes/Header.h'
    s.frameworks = 'UIKit'
