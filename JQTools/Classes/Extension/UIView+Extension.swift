@@ -58,6 +58,7 @@ extension UIView{
         let maskLayer = CAShapeLayer()
         maskLayer.frame = self.bounds
         maskLayer.path = maskPath.cgPath
+        maskLayer.masksToBounds = false
         self.layer.mask = maskLayer
     }
     ///切部分圆角(Xib)

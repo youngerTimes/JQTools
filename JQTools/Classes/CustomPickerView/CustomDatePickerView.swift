@@ -490,14 +490,14 @@ extension CustomDatePickerView:UIPickerViewDataSource{
             
             switch datePickerSubType {
                 case .today:
-                    let days = date.jq_getDays(selectYear, selectMonth)
+                    let days = Date.jq_getDays(selectYear, selectMonth)
                     return days - date.jq_nowDay()
                 
                 default:
                     if selectMonth == date.jq_nowMonth() && selectYear == date.jq_nowYear() && limitToday{
                         return date.jq_nowDay()
                     }
-                    let days = date.jq_getDays(selectYear, selectMonth)
+                    let days = Date.jq_getDays(selectYear, selectMonth)
                     selectDay = selectDay > days ? days : selectDay
                     return days
             }

@@ -7,9 +7,9 @@
 
 extension UIImage{
     
-    /// 创建一个透明的图片，可用于nav
+    /// 创建一个透明的图片，可用于nav:        navigationController?.navigationBar.isTranslucent = true
     /// - Parameter rect: 尺寸
-    public static func jq_createClarityImg(rect:CGRect)->UIImage{
+    public static func jq_createClarityImg(rect:CGRect,alpha:CGFloat = 0)->UIImage{
         let color = UIColor.clear
         UIGraphicsBeginImageContext(rect.size)
         let context = UIGraphicsGetCurrentContext()

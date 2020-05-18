@@ -10,14 +10,14 @@
 import ObjectMapper
 
 public class CitysOptionModel: JQModel {
-    var object_id = 0
-    var name = ""
-    var level = 0
-    var longitude = 0
-    var latitude = 0
-    var pid = 0
-    var childs = [CitysOptionModel]()
-    var crown = false
+    public var object_id = 0
+    public var name = ""
+    public var level = 0
+    public var longitude = 0
+    public var latitude = 0
+    public var pid = 0
+    public var childs = [CitysOptionModel]()
+    public var crown = false
     
     public override func mapping(map: Map) {
         object_id <- map["object_id"]

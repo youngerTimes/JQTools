@@ -87,7 +87,7 @@ extension Date{
     /// 给定年月得到日期
     /// - Parameter year: 设定年
     /// - Parameter month: 设定月
-    public func jq_getDays(_ year:Int,_ month:Int)->Int{
+    public static func jq_getDays(_ year:Int,_ month:Int)->Int{
         if((month == 1)||(month == 3)||(month == 5)||(month == 7)||(month == 8)||(month == 10)||(month == 12)){
             return 31
         }
@@ -159,6 +159,22 @@ extension Date{
         return NSInteger(str) ?? 0
     }
     
+    public func jq_formatSayHello()->String{
+        switch jq_nowHour() {
+            case 0...4:
+            return "深夜，"
+            case 5...11:
+            return "早上好，"
+            case 12...14:
+            return "中午好，"
+            case 15...18:
+            return "下午好，"
+            case 19...23:
+            return "晚上好，"
+            default:return ""
+        }
+    }
+    
     /// 当前分
     public func jq_nowMinute()->NSInteger{
         let dateformatter = DateFormatter()
@@ -175,30 +191,52 @@ extension Date{
         return NSInteger(str) ?? 0
     }
     
+    public static func jq_format(year:NSInteger,month:NSInteger,day:NSInteger,hour:NSInteger = 0,minute:NSInteger = 0)->Date?{
+        let calendar = Calendar(identifier: .gregorian)
+        
+       let dateComponents = DateComponents(calendar: calendar, timeZone: TimeZone.current, year: year, month: month, day: day, hour: hour, minute: minute, second: 0, nanosecond: 0)
+        return dateComponents.date?.addingTimeInterval(8 * 3600)
+        
+    }
+    
+    public func jq_equal(_ date:Date)->Bool{
+        if self.jq_nowYear() == date.jq_nowYear() && self.jq_nowMonth() == date.jq_nowMonth() && self.jq_nowDay() == date.jq_nowDay(){
+            return true
+        }
+        return false
+    }
     
     /// 当天周数
-    public func jq_nowWeekDay()->String{
+    public func jq_nowWeekDay()->(weekName:String,index:NSInteger){
         let calendar = Calendar(identifier: .gregorian)
         let a = calendar.component(Calendar.Component.weekday, from: self)
         var weekday = "未知"
+        var index = 0
         switch a {
             case 1:
                 weekday = "日"
+            index = 6
             case 2:
                 weekday = "一"
+            index = 0
             case 3:
                 weekday = "二"
+            index = 1
             case 4:
                 weekday = "三"
+            index = 2
             case 5:
                 weekday = "四"
+            index = 3
             case 6:
                 weekday = "五"
+            index = 4
             case 7:
                 weekday = "六"
+            index = 5
             default:break
         }
-        return weekday
+        return (weekday,index)
     }
     
     

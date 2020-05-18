@@ -10,6 +10,13 @@ import CommonCrypto
 
 extension String{
     
+   public enum JQSafeBase64Type {
+        ///加密
+        case encode
+        ///解密
+        case decode
+    }
+    
     //MARK: - 字符串计算宽高
     ///获取字符串宽度
     public static func jq_getWidth(text: String, height: CGFloat, font: CGFloat) -> CGFloat {
@@ -47,6 +54,14 @@ extension String{
         return NSRange(location: utf16.distance(from: utf16.startIndex, to: from!),
                        length: utf16.distance(from: from!, to: to!))
     }
+    
+    public func toDict() -> [String : Any]?{
+         let data = self.data(using: String.Encoding.utf8)
+         if let dict = try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String : Any] {
+             return dict
+         }
+         return nil
+     }
     
     public func jq_range(from nsRange: NSRange) -> Range<String.Index>? {
         guard
@@ -275,6 +290,23 @@ extension String{
         } else {
             return self
         }
+    }
+    
+    public func jq_safeBase64(type: JQSafeBase64Type) -> String {
+        var base64Str: String!
+        if type == .encode {
+            base64Str = self.replacingOccurrences(of: "+", with: "-")
+            base64Str = base64Str.replacingOccurrences(of: "/", with: "_")
+            base64Str = base64Str.replacingOccurrences(of: "=", with: "")
+        }else {
+            base64Str = self.replacingOccurrences(of: "-", with: "+")
+            base64Str = base64Str.replacingOccurrences(of: "_", with: "/")
+            let mod = base64Str.count % 4
+            if mod > 0 {
+                base64Str += "====".substring(to: mod)
+            }
+        }
+        return base64Str
     }
     
     

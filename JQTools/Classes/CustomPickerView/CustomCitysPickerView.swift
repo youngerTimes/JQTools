@@ -12,6 +12,11 @@ import UIKit
 
 public typealias CustomCitysClouse = (CitysOptionModel,CitysOptionModel,CitysOptionModel)->(Void)
 
+public enum CistysPickerType{
+    case PC
+    case PCC
+}
+
 public class CustomCitysPickerView: UIView {
     private var centerView = UIView()
     private var pickerView = UIPickerView()
@@ -25,6 +30,7 @@ public class CustomCitysPickerView: UIView {
     private var provinceModel:CitysOptionModel?
     private var cityModel:CitysOptionModel?
     private var countryModel:CitysOptionModel?
+    public var cityType:CistysPickerType = .PCC
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -135,6 +141,9 @@ public class CustomCitysPickerView: UIView {
 
 extension CustomCitysPickerView:UIPickerViewDataSource{
     public func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        if cityType == .PC{
+            return 2
+        }
         return 3
     }
     
