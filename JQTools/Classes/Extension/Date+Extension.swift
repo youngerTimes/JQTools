@@ -261,4 +261,12 @@ extension Date{
         dateFormatter.dateFormat = formatter
         return dateFormatter.string(from: detaildate as Date)
     }
+    
+    //时间戳格式格式化时间
+    public func jq_formatDate(_ time:TimeInterval,formatter:String)->Date{
+        let detaildate = Date(timeIntervalSince1970: time)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = formatter
+        return detaildate
+    }
 }

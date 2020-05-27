@@ -115,7 +115,7 @@ public class CustomDatePickerView: UIView {
     
     @objc func hiden(){
         
-        JQ_currentNavigationController().setNavigationBarHidden(false, animated: true)
+//        JQ_currentNavigationController().setNavigationBarHidden(false, animated: true)
         UIView.animate(withDuration: 0.3, animations: {
             self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH, width: JQ_ScreenW, height: 325 * JQ_RateW)
         }) { (complete) in
@@ -295,13 +295,28 @@ public class CustomDatePickerView: UIView {
             allYears.append(i)
         }
         
+        selectYear = date.jq_nowYear()
+        selectMonth = date.jq_nowMonth()
+        selectDay = date.jq_nowDay()
+        
+        //选中年的索引
+        for (index,year) in allYears.enumerated(){
+            if selectYear == (year as! NSInteger){
+                component_0_row = index
+                break
+            }
+        }
+        
+        
         UIView.animate(withDuration: 0.6, animations: {
             self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH - 317 * JQ_RateW, width: JQ_ScreenW, height: 325 * JQ_RateW)
         }) { (status) in
-            self.pickerView.selectRow(self.date.jq_allYears(0).count, inComponent: 0, animated: true)
-            self.pickerView.selectRow(self.selectMonth - 1, inComponent: 1, animated: true)
+            self.pickerView.selectRow(self.component_0_row, inComponent: 0, animated: true)
+            self.component_1_row = self.selectMonth - 1
+            self.pickerView.selectRow(self.component_1_row, inComponent: 1, animated: true)
             if self.datePickerType == .YMD{
-                self.pickerView.selectRow(self.date.jq_nowDay() - 1, inComponent: 2, animated: true)
+                self.component_2_row = self.selectDay - 1
+                self.pickerView.selectRow(self.selectDay - 1, inComponent: 2, animated: true)
             }
             self.pickerView.reloadAllComponents()
         }
