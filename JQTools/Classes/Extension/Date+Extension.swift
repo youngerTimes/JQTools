@@ -22,8 +22,8 @@ extension Date{
     
     public static func jq_CalByDays(startDate:Date,endDate:Date)->Int{
         //格式化成：时分秒归零
-        let formatStartDate = Date.jq_format(year: startDate.year, month: startDate.month, day: startDate.day,hour:startDate.hour,minute: startDate.minute)
-        let formatEndDate = Date.jq_format(year: endDate.year, month: endDate.month, day: endDate.day,hour:endDate.hour,minute: endDate.minute)
+        let formatStartDate = Date.jq_format(year: startDate.year, month: startDate.month, day: startDate.day,hour:0,minute: 0)
+        let formatEndDate = Date.jq_format(year: endDate.year, month: endDate.month, day: endDate.day,hour:0,minute: 0)
         
         let calendar = Calendar(identifier: .gregorian)
         let set = Set(arrayLiteral: Calendar.Component.day)

@@ -52,7 +52,7 @@ extension UIView{
     }
     
     
-    ///切部分圆角(Frame)
+    ///切部分圆角(Frame) 注意不能用错，storyboard和nib 在高度动态变化时，容易出现BUG
     public func jq_cornerPart(byRoundingCorners corners: UIRectCorner, radii: CGFloat) {
         let maskPath = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radii, height: radii))
         let maskLayer = CAShapeLayer()
