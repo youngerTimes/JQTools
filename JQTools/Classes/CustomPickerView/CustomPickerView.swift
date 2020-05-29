@@ -128,7 +128,9 @@ public class CustomPickerView: UIView {
         }
         let item = items[selectcomponent]
         let str = (item as! Array<Any>)[selectRow]
-        callbackSelect!(selectRow,str as! String)
+        if selectRow != -1{
+            callbackSelect!(selectRow,str as! String)
+        }
     }
     
     required init?(coder: NSCoder) {

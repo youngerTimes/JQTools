@@ -7,6 +7,54 @@
 
 extension Date{
     
+    
+    public static func jq_CalBySet(startDate:Date,endDate:Date)->(year:Int,month:Int,day:Int,hour:Int,minute:Int){
+        
+        //格式化成：秒归零
+        let formatStartDate = Date.jq_format(year: startDate.year, month: startDate.month, day: startDate.day,hour:startDate.hour,minute: startDate.minute)
+        let formatEndDate = Date.jq_format(year: endDate.year, month: endDate.month, day: endDate.day,hour:endDate.hour,minute: endDate.minute)
+        
+        let calendar = Calendar(identifier: .gregorian)
+        let set = Set(arrayLiteral: Calendar.Component.day,Calendar.Component.year,Calendar.Component.month,Calendar.Component.hour,Calendar.Component.minute)
+        let a = calendar.dateComponents(set, from: formatStartDate!, to: formatEndDate!)
+        return(year:a.year ?? 0,month:a.month ?? 0,day:a.day ?? 0,hour:a.hour ?? 0,minute:a.minute ?? 0)
+    }
+    
+    public static func jq_CalByDays(startDate:Date,endDate:Date)->Int{
+        //格式化成：时分秒归零
+        let formatStartDate = Date.jq_format(year: startDate.year, month: startDate.month, day: startDate.day,hour:startDate.hour,minute: startDate.minute)
+        let formatEndDate = Date.jq_format(year: endDate.year, month: endDate.month, day: endDate.day,hour:endDate.hour,minute: endDate.minute)
+        
+        let calendar = Calendar(identifier: .gregorian)
+        let set = Set(arrayLiteral: Calendar.Component.day)
+        let a = calendar.dateComponents(set, from: formatStartDate!, to: formatEndDate!)
+        return a.day ?? 0
+    }
+    
+    
+    public static func jq_CalByStr(startDate:Date,endDate:Date)->String{
+        var str = ""
+        let calendar = Calendar(identifier: .gregorian)
+        let set = Set(arrayLiteral: Calendar.Component.day,Calendar.Component.year,Calendar.Component.month,Calendar.Component.hour,Calendar.Component.minute)
+        let a = calendar.dateComponents(set, from: startDate, to: endDate)
+        if a.year ?? 0 > 0{
+            str.append("\(a.year!)年")
+        }
+        if a.month ?? 0 > 0{
+            str.append("\(a.month!)月")
+        }
+        if a.day ?? 0 > 0{
+            str.append("\(a.day!)天")
+        }
+        if a.hour ?? 0 > 0{
+            str.append("\(a.hour!)时")
+        }
+        if a.minute ?? 0 > 0{
+            str.append("\(a.minute!)分")
+        }
+        return str
+    }
+    
     //MARK: - 时间戳转换字符串，yyyy-MM-dd
     ///时间戳转换字符串，yyyy-MM-dd
     public static func jq_TheTimeStampConversionMinutes(_ time:TimeInterval, _ formatter:String) -> String {
