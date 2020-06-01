@@ -243,7 +243,7 @@ extension Date{
         let calendar = Calendar(identifier: .gregorian)
         
        let dateComponents = DateComponents(calendar: calendar, timeZone: TimeZone.current, year: year, month: month, day: day, hour: hour, minute: minute, second: 0, nanosecond: 0)
-        return dateComponents.date?.addingTimeInterval(8 * 3600)
+        return dateComponents.date
         
     }
     

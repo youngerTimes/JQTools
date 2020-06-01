@@ -102,9 +102,13 @@ public class CustomCitysPickerView: UIView {
         }
     }
     
-    public func show(vc:UIViewController,callback:@escaping CustomCitysClouse){
+    public func show(vc:UIViewController,selectComponent:NSInteger = 0,callback:@escaping CustomCitysClouse){
         vc.view.addSubview(self)
         customCitysClouse  = callback
+        provinceComponent = selectComponent
+        self.pickerView.selectRow(selectComponent, inComponent: 0, animated: false)
+        self.pickerView.selectRow(0, inComponent: 1, animated: false)
+        self.pickerView.reloadAllComponents()
         UIView.animate(withDuration: 0.6, animations: {
             self.centerView.frame = CGRect(x: 0, y: self.jq_height - 317 * JQ_RateW, width: JQ_ScreenW, height: 325 * JQ_RateW)
         }) { (status) in
