@@ -30,7 +30,6 @@
 		13AC032C24568FB3003B19CA /* WeChatOptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC031D24568FB3003B19CA /* WeChatOptView.swift */; };
 		13AC032D24568FB3003B19CA /* WeChatOptView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13AC031E24568FB3003B19CA /* WeChatOptView.xib */; };
 		13AC033024568FDD003B19CA /* JQ_AnisTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC032F24568FDD003B19CA /* JQ_AnisTools.swift */; };
-		13AC03322456D952003B19CA /* JQ_JMessageTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC03312456D952003B19CA /* JQ_JMessageTools.swift */; };
 		183ACC1C929A88C9F47733A24FC14704 /* ConstraintRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21B2FDCEA78DB15010A749F9203D21F /* ConstraintRelation.swift */; };
 		1B97EA35E7E8E870BB14BEC36115CA4C /* LayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EFBC475A6AD866A5083DC5F61B3563 /* LayoutConstraint.swift */; };
 		202C3C16767E9A4D4912F657811DA3CA /* ConstraintPriorityTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC92BE130C0A4CE98F06E9D397E55AF /* ConstraintPriorityTarget.swift */; };
@@ -128,7 +127,6 @@
 		13AC031D24568FB3003B19CA /* WeChatOptView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeChatOptView.swift; sourceTree = "<group>"; };
 		13AC031E24568FB3003B19CA /* WeChatOptView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WeChatOptView.xib; sourceTree = "<group>"; };
 		13AC032F24568FDD003B19CA /* JQ_AnisTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JQ_AnisTools.swift; path = JQTools/Classes/JQ_AnisTools.swift; sourceTree = "<group>"; };
-		13AC03312456D952003B19CA /* JQ_JMessageTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQ_JMessageTools.swift; sourceTree = "<group>"; };
 		144DAF3614C757BDAABBA78E4B4866FC /* ConstraintLayoutGuide+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "ConstraintLayoutGuide+Extensions.swift"; path = "Source/ConstraintLayoutGuide+Extensions.swift"; sourceTree = "<group>"; };
 		14FE473E37EFB8571E729F9B375CE60E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		15E730D3489BE9D2EF65330BEB9C56B3 /* NSInterger+extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "NSInterger+extension.swift"; sourceTree = "<group>"; };
@@ -370,7 +368,6 @@
 			isa = PBXGroup;
 			children = (
 				135A7C80246534D80052D7ED /* Header.h */,
-				13AC03312456D952003B19CA /* JQ_JMessageTools.swift */,
 				13AC032F24568FDD003B19CA /* JQ_AnisTools.swift */,
 				13AC030C24568F96003B19CA /* JQ_CommonCodeBlock.swift */,
 				ECA7881D6ABA03A41CC2CABBEBE644C1 /* JQ_DownloadTools.swift */,
@@ -653,7 +650,6 @@
 				74A12620CCDAB4806D7680239AF5288F /* UIImage+Extension.swift in Sources */,
 				6B4C845453C41E62E796DEB96E8C0B8E /* UIImageView+Extension.swift in Sources */,
 				13AC030D24568F96003B19CA /* JQ_CommonCodeBlock.swift in Sources */,
-				13AC03322456D952003B19CA /* JQ_JMessageTools.swift in Sources */,
 				30C6891745C2BC22AEE135335C355A44 /* UIView+Extension.swift in Sources */,
 				13AC032524568FB3003B19CA /* CustomPickerView.swift in Sources */,
 				13AC033024568FDD003B19CA /* JQ_AnisTools.swift in Sources */,

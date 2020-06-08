@@ -165,6 +165,9 @@ extension CustomPickerView:UIPickerViewDataSource{
         }
         label.textColor = UIColor(hexStr: "404040")
         label.adjustsFontSizeToFitWidth = true
+        
+        pickerView.subviews[1].backgroundColor = UIColor.gray.withAlphaComponent(0.5)
+        pickerView.subviews[2].backgroundColor = UIColor.gray.withAlphaComponent(0.5)
         return label
     }
 }

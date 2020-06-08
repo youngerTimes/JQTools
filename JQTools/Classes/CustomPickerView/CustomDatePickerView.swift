@@ -27,12 +27,14 @@ public enum DatePickerSubType{
 
 public class CustomDatePickerView: UIView {
     public typealias CallbackSelect = (Int,Int,Int,Int,Int)->Void
+    public typealias CallbackHidden = ()->Void
     
     private var centerView = UIView()
     private var pickerView = UIPickerView()
     private var completeBtn = UIButton()
     private var cancelBtn = UIButton()
     private var callbackSelect:CallbackSelect?
+    private var callbackHidden:CallbackHidden?
     private let date = Date()
     private var datePickerSubType:DatePickerSubType = .Normal
     private var resignYear = Date().jq_nowYear() //辞职年
@@ -114,8 +116,7 @@ public class CustomDatePickerView: UIView {
     }
     
     @objc func hiden(){
-        
-//        JQ_currentNavigationController().setNavigationBarHidden(false, animated: true)
+        callbackHidden?()
         UIView.animate(withDuration: 0.3, animations: {
             self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH, width: JQ_ScreenW, height: 325 * JQ_RateW)
         }) { (complete) in
@@ -129,7 +130,7 @@ public class CustomDatePickerView: UIView {
     ///   - resignMonth: 辞职月份，默认“本月”
     ///   - vc: 控制器
     ///   - callback: 回调
-    public  func showInJob(rY:NSInteger,rM:NSInteger,iY:NSInteger,iM:NSInteger,vc:UIViewController,callback:@escaping CallbackSelect){
+    public  func showInJob(rY:NSInteger,rM:NSInteger,iY:NSInteger,iM:NSInteger,vc:UIViewController,callback:@escaping CallbackSelect,hiden:@escaping CallbackHidden){
         JQ_currentNavigationController().setNavigationBarHidden(true, animated: true)
         datePickerSubType = .InJob
         self.resignYear = rY
@@ -139,6 +140,7 @@ public class CustomDatePickerView: UIView {
         
         vc.view.addSubview(self)
         callbackSelect  = callback
+        callbackHidden = hiden
         
         var selectComentRow_1 = 0
         for i in 1950...resignYear{
@@ -166,7 +168,7 @@ public class CustomDatePickerView: UIView {
         }
     }
     
-    public func showResign(rY:NSInteger,rM:NSInteger,iY:NSInteger,iM:NSInteger,vc:UIViewController,callback:@escaping CallbackSelect){
+    public func showResign(rY:NSInteger,rM:NSInteger,iY:NSInteger,iM:NSInteger,vc:UIViewController,callback:@escaping CallbackSelect,hiden:@escaping CallbackHidden){
         JQ_currentNavigationController().setNavigationBarHidden(true, animated: true)
         datePickerSubType = .Resign
         self.inJobYear = iY
@@ -175,6 +177,7 @@ public class CustomDatePickerView: UIView {
         
         vc.view.addSubview(self)
         callbackSelect  = callback
+        callbackHidden = hiden
         var selectComentRow_1 = 0
         for i in inJobYear...Date().jq_nowYear(){
             allYears.append(i)
@@ -203,11 +206,12 @@ public class CustomDatePickerView: UIView {
         }
     }
     
-    public func showInSchool(inSY:NSInteger,inSM:NSInteger,outSY:NSInteger,outSM:NSInteger,vc:UIViewController,callback:@escaping CallbackSelect){
+    public func showInSchool(inSY:NSInteger,inSM:NSInteger,outSY:NSInteger,outSM:NSInteger,vc:UIViewController,callback:@escaping CallbackSelect,hiden:@escaping CallbackHidden){
         JQ_currentNavigationController().setNavigationBarHidden(true, animated: true)
         datePickerSubType = .enrol
         vc.view.addSubview(self)
         callbackSelect  = callback
+        callbackHidden = hiden
         inSchoolMonth = inSM
         inSchoolYear = inSY
         outSchoolYear = outSY
@@ -242,11 +246,12 @@ public class CustomDatePickerView: UIView {
         }
     }
     
-    public func showGraduate(inSY:NSInteger,inSM:NSInteger,outSY:NSInteger,outSM:NSInteger,vc:UIViewController,callback:@escaping CallbackSelect){
+    public func showGraduate(inSY:NSInteger,inSM:NSInteger,outSY:NSInteger,outSM:NSInteger,vc:UIViewController,callback:@escaping CallbackSelect,hiden:@escaping CallbackHidden){
         JQ_currentNavigationController().setNavigationBarHidden(true, animated: true)
         datePickerSubType = .graduate
         vc.view.addSubview(self)
         callbackSelect  = callback
+        callbackHidden = hiden
         inSchoolMonth = inSM
         inSchoolYear = inSY
         outSchoolYear = outSY
@@ -286,10 +291,11 @@ public class CustomDatePickerView: UIView {
         }
     }
     
-    public func show(vc:UIViewController,callback:@escaping CallbackSelect){
+    public func show(vc:UIViewController,callback:@escaping CallbackSelect,hiden:@escaping CallbackHidden){
         JQ_currentNavigationController().setNavigationBarHidden(true, animated: true)
         vc.view.addSubview(self)
         callbackSelect  = callback
+        callbackHidden = hiden
         
         for i in 1950...Date().jq_nowYear()+30{
             allYears.append(i)
@@ -322,7 +328,7 @@ public class CustomDatePickerView: UIView {
         }
     }
     
-    public func showLimitToday(selectYear:NSInteger,selectMonth:NSInteger,selectDay:NSInteger,hour:NSInteger,minute:NSInteger,vc:UIViewController,callback:@escaping CallbackSelect){
+    public func showLimitToday(selectYear:NSInteger,selectMonth:NSInteger,selectDay:NSInteger,hour:NSInteger,minute:NSInteger,vc:UIViewController,callback:@escaping CallbackSelect,hiden:@escaping CallbackHidden){
         JQ_currentNavigationController().setNavigationBarHidden(true, animated: true)
         datePickerSubType = .today
         self.selectYear = selectYear
@@ -334,6 +340,7 @@ public class CustomDatePickerView: UIView {
         limitMinute = minute
         vc.view.addSubview(self)
         callbackSelect  = callback
+        callbackHidden = hiden
         
         for i in Date().jq_nowYear()...Date().jq_nowYear()+30{
             allYears.append(i)
@@ -368,10 +375,12 @@ public class CustomDatePickerView: UIView {
     
     
     
-    public func showLimit(selectYear:NSInteger = Date().jq_nowYear(),selectMonth:NSInteger = Date().jq_nowMonth(), vc:UIViewController,callback:@escaping CallbackSelect){
+    public func showLimit(selectYear:NSInteger = Date().jq_nowYear(),selectMonth:NSInteger = Date().jq_nowMonth(), vc:UIViewController,callback:@escaping CallbackSelect,hiden:@escaping CallbackHidden){
         JQ_currentNavigationController().setNavigationBarHidden(true, animated: true)
         vc.view.addSubview(self)
         callbackSelect  = callback
+        callbackHidden = hiden
+        
         self.selectMonth = selectMonth
         self.selectYear = selectYear
         
@@ -421,6 +430,12 @@ public class CustomDatePickerView: UIView {
 //            selectHour+=component_3_row
 //            selectMonth+=component_4_row
 //        }
+        
+        if limitToday && date.jq_nowYear() == selectYear && date.jq_nowMonth() == selectMonth && date.jq_nowDay() == selectDay && date.jq_nowHour() == selectHour {
+            selectMinute = component_4_row + limitMinute
+        }else{
+            selectMinute = component_4_row
+        }
         
         callbackSelect?(selectYear,selectMonth,selectDay,selectHour,selectMinute)
     }
@@ -527,7 +542,7 @@ extension CustomDatePickerView:UIPickerViewDataSource{
         }
         
         if component == 4{
-            if limitToday && date.jq_nowYear() == selectYear && date.jq_nowMonth() == selectMonth && date.jq_nowDay() == selectDay {
+            if limitToday && date.jq_nowYear() == selectYear && date.jq_nowMonth() == selectMonth && date.jq_nowDay() == selectDay && selectHour == date.jq_nowHour() {
                 return 60 - limitMinute
             }else{
                 return 60
@@ -586,7 +601,7 @@ extension CustomDatePickerView:UIPickerViewDataSource{
             }
         }
         if component == 4{
-            if limitToday && date.jq_nowYear() == selectYear && date.jq_nowMonth() == selectMonth && date.jq_nowDay() == selectDay {
+            if limitToday && date.jq_nowYear() == selectYear && date.jq_nowMonth() == selectMonth && date.jq_nowDay() == selectDay && selectHour == date.jq_nowHour()  {
                 label.text = String(format: "%02ld分", row + limitMinute)
             }else{
                 label.text = String(format: "%02ld分", row)
@@ -646,7 +661,7 @@ extension CustomDatePickerView:UIPickerViewDelegate{
                     selectHour = component_3_row
                 }
                 
-                if limitToday && date.jq_nowYear() == selectYear && date.jq_nowMonth() == selectMonth && date.jq_nowDay() == selectDay  {
+                if limitToday && date.jq_nowYear() == selectYear && date.jq_nowMonth() == selectMonth && date.jq_nowDay() == selectDay && selectHour == date.jq_nowHour()  {
                     selectMinute = component_4_row + limitMinute
                 }else{
                     selectMinute = component_4_row
@@ -681,7 +696,7 @@ extension CustomDatePickerView:UIPickerViewDelegate{
                 selectHour = component_3_row
             }
             
-            if limitToday && date.jq_nowYear() == selectYear && date.jq_nowMonth() == selectMonth && date.jq_nowDay() == selectDay  {
+            if limitToday && date.jq_nowYear() == selectYear && date.jq_nowMonth() == selectMonth && date.jq_nowDay() == selectDay && selectHour == date.jq_nowHour()  {
                 selectMinute = component_4_row + limitMinute
             }else{
                 selectMinute = component_4_row
@@ -702,7 +717,7 @@ extension CustomDatePickerView:UIPickerViewDelegate{
                 selectHour = component_3_row
             }
             
-            if limitToday && date.jq_nowYear() == selectYear && date.jq_nowMonth() == selectMonth && date.jq_nowDay() == selectDay  {
+            if limitToday && date.jq_nowYear() == selectYear && date.jq_nowMonth() == selectMonth && date.jq_nowDay() == selectDay && selectHour == date.jq_nowHour() {
                 selectMinute = component_4_row + limitMinute
             }else{
                 selectMinute = component_4_row
