@@ -317,4 +317,68 @@ extension Date{
         dateFormatter.dateFormat = formatter
         return detaildate
     }
+    
+    //该时间所在周的第一天日期（2017年12月17日 00:00:00）
+    public var startOfWeek: Date {
+        let calendar = NSCalendar.current
+        let components = calendar.dateComponents(
+            Set<Calendar.Component>([.yearForWeekOfYear, .weekOfYear]), from: self)
+        return calendar.date(from: components)!
+    }
+    
+    //该时间所在周的最后一天日期（2017年12月23日 00:00:00）
+    public var endOfWeek: Date {
+        let calendar = NSCalendar.current
+        var components = DateComponents()
+        components.day = 6
+        return calendar.date(byAdding: components, to: self.startOfWeek)!
+    }
+    
+    //根据时间获取一个周的时间表
+    public static func weekDates(_ date:Date)->[Date]{
+        var dates = [Date]()
+        let timeInterval = 24 * 3600
+        for week in 1...7{
+            let date = date.startOfWeek.addingTimeInterval(TimeInterval(week * timeInterval + 8 * 3600))
+            dates.append(date)
+        }
+        return dates
+    }
+    
+    
+    //获取上一周的时间表
+    public var jq_lastWeekDates:[Date]{
+         let temp_lastDate = self.addingTimeInterval(-7 * 24 * 3600)
+        return Date.weekDates(temp_lastDate)
+    }
+    
+    //获取上一周的时间表
+    public var jq_nextWeekDates:[Date]{
+         let temp_nextDate = self.addingTimeInterval(7 * 24 * 3600)
+        return Date.weekDates(temp_nextDate)
+    }
+    
+    //获取本周的时间表
+    public var jq_currentWeekDates:[Date]{
+        return Date.weekDates(self)
+    }
+    
+    //获取上一个周
+    public var jq_lastWeekDate:Date{
+        return self.addingTimeInterval(-7 * 24 * 3600)
+    }
+    
+    public var jq_nextWeekDate:Date{
+        return self.addingTimeInterval(7 * 24 * 3600)
+    }
+    
+    //获取上一个周
+    public static func lastWeek(_ date:Date)->Date{
+        return date.addingTimeInterval(-7 * 24 * 3600)
+    }
+    
+    //获取下一个周
+    public static func nextWeek(_ date:Date)->Date{
+        return date.addingTimeInterval(7 * 24 * 3600)
+    }
 }
