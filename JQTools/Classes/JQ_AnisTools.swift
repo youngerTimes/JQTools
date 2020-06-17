@@ -61,7 +61,7 @@ public func JQ_AnnimationTableView(tableView:UITableView,type:JQ_TableAniType){
     }
 }
 
-public func JQ_MoveAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
+private func JQ_MoveAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
     cell.transform = CGAffineTransform(translationX: CGFloat(offset), y: 0)
     UIView.animate(withDuration: 0.35, delay: Double(index) * 0.075, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.0, options: .layoutSubviews, animations: {
         cell.transform = .identity
@@ -70,7 +70,7 @@ public func JQ_MoveAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int)
     }
 }
 
-public func JQ_OverturnAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
+private func JQ_OverturnAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
     cell.transform = CGAffineTransform(scaleX: -JQ_ScreenW, y: 0)
     UIView.animate(withDuration: 0.35, delay: Double(index) * 0.075, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.0, options: .layoutSubviews, animations: {
         cell.transform = .identity
@@ -79,7 +79,7 @@ public func JQ_OverturnAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:
     }
 }
 
-public func JQ_FadeDutAnimation(_ cell:UITableViewCell,_ index:Int){
+private func JQ_FadeDutAnimation(_ cell:UITableViewCell,_ index:Int){
     UIView.animate(withDuration: 0.35, delay: Double(index) * 0.075, options: .curveEaseIn, animations: {
         cell.alpha = 1.0
     }) { (complete) in
@@ -87,7 +87,7 @@ public func JQ_FadeDutAnimation(_ cell:UITableViewCell,_ index:Int){
     }
 }
 
-public func JQ_FadeDutAnimationMove(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
+private func JQ_FadeDutAnimationMove(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
     cell.transform = CGAffineTransform(translationX: CGFloat(offset), y: 0)
     UIView.animate(withDuration: 0.35, delay: Double(index) * 0.075, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.1, options: .layoutSubviews, animations: {
         cell.transform = .identity
@@ -97,7 +97,7 @@ public func JQ_FadeDutAnimationMove(_ cell:UITableViewCell,_ offset:Double,_ ind
     }
 }
 
-public func JQ_BoundsAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
+private func JQ_BoundsAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
     cell.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
     UIView.animate(withDuration: 0.8, delay: Double(index) * 0.075, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.1, options: .layoutSubviews, animations: {
         cell.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
@@ -107,7 +107,7 @@ public func JQ_BoundsAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:In
     }
 }
 
-public func JQ_BothwayAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
+private func JQ_BothwayAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
     
     var value = offset * 2
     if index % 2 == 0{
@@ -122,7 +122,7 @@ public func JQ_BothwayAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:I
     }
 }
 
-public func JQ_FillOneAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
+private func JQ_FillOneAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:Int){
     
     let frame = CGRect(x: 0, y:cell.frame.origin.y, width: cell.frame.size.width, height: cell.frame.size.height)
     cell.frame = CGRect.zero
@@ -135,9 +135,6 @@ public func JQ_FillOneAnimation(_ cell:UITableViewCell,_ offset:Double,_ index:I
 
 //MARK: - UILabel
 /// 数值增长
-/// - Parameters:
-///   - label: 增长的Label
-///   - maxNumber: 最大数
 public func JQ_AnnimationNumber(_ label:UILabel,maxNumber:Int){
     
     let interval = maxNumber/100
@@ -156,10 +153,7 @@ public func JQ_AnnimationNumber(_ label:UILabel,maxNumber:Int){
     }
 }
 
-/// 数值增长
-/// - Parameters:
-///   - label: 增长的Label
-///   - maxNumber: 最大数
+/// 数值增长 Double
 public func JQ_AnnimationNumber(_ label:UILabel,maxNumber:Double){
     
     let interval = 0.02
@@ -227,7 +221,9 @@ public func JQ_AnimationTransition(fromView:UIView,type:CATransitionType,subType
     fromView.layer.add(transition, forKey: "ani")
 }
 
-/// 动画集合类
+
+//MARK: - BasicAnimation等动画
+///动画集合类
 public class JQ_AnisTools{
     
     /// 字体动画

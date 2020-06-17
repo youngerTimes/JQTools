@@ -40,9 +40,9 @@ TODO: Add long description of the pod here.
    s.frameworks = 'UIKit'
    s.dependency 'SnapKit'
    s.dependency 'ObjectMapper'
-   s.dependency 'QMUIKit', '~> 2.7.2'
-   s.dependency 'IQKeyboardManagerSwift'
-   s.dependency 'RxSwift'
-   s.dependency 'RxCocoa'
+   s.dependency 'QMUIKit', '~> 4.0.4'
+   s.dependency 'IQKeyboardManagerSwift', '~> 6.5.5'
+   s.dependency 'RxSwift','~> 5.1.1'
+   s.dependency 'RxCocoa','~> 5.1.1'
    s.dependency 'SwiftyUserDefaults', '4.0.0-alpha.1'
 end

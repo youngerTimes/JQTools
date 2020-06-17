@@ -15,6 +15,11 @@ extension Dictionary{
         let str = String(data: data!, encoding: String.Encoding.utf8)
         return str
     }
+    
+    ///unicode编码问题
+    public var jq_unicodeDescription : String{
+         return self.description.jq_stringByReplaceUnicode
+     }
 }
 
 

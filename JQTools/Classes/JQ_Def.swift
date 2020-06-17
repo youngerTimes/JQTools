@@ -36,7 +36,7 @@ public func JQ_HideAllView() {
 #endif
 
 
-//提示信息
+///提示信息
 public func JQ_Log<T>(_ message:T,file:String = #file,funcName:String = #function,lineNum:Int = #line){
     #if DEBUG
     let file = (file as NSString).lastPathComponent;
@@ -44,7 +44,7 @@ public func JQ_Log<T>(_ message:T,file:String = #file,funcName:String = #functio
     #endif
 }
 
-//警告信息
+///警告信息
 public func JQ_WarningLog<T>(_ message:T,file:String = #file,funcName:String = #function,lineNum:Int = #line){
     #if DEBUG
     let file = (file as NSString).lastPathComponent;

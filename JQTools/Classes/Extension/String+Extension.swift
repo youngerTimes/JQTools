@@ -18,7 +18,7 @@ extension String{
     }
     
     //MARK: - 字符串计算宽高
-    ///获取字符串宽度
+    /// 获取字符串宽度
     public static func jq_getWidth(text: String, height: CGFloat, font: CGFloat) -> CGFloat {
         let text = text as NSString
         let rect = text.boundingRect(with: CGSize(width: CGFloat(Int.max), height: height), options: .usesLineFragmentOrigin, attributes: [.font : UIFont.systemFont(ofSize: font)], context: nil)
@@ -39,6 +39,7 @@ extension String{
     }
     
     static let random_str_characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+     ///获取指定长度的随机字符串
     public static func jq_randomStr(len : Int) -> String{
         var ranStr = ""
         for _ in 0..<len {
@@ -48,6 +49,7 @@ extension String{
         return ranStr
     }
     
+    @available(*,deprecated,message: "废弃:建议使用jq_subRange")
     public func jq_nsRange(from range: Range<String.Index>) -> NSRange {
         let from = range.lowerBound.samePosition(in: utf16)
         let to = range.upperBound.samePosition(in: utf16)
@@ -55,6 +57,17 @@ extension String{
                        length: utf16.distance(from: from!, to: to!))
     }
     
+    /// 获取子字符串的NSRange
+    public func jq_subRange(_ subText:String)->NSRange{
+        let range = self.range(of: subText)
+        let from = range?.lowerBound.samePosition(in: utf16)
+        let to = range?.upperBound.samePosition(in: utf16)
+        return NSRange(location: utf16.distance(from: utf16.startIndex, to: from!),
+                       length: utf16.distance(from: from!, to: to!))
+    }
+    
+    /// 将字符串转换为字典类型
+    @available(*,deprecated,message: "废弃")
     public func toDict() -> [String : Any]?{
          let data = self.data(using: String.Encoding.utf8)
          if let dict = try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String : Any] {
@@ -63,6 +76,34 @@ extension String{
          return nil
      }
     
+    /// 将字符串转换为字典类型
+    public func jq_toDict() -> [String : Any]?{
+         let data = self.data(using: String.Encoding.utf8)
+         if let dict = try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String : Any] {
+             return dict
+         }
+         return nil
+     }
+    
+    ///JSONString转换为数组
+    public func jq_toArray(jsonString:String) ->NSArray{
+        let jsonData:Data = jsonString.data(using: .utf8)!
+        let array = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
+        if array != nil {
+            return array as! NSArray
+        }
+        return array as! NSArray
+    }
+    
+    ///字符串分割成数组
+    public func jq_toArray(character:String) -> Array<String>{
+        let array : Array = components(separatedBy: character)
+        return array
+    }
+    
+    
+    /// NSRange 转 Range
+    @available(*,deprecated,message: "废弃")
     public func jq_range(from nsRange: NSRange) -> Range<String.Index>? {
         guard
             let from16 = utf16.index(utf16.startIndex, offsetBy: nsRange.location, limitedBy: utf16.endIndex),
@@ -73,29 +114,24 @@ extension String{
         return from ..< to
     }
     
-    /*
-     *去掉首尾空格
-     */
+  ///去掉首尾空格
     public var jq_removeHeadAndTailSpace:String {
         let whitespace = NSCharacterSet.whitespaces
         return self.trimmingCharacters(in: whitespace)
     }
-    /*
-     *去掉首尾空格 包括后面的换行 \n
-     */
+    
+    ///去掉首尾空格 包括后面的换行 \n
     public var jq_removeHeadAndTailSpacePro:String {
         let whitespace = NSCharacterSet.whitespacesAndNewlines
         return self.trimmingCharacters(in: whitespace)
     }
-    /*
-     *去掉所有空格
-     */
+    
+    ///去掉所有空格
     public var jq_removeAllSapce: String {
         return self.replacingOccurrences(of: " ", with: "", options: .literal, range: nil)
     }
-    /*
-     *去掉首尾空格 后 指定开头空格数
-     */
+   
+    ///去掉首尾空格 后 指定开头空格数
     public func jq_beginSpaceNum(num: Int) -> String {
         var beginSpace = ""
         for _ in 0..<num {
@@ -104,7 +140,7 @@ extension String{
         return beginSpace + self.jq_removeHeadAndTailSpacePro
     }
     
-    //配合 TextDelegate -> shouldChangeCharactersIn
+    ///配合 TextDelegate -> shouldChangeCharactersIn
     public func jq_filterDecimals(replacementString:String,range:NSRange,limit:NSInteger = 2)->Bool{
         let futureString: NSMutableString = NSMutableString(string: self)
         futureString.insert(replacementString, at: range.location)
@@ -123,8 +159,7 @@ extension String{
         return true
     }
     
-    
-    //填充HTML的完整
+    ///适配Web,填充HTML的完整
     public func jq_wrapHtml()-> String{
         return "<html><head><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'><style>*{ width: 100%%; margin: 0; padding: 0 3; box-sizing: border-box;} img{ width: 100%%;}</style></head><body>\(self)</body></html>"
     }
@@ -144,37 +179,32 @@ extension String{
         }
     }
     
-    //    /// 计算文本的宽度
-    //    /// - Parameter height: 固定高度
-    //    /// - Parameter font: 字体
-    //    public func GetWidth(height: CGFloat, font: CGFloat) -> CGFloat {
-    //        let text = self as NSString
-    //        let rect = text.boundingRect(with: CGSize(width: CGFloat(Int.max), height: height), options: .usesLineFragmentOrigin, attributes: [.font : UIFont.systemFont(ofSize: font)], context: nil)
-    //        return rect.size.width
-    //    }
-    //
-    //    /// 计算文本高度
-    //    /// - Parameter width: 固定宽度
-    //    /// - Parameter font: 字体
-    //    public func GetHeight(width: CGFloat, font: CGFloat) -> CGFloat {
-    //        let text = self as NSString
-    //        let rect = text.boundingRect(with: CGSize(width: width, height: CGFloat(Int.max)), options: .usesLineFragmentOrigin, attributes: [.font : UIFont.systemFont(ofSize: font)], context: nil)
-    //        return rect.size.height
-    //    }
     
-    //将原始的url编码为合法的url
+    /// 手机号转138****6372
+    public func jq_blotOutPhone() -> String{
+        if self == nil || self.count != 11{
+            print("传入手机号格式错误")
+            return ""
+        }else{
+            let befor = prefix(3)
+            let last = suffix(4)
+            return befor + "****" + last
+        }
+    }
+    
+    ///将原始的url编码为合法的url
     public func jq_urlEncoded() -> String {
         let encodeUrlString = self.addingPercentEncoding(withAllowedCharacters:
             .urlQueryAllowed)
         return encodeUrlString ?? ""
     }
     
-    //将编码后的url转换回原始的url
+    ///将编码后的url转换回原始的url
     public func jq_urlDecoded() -> String {
         return self.removingPercentEncoding ?? ""
     }
     
-    //获取子字符串
+    ///获取子字符串
     public func jq_substingInRange(_ r: Range<Int>) -> String? {
         if r.lowerBound < 0 || r.upperBound > self.count {
             return nil
@@ -184,34 +214,11 @@ extension String{
         return String(self[startIndex..<endIndex])
     }
     
-    //    public func adaptHeight(fontSize:Double,fixWidth:Double) -> CGSize{
-    //
-    //        let dict  = [NSAttributedString.Key.font:UIFont.systemFont(ofSize: CGFloat(fontSize))]
-    //
-    //        let newStr = self as NSString
-    //        let size = newStr.boundingRect(with: CGSize(width: fixWidth, height: Double(MAXFLOAT)), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: dict, context: nil).size
-    //
-    //        return size
-    //    }
-    //
-    //    public func adaptWidth(fontSize:Double,fixHeight:Double) -> CGSize{
-    //        let dict  = [NSAttributedString.Key.font:UIFont.systemFont(ofSize: CGFloat(fontSize))]
-    //
-    //        let newStr = self as NSString
-    //        let size = newStr.boundingRect(with: CGSize(width: Double(MAXFLOAT), height: fixHeight), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: dict, context: nil).size
-    //
-    //        return size
-    //    }
-    
     public func jq_toDate(format:String = "YYYY-MM-dd") ->Date?{
         let dateformatter = DateFormatter()
         dateformatter.dateFormat = format
         dateformatter.timeZone = TimeZone.current
         return dateformatter.date(from: self)
-    }
-    
-    public func jq_wapperToHTML()->String{
-        return "<html><head><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'><style>*{ width: 100%; margin: 0; padding: 0 3; box-sizing: border-box;} img{ width: 100%%;}</style></head><body>\(self)</body></html>"
     }
     
     public func jq_filterFromHTML(_ htmlString:String)->String{
@@ -442,5 +449,24 @@ extension String{
             }
             return Int(result)
         }
+    }
+    
+    /// 对Unicode编码进行转换
+    public var jq_unicodeDescription : String{
+        return self.jq_stringByReplaceUnicode
+    }
+    
+    var jq_stringByReplaceUnicode : String{
+        let tempStr1 = self.replacingOccurrences(of: "\\u", with: "\\U")
+        let tempStr2 = tempStr1.replacingOccurrences(of: "\"", with: "\\\"")
+        let tempStr3 = "\"".appending(tempStr2).appending("\"")
+        let tempData = tempStr3.data(using: String.Encoding.utf8)
+        var returnStr:String = ""
+        do {
+            returnStr = try PropertyListSerialization.propertyList(from: tempData!, options: [.mutableContainers], format: nil) as! String
+        } catch {
+            print(error)
+        }
+        return returnStr.replacingOccurrences(of: "\\n", with: "\n")
     }
 }

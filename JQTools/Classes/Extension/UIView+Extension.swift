@@ -51,6 +51,25 @@ extension UIView{
         set(value){self.layer.borderColor = value}
     }
     
+    /// centerY
+    public var centerY: CGFloat {
+        get {return center.y}
+        set {center.y = newValue}
+    }
+    
+    /// size
+    public var size: CGSize {
+        get {return frame.size}
+        set {frame.size = newValue}
+    }
+    
+    public var right: CGFloat {
+        get {return frame.maxX}
+    }
+    
+    public var bottom: CGFloat {
+        get {return frame.maxY}
+    }
     
     ///切部分圆角(Frame) 注意不能用错，storyboard和nib 在高度动态变化时，容易出现BUG
     public func jq_cornerPart(byRoundingCorners corners: UIRectCorner, radii: CGFloat) {
@@ -127,5 +146,39 @@ extension UIView{
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
         self.layer.insertSublayer(gradientLayer, at: 0)
         return gradientLayer
+    }
+    
+    ///读取本地json文件
+    public func jq_readFilesOfJsonfiles(name:String,type:String) -> NSArray{
+        let path = Bundle.main.path(forResource: name, ofType: type)
+        let url = URL(fileURLWithPath: path!)
+        do {
+            let data = try Data(contentsOf: url)
+            let jsonData:Any = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
+            let jsonArr = jsonData as! NSArray
+            
+            for dict in jsonArr {
+                print(dict)
+            }
+            return jsonArr
+        } catch let error as Error {
+            print("读取本地数据出现错误!%@",error)
+            return []
+        }
+    }
+    
+   public func jq_backgroundColorClear(){
+        self.backgroundColor = UIColor.white.withAlphaComponent(0)
+    }
+    
+    /// 圆角加阴影
+     func jq_addShadows(shadowColor: UIColor, corner: CGFloat,radius:CGFloat,offset:CGSize, opacity: Double) {
+        self.layer.shadowColor = shadowColor.cgColor
+        self.layer.cornerRadius = corner
+        self.layer.shadowOpacity = Float(opacity)
+        self.layer.shadowRadius = radius
+        self.layer.shadowOffset = offset
+        self.layer.shouldRasterize = true
+        self.layer.rasterizationScale = UIScreen.main.scale
     }
 }
