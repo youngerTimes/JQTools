@@ -165,6 +165,41 @@ public func JQ_currentNavigationController() -> UINavigationController {
 }
 
 public class JQTool{
+    
+    public enum DottedLineType {
+        case Vertical
+        case Horizontal
+    }
+    
+    ///绘制虚线
+    public static func ky_drawDashLine(lineView : UIView,lineLength : Double ,lineSpacing : Int,lineColor : UIColor, type:DottedLineType){
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.bounds = lineView.bounds
+        //        只要是CALayer这种类型,他的anchorPoint默认都是(0.5,0.5)
+        shapeLayer.anchorPoint = CGPoint(x: 0, y: 0)
+        shapeLayer.strokeColor = lineColor.cgColor
+        if type == .Vertical {
+            shapeLayer.lineWidth = lineView.frame.size.width * JQ_RateW
+        }else {
+            shapeLayer.lineWidth = lineView.frame.size.height
+        }
+        
+        shapeLayer.lineJoin = .round
+        
+        shapeLayer.lineDashPattern = [NSNumber(value: lineLength),NSNumber(value: lineSpacing)]
+        
+        let path = CGMutablePath()
+        path.move(to: CGPoint(x: 0, y: 0))
+        
+        if type == .Vertical {
+            path.addLine(to: CGPoint(x: 0, y: lineView.frame.size.height))
+        }else {
+            path.addLine(to: CGPoint(x: lineView.frame.size.width * JQ_RateW, y: 0))
+        }
+        shapeLayer.path = path
+        lineView.layer.addSublayer(shapeLayer)
+    }
+    
     ///获取系统缓存大小（B）
     public static func jq_cacheSize() -> String {
         var big = 0.0
@@ -220,7 +255,7 @@ public class JQTool{
     }
     
     ///横竖屏
-    func jq_setNewOrientation(fullScreen: Bool) {
+    public func jq_setNewOrientation(fullScreen: Bool) {
         if fullScreen {
             //横屏
             let resetOrientationTargert = NSNumber(integerLiteral: UIInterfaceOrientation.unknown.rawValue)
