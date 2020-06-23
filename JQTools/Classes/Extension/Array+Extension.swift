@@ -7,7 +7,9 @@
 
 import Foundation
 extension Array{
-    public var jq_unicodeDescription : String {
+    
+    ///unicode编码问题
+    public var jq_unicodeDescription:String{
         return self.description.jq_stringByReplaceUnicode
-    }
+     }
 }

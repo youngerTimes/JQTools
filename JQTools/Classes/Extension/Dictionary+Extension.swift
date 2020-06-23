@@ -7,9 +7,8 @@
 
 import Foundation
 
-/// 字典转字符串
-
 extension Dictionary{
+    /// 字典转字符串
     public func jq_toString() -> String?{
         let data = try? JSONSerialization.data(withJSONObject: self, options: [])
         let str = String(data: data!, encoding: String.Encoding.utf8)

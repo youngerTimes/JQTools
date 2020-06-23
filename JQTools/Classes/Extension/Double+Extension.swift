@@ -7,10 +7,10 @@
 
 import Foundation
 
-
 extension Double{
+    
+    /// 格式化
     public func jq_formatFloat()->String {
-        
         #if targetEnvironment(simulator)
         if fmodl(Float80(Double(self)), 1) == 0 {//如果有一位小数点
             return (NSString(format: "%.0f", self) as String)
@@ -32,8 +32,9 @@ extension Double{
 }
 
 extension CGFloat{
+    
+    /// 格式化
     public func jq_formatFloat()->String {
-        
         #if targetEnvironment(simulator)
         if fmodl(Float80(Double(self)), 1) == 0 {//如果有一位小数点
             return (NSString(format: "%.0f", self) as String)
@@ -51,6 +52,5 @@ extension CGFloat{
             return (NSString(format: "%.2f", self) as String)
         }
         #endif
-        
     }
 }

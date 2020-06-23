@@ -9,6 +9,7 @@ import Foundation
 import CommonCrypto
 
 extension String{
+     private static let random_str_characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
    public enum JQSafeBase64Type {
         ///加密
@@ -17,7 +18,49 @@ extension String{
         case decode
     }
     
-    //MARK: - 字符串计算宽高
+    public enum HMACAlgorithm {
+        case MD5, SHA1, SHA224, SHA256, SHA384, SHA512
+        
+        func toCCHmacAlgorithm() -> CCHmacAlgorithm {
+            var result: Int = 0
+            switch self {
+                case .MD5:
+                    result = kCCHmacAlgMD5
+                case .SHA1:
+                    result = kCCHmacAlgSHA1
+                case .SHA224:
+                    result = kCCHmacAlgSHA224
+                case .SHA256:
+                    result = kCCHmacAlgSHA256
+                case .SHA384:
+                    result = kCCHmacAlgSHA384
+                case .SHA512:
+                    result = kCCHmacAlgSHA512
+            }
+            return CCHmacAlgorithm(result)
+        }
+        
+        func digestLength() -> Int {
+            var result: CInt = 0
+            switch self {
+                case .MD5:
+                    result = CC_MD5_DIGEST_LENGTH
+                case .SHA1:
+                    result = CC_SHA1_DIGEST_LENGTH
+                case .SHA224:
+                    result = CC_SHA224_DIGEST_LENGTH
+                case .SHA256:
+                    result = CC_SHA256_DIGEST_LENGTH
+                case .SHA384:
+                    result = CC_SHA384_DIGEST_LENGTH
+                case .SHA512:
+                    result = CC_SHA512_DIGEST_LENGTH
+            }
+            return Int(result)
+        }
+    }
+    
+    // MARK: -- Static
     /// 获取字符串宽度
     public static func jq_getWidth(text: String, height: CGFloat, font: CGFloat) -> CGFloat {
         let text = text as NSString
@@ -38,7 +81,6 @@ extension String{
         return rect.size.height
     }
     
-    static let random_str_characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
      ///获取指定长度的随机字符串
     public static func jq_randomStr(len : Int) -> String{
         var ranStr = ""
@@ -49,6 +91,7 @@ extension String{
         return ranStr
     }
     
+    // MARK: -- Instance Method
     @available(*,deprecated,message: "废弃:建议使用jq_subRange")
     public func jq_nsRange(from range: Range<String.Index>) -> NSRange {
         let from = range.lowerBound.samePosition(in: utf16)
@@ -114,23 +157,6 @@ extension String{
         return from ..< to
     }
     
-  ///去掉首尾空格
-    public var jq_removeHeadAndTailSpace:String {
-        let whitespace = NSCharacterSet.whitespaces
-        return self.trimmingCharacters(in: whitespace)
-    }
-    
-    ///去掉首尾空格 包括后面的换行 \n
-    public var jq_removeHeadAndTailSpacePro:String {
-        let whitespace = NSCharacterSet.whitespacesAndNewlines
-        return self.trimmingCharacters(in: whitespace)
-    }
-    
-    ///去掉所有空格
-    public var jq_removeAllSapce: String {
-        return self.replacingOccurrences(of: " ", with: "", options: .literal, range: nil)
-    }
-   
     ///去掉首尾空格 后 指定开头空格数
     public func jq_beginSpaceNum(num: Int) -> String {
         var beginSpace = ""
@@ -179,10 +205,9 @@ extension String{
         }
     }
     
-    
     /// 手机号转138****6372
     public func jq_blotOutPhone() -> String{
-        if self == nil || self.count != 11{
+        if self.count != 11{
             print("传入手机号格式错误")
             return ""
         }else{
@@ -214,6 +239,7 @@ extension String{
         return String(self[startIndex..<endIndex])
     }
     
+    ///时间转换为Date
     public func jq_toDate(format:String = "YYYY-MM-dd") ->Date?{
         let dateformatter = DateFormatter()
         dateformatter.dateFormat = format
@@ -221,6 +247,7 @@ extension String{
         return dateformatter.date(from: self)
     }
     
+    /// 将HTML标签中<>去除
     public func jq_filterFromHTML(_ htmlString:String)->String{
         var html = htmlString
         let scanner = Scanner(string: htmlString)
@@ -233,6 +260,159 @@ extension String{
         return html
     }
     
+    ///减少内存(截取)
+     public func jq_substring(from index: Int) -> String {
+         if self.count > index {
+             let startIndex = self.index(self.startIndex, offsetBy: index)
+             let subString = self[startIndex..<self.endIndex]
+             return String(subString)
+         } else {
+             return self
+         }
+     }
+     
+     ///减少内存(截取)
+     public func jq_substring(to index: Int) -> String {
+         if self.count > index {
+             let endIndex = self.index(self.startIndex, offsetBy: index)
+             let subString = self[self.startIndex..<endIndex]
+             return String(subString)
+         } else {
+             return self
+         }
+     }
+     
+    ///转化为Base64
+     public func jq_safeBase64(type: JQSafeBase64Type) -> String {
+         var base64Str: String!
+         if type == .encode {
+             base64Str = self.replacingOccurrences(of: "+", with: "-")
+             base64Str = base64Str.replacingOccurrences(of: "/", with: "_")
+             base64Str = base64Str.replacingOccurrences(of: "=", with: "")
+         }else {
+             base64Str = self.replacingOccurrences(of: "-", with: "+")
+             base64Str = base64Str.replacingOccurrences(of: "_", with: "/")
+             let mod = base64Str.count % 4
+             if mod > 0 {
+                 base64Str += "====".jq_substring(to: mod)
+             }
+         }
+         return base64Str
+     }
+     
+     
+     ///MD5
+     public func jq_md5String() -> String {
+         let str = self.cString(using: String.Encoding.utf8)
+         let strLen = CC_LONG(self.lengthOfBytes(using: String.Encoding.utf8))
+         let digestLen = Int(CC_MD5_DIGEST_LENGTH)
+         let result = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: digestLen)
+         
+         CC_MD5(str!, strLen, result)
+         let hash = NSMutableString()
+         for i in 0 ..< digestLen {
+             hash.appendFormat("%02x", result[i])
+         }
+         result.deinitialize(count: digestLen)
+         return String(format: hash as String)
+     }
+     
+     ///获取字符串拼音
+     public func jq_getPinyin() -> String {
+         let str = NSMutableString(string: self)
+         CFStringTransform(str as CFMutableString, nil, kCFStringTransformMandarinLatin, false)
+         CFStringTransform(str as CFMutableString, nil, kCFStringTransformStripDiacritics, false)
+         return str.capitalized
+     }
+     
+     ///获取字符串首字母大写
+     public func jq_FirstLetter() -> String {
+         let str = NSMutableString(string: self)
+         CFStringTransform(str as CFMutableString, nil, kCFStringTransformMandarinLatin, false)
+         CFStringTransform(str as CFMutableString, nil, kCFStringTransformStripDiacritics, false)
+         let strPinYin = str.capitalized
+         return strPinYin.jq_substring(to: 1)
+     }
+     
+     ///判断是否为汉字
+     public func jq_isValidateChinese() -> Bool {
+         let match: String = "[\\u4e00-\\u9fa5]+$"
+         return NSPredicate(format: "SELF MATCHES %@", match).evaluate(with:self)
+     }
+     
+     ///获取文件/文件夹大小
+     public func jq_getFileSize() -> UInt64  {
+         var size: UInt64 = 0
+         let fileManager = FileManager.default
+         var isDir: ObjCBool = false
+         let isExists = fileManager.fileExists(atPath: self, isDirectory: &isDir)
+         if isExists {
+             if isDir.boolValue {
+                 let enumerator = fileManager.enumerator(atPath: self)
+                 for subPath in enumerator! {
+                     let fullPath = self.appending("/\(subPath)")
+                     do {
+                         let attr = try fileManager.attributesOfItem(atPath: fullPath)
+                         size += attr[FileAttributeKey.size] as! UInt64
+                     } catch  {
+                         print("error :\(error)")
+                     }
+                 }
+             } else {
+                 do {
+                     let attr = try fileManager.attributesOfItem(atPath: self)
+                     size += attr[FileAttributeKey.size] as! UInt64
+                     
+                 } catch  {
+                     print("error :\(error)")
+                 }
+             }
+         }
+         return size
+     }
+     
+     public func jq_hmac(algorithm: HMACAlgorithm, key: String) -> String {
+         let cKey = key.cString(using: String.Encoding.utf8)
+         let cData = self.cString(using: String.Encoding.utf8)
+         //        var result = [CUnsignedChar](count: Int(algorithm.digestLength()), repeatedValue: 0)
+         //        var hmacData:NSData = NSData(bytes: result, length: (Int(algorithm.digestLength())))
+         //        var hmacBase64 = hmacData.base64EncodedStringWithOptions(NSData.Base64EncodingOptions.Encoding76CharacterLineLength)
+         var result = [CUnsignedChar](repeating: 0, count: Int(algorithm.digestLength()))
+         CCHmac(algorithm.toCCHmacAlgorithm(), cKey!, strlen(cKey!), cData!, strlen(cData!), &result)
+         
+         var hmacData: Data = Data(bytes: result, count: (Int(algorithm.digestLength())))
+         
+         
+         //        var str = String(data: hmacData, encoding: String.Encoding.utf8)!
+         //        str += "\(self)"
+         //        let data = str.data(using: String.Encoding.utf8)!
+         
+         let data = self.data(using: String.Encoding.utf8)!
+         hmacData.append(data)
+         let hmacBase64 = hmacData.base64EncodedString(options: Data.Base64EncodingOptions.lineLength76Characters)
+         return String(hmacBase64)
+     }
+    
+    
+    // MARK: -- property
+  ///去掉首尾空格
+    public var jq_removeHeadAndTailSpace:String {
+        let whitespace = NSCharacterSet.whitespaces
+        return self.trimmingCharacters(in: whitespace)
+    }
+    
+    ///去掉首尾空格 包括后面的换行 \n
+    public var jq_removeHeadAndTailSpacePro:String {
+        let whitespace = NSCharacterSet.whitespacesAndNewlines
+        return self.trimmingCharacters(in: whitespace)
+    }
+    
+    ///去掉所有空格
+    public var jq_removeAllSapce: String {
+        return self.replacingOccurrences(of: " ", with: "", options: .literal, range: nil)
+    }
+   
+    /// 判断是否为手机号
     public var jq_isPhone:Bool{
         let pattern2 = "^1[0-9]{10}$"
         if NSPredicate(format: "SELF MATCHES %@", pattern2).evaluate(with: self) {
@@ -241,6 +421,7 @@ extension String{
         return false
     }
     
+    /// 判断是否是身份证
     public var jq_isIdCard:Bool{
         let pattern = "(^[0-9]{15}$)|([0-9]{17}([0-9]|X)$)";
         let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
@@ -248,7 +429,7 @@ extension String{
         return isMatch
     }
     
-    //MARK:- 正则匹配用户密码6-18位数字和字母组合
+    ///正则匹配用户密码6-18位数字和字母组合
     public var jq_isComplexPassword:Bool{
         let pattern = "^(?![0-9]+$)(?![a-zA-Z]+$)[a-zA-Z0-9]{6,18}"
         let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
@@ -256,6 +437,7 @@ extension String{
         return isMatch
     }
     
+    /// 判断是否是邮箱
     public var jq_isEmail:Bool {
         let pattern = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
         let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
@@ -263,6 +445,7 @@ extension String{
         return isMatch;
     }
     
+    /// 判断是否是中文
     public var jq_isChinese:Bool {
         let pattern = "^[a-zA-Z\\u4E00-\\u9FA5]{1,20}"
         let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
@@ -270,185 +453,10 @@ extension String{
         return isMatch;
     }
     
+    /// 判断是否是链接
     public var jq_isURL:Bool {
-        let pattern = "^[0-9A-Za-z]{1,50}"
-        let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
-        let isMatch:Bool = pred.evaluate(with: self)
-        return isMatch;
-    }
-    
-    ///减少内存(截取)
-    public func substring(from index: Int) -> String {
-        if self.count > index {
-            let startIndex = self.index(self.startIndex, offsetBy: index)
-            let subString = self[startIndex..<self.endIndex]
-            return String(subString)
-        } else {
-            return self
-        }
-    }
-    
-    ///减少内存(截取)
-    public func substring(to index: Int) -> String {
-        if self.count > index {
-            let endIndex = self.index(self.startIndex, offsetBy: index)
-            let subString = self[self.startIndex..<endIndex]
-            return String(subString)
-        } else {
-            return self
-        }
-    }
-    
-    public func jq_safeBase64(type: JQSafeBase64Type) -> String {
-        var base64Str: String!
-        if type == .encode {
-            base64Str = self.replacingOccurrences(of: "+", with: "-")
-            base64Str = base64Str.replacingOccurrences(of: "/", with: "_")
-            base64Str = base64Str.replacingOccurrences(of: "=", with: "")
-        }else {
-            base64Str = self.replacingOccurrences(of: "-", with: "+")
-            base64Str = base64Str.replacingOccurrences(of: "_", with: "/")
-            let mod = base64Str.count % 4
-            if mod > 0 {
-                base64Str += "====".substring(to: mod)
-            }
-        }
-        return base64Str
-    }
-    
-    
-    ///MD5
-    public func ky_md5String() -> String {
-        let str = self.cString(using: String.Encoding.utf8)
-        let strLen = CC_LONG(self.lengthOfBytes(using: String.Encoding.utf8))
-        let digestLen = Int(CC_MD5_DIGEST_LENGTH)
-        let result = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: digestLen)
-        
-        CC_MD5(str!, strLen, result)
-        let hash = NSMutableString()
-        for i in 0 ..< digestLen {
-            hash.appendFormat("%02x", result[i])
-        }
-        result.deinitialize(count: digestLen)
-        return String(format: hash as String)
-    }
-    
-    ///获取字符串拼音
-    public func ky_getPinyin() -> String {
-        let str = NSMutableString(string: self)
-        CFStringTransform(str as CFMutableString, nil, kCFStringTransformMandarinLatin, false)
-        CFStringTransform(str as CFMutableString, nil, kCFStringTransformStripDiacritics, false)
-        return str.capitalized
-    }
-    
-    ///获取字符串首字母大写
-    public func ky_FirstLetter() -> String {
-        let str = NSMutableString(string: self)
-        CFStringTransform(str as CFMutableString, nil, kCFStringTransformMandarinLatin, false)
-        CFStringTransform(str as CFMutableString, nil, kCFStringTransformStripDiacritics, false)
-        let strPinYin = str.capitalized
-        return strPinYin.substring(to: 1)
-    }
-    
-    ///判断是否为汉字
-    public func ky_isValidateChinese() -> Bool {
-        let match: String = "[\\u4e00-\\u9fa5]+$"
-        return NSPredicate(format: "SELF MATCHES %@", match).evaluate(with:self)
-    }
-    
-    ///获取文件/文件夹大小
-    public func getFileSize() -> UInt64  {
-        var size: UInt64 = 0
-        let fileManager = FileManager.default
-        var isDir: ObjCBool = false
-        let isExists = fileManager.fileExists(atPath: self, isDirectory: &isDir)
-        if isExists {
-            if isDir.boolValue {
-                let enumerator = fileManager.enumerator(atPath: self)
-                for subPath in enumerator! {
-                    let fullPath = self.appending("/\(subPath)")
-                    do {
-                        let attr = try fileManager.attributesOfItem(atPath: fullPath)
-                        size += attr[FileAttributeKey.size] as! UInt64
-                    } catch  {
-                        print("error :\(error)")
-                    }
-                }
-            } else {
-                do {
-                    let attr = try fileManager.attributesOfItem(atPath: self)
-                    size += attr[FileAttributeKey.size] as! UInt64
-                    
-                } catch  {
-                    print("error :\(error)")
-                }
-            }
-        }
-        return size
-    }
-    
-    func ky_hmac(algorithm: HMACAlgorithm, key: String) -> String {
-        let cKey = key.cString(using: String.Encoding.utf8)
-        let cData = self.cString(using: String.Encoding.utf8)
-        //        var result = [CUnsignedChar](count: Int(algorithm.digestLength()), repeatedValue: 0)
-        //        var hmacData:NSData = NSData(bytes: result, length: (Int(algorithm.digestLength())))
-        //        var hmacBase64 = hmacData.base64EncodedStringWithOptions(NSData.Base64EncodingOptions.Encoding76CharacterLineLength)
-        var result = [CUnsignedChar](repeating: 0, count: Int(algorithm.digestLength()))
-        CCHmac(algorithm.toCCHmacAlgorithm(), cKey!, strlen(cKey!), cData!, strlen(cData!), &result)
-        
-        var hmacData: Data = Data(bytes: result, count: (Int(algorithm.digestLength())))
-        
-        
-        //        var str = String(data: hmacData, encoding: String.Encoding.utf8)!
-        //        str += "\(self)"
-        //        let data = str.data(using: String.Encoding.utf8)!
-        
-        let data = self.data(using: String.Encoding.utf8)!
-        hmacData.append(data)
-        let hmacBase64 = hmacData.base64EncodedString(options: Data.Base64EncodingOptions.lineLength76Characters)
-        return String(hmacBase64)
-    }
-    
-    enum HMACAlgorithm {
-        case MD5, SHA1, SHA224, SHA256, SHA384, SHA512
-        
-        func toCCHmacAlgorithm() -> CCHmacAlgorithm {
-            var result: Int = 0
-            switch self {
-                case .MD5:
-                    result = kCCHmacAlgMD5
-                case .SHA1:
-                    result = kCCHmacAlgSHA1
-                case .SHA224:
-                    result = kCCHmacAlgSHA224
-                case .SHA256:
-                    result = kCCHmacAlgSHA256
-                case .SHA384:
-                    result = kCCHmacAlgSHA384
-                case .SHA512:
-                    result = kCCHmacAlgSHA512
-            }
-            return CCHmacAlgorithm(result)
-        }
-        
-        func digestLength() -> Int {
-            var result: CInt = 0
-            switch self {
-                case .MD5:
-                    result = CC_MD5_DIGEST_LENGTH
-                case .SHA1:
-                    result = CC_SHA1_DIGEST_LENGTH
-                case .SHA224:
-                    result = CC_SHA224_DIGEST_LENGTH
-                case .SHA256:
-                    result = CC_SHA256_DIGEST_LENGTH
-                case .SHA384:
-                    result = CC_SHA384_DIGEST_LENGTH
-                case .SHA512:
-                    result = CC_SHA512_DIGEST_LENGTH
-            }
-            return Int(result)
-        }
+        let url = URL(string: self)
+        return url != nil
     }
     
     /// 对Unicode编码进行转换
@@ -456,7 +464,7 @@ extension String{
         return self.jq_stringByReplaceUnicode
     }
     
-    var jq_stringByReplaceUnicode : String{
+    public var jq_stringByReplaceUnicode : String{
         let tempStr1 = self.replacingOccurrences(of: "\\u", with: "\\U")
         let tempStr2 = tempStr1.replacingOccurrences(of: "\"", with: "\\\"")
         let tempStr3 = "\"".appending(tempStr2).appending("\"")
