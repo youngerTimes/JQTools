@@ -181,4 +181,36 @@ extension UIView{
         self.layer.shouldRasterize = true
         self.layer.rasterizationScale = UIScreen.main.scale
     }
+    
+    /// 添加阴影（父视图）
+    public static func jq_addRoundedOrShadow(frame: CGRect,radius:CGFloat, shadowOpacity:CGFloat, shadowColor:UIColor) -> CALayer {
+        let subLayer = CALayer()
+        let fixframe = frame
+        let newFrame = CGRect(x: 0, y: fixframe.minY, width: fixframe.width, height: fixframe.height) // 修正偏差
+        subLayer.frame = newFrame
+        subLayer.cornerRadius = radius
+        subLayer.backgroundColor = UIColor.white.cgColor
+        subLayer.masksToBounds = false
+        subLayer.shadowColor = shadowColor.cgColor // 阴影颜色
+        subLayer.shadowOffset = CGSize(width: 0, height: 4) // 阴影偏移,width:向右偏移3，height:向下偏移2，默认(0, -3),这个跟shadowRadius配合使用
+        subLayer.shadowOpacity = Float(shadowOpacity) //阴影透明度
+        subLayer.shadowRadius = 5;//阴影半径，默认3
+        return subLayer
+    }
+    
+    /// 添加阴影（父视图）
+    public static func jq_addRoundedOrShadows(frame: CGRect,radius:CGFloat, shadowOpacity:CGFloat, shadowColor:UIColor) -> CALayer {
+        let subLayer = CALayer()
+        let fixframe = frame
+        let newFrame = CGRect(x: fixframe.minX-(375-UIScreen.main.bounds.size.width)/2, y: fixframe.minY, width: fixframe.width, height: fixframe.height) // 修正偏差
+        subLayer.frame = newFrame
+        subLayer.cornerRadius = radius
+        subLayer.backgroundColor = UIColor.white.cgColor
+        subLayer.masksToBounds = false
+        subLayer.shadowColor = shadowColor.cgColor // 阴影颜色
+        subLayer.shadowOffset = CGSize(width: 0, height: 0) // 阴影偏移,width:向右偏移3，height:向下偏移2，默认(0, -3),这个跟shadowRadius配合使用
+        subLayer.shadowOpacity = Float(shadowOpacity) //阴影透明度
+        subLayer.shadowRadius = 5;//阴影半径，默认3
+        return subLayer
+    }
 }
