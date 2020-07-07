@@ -8,11 +8,46 @@
 
 import Foundation
 
-private let BasicAni_Scale = "transform.scale"
 private let BasicAni_Frame = "frame"
+
+//position
 private let BasicAni_Position = "position"
+private let BasicAni_PositionX = "position.x"
+private let BasicAni_PositionY = "position.y"
+
 private let BasicAni_Alpha = "opacity"
-private let BasicAni_size = "size"
+private let BasicAni_BgColor = "backgroundColor"
+private let BasicAni_Radius = "cornerRadius"
+private let BasicAni_OrderWidth = "borderWidth"
+private let BasicAni_ShadowColor = "shadowColor"
+private let BasicAni_Offset = "shadowOffset"
+private let BasicAni_ShadowOpacity = "shadowOpacity"
+private let BasicAni_ShadowRadius = "shadowRadius"
+
+//rotation
+private let BasicAni_Rotation = "transform.rotation"
+private let BasicAni_RotationX = "transform.rotation.x"
+private let BasicAni_RotationY = "transform.rotation.y"
+private let BasicAni_RotationZ = "transform.rotation.z"
+
+//scale
+private let BasicAni_Scale = "transform.scale"
+private let BasicAni_ScaleX = "transform.scale.x"
+private let BasicAni_ScaleY = "transform.scale.y"
+private let BasicAni_ScaleZ = "transform.scale.z"
+
+//translation
+private let BasicAni_Translation = "transform.translation"
+private let BasicAni_TranslationX = "transform.translation.x"
+private let BasicAni_TranslationY = "transform.translation.y"
+private let BasicAni_TranslationZ = "transform.translation.z"
+
+//CGrect
+private let BasicAni_Size = "bounds.size"
+private let BasicAni_SizeW = "bounds.size.width"
+private let BasicAni_SizeH = "bounds.size.height"
+private let BasicAni_OriginX = "bounds.origin.x"
+private let BasicAni_OriginY = "bounds.origin.y"
 
 
 //MARK: - TableAnnimation
@@ -256,7 +291,7 @@ public class JQ_AnisTools{
         basic.repeatCount = repeatCount
         basic.isRemovedOnCompletion = false
         basic.fillMode = .forwards
-        basic.keyPath = BasicAni_size
+        basic.keyPath = BasicAni_Size
         return basic
     }
     

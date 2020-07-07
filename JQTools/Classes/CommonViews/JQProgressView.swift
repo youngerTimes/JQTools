@@ -13,18 +13,51 @@ public enum JQPradientType{
     case TopToDown
 }
 
+public enum JQProgressStyle{
+    case normal
+    case gradient
+    case none
+}
+
+/// 进度条
 public class JQProgressView: UIView {
     private var progressLayer:CAShapeLayer? //普通类型
-    private var gradientLayer:CAGradientLayer? //渐变
-    
-    private var corner:Bool = false //切圆角
-    private var tinColor:UIColor = UIColor.clear //填充颜色
-    private var animation:Bool = false //是否有动画
+    private var gradientLayer:CAGradientLayer? //渐变类型
     private var lastWidth:CGFloat = 0 //上一次动画的宽度
-    private var duration:CGFloat = 0 //动画持续时间
     
-    private var gradientColors:Array<CGColor>? //存在渐变的话，需要设置颜色
-    private var pradientType:JQPradientType = .LeftToRight //渐变方向
+    public var corner:Bool = true //切圆角
+    public var tinColor:UIColor = UIColor.clear //填充颜色
+    public var animation:Bool = true //是否有动画
+    public var duration:CGFloat = 1 //动画持续时间
+    public var gradientColors:Array<CGColor>?{//存在渐变的话，需要设置颜色
+        didSet{
+            gradientLayer?.colors = gradientColors
+        }
+    }
+    public var pradientType:JQPradientType = .LeftToRight {//渐变方向
+        didSet{
+            if pradientType == .LeftToRight{
+                gradientLayer!.endPoint = CGPoint(x: 1, y: 0)
+            }else{
+                gradientLayer!.endPoint = CGPoint(x: 0, y: 1)
+            }
+        }
+    }
+    
+    //xib创建需要先指定此类型
+    public var style:JQProgressStyle = .none{
+        didSet{
+            if style == .none{fatalError("未指定风格样式")}
+            else if style == .normal {
+                progressLayer = CAShapeLayer()
+                setUI()
+            }else{
+                gradientLayer = CAGradientLayer()
+                gradientLayer!.startPoint = CGPoint(x: 0, y: 0)
+                setUI()
+            }
+        }
+    }
     
     public lazy var hintL:UILabel = {
         let label = UILabel()
@@ -72,8 +105,12 @@ public class JQProgressView: UIView {
                     
                     weakSelf.group.animations = [weakSelf.sizeAni,weakSelf.positionAni]
                     
-                    weakSelf.gradientLayer?.add(weakSelf.group, forKey: nil)
-                    weakSelf.progressLayer?.add(weakSelf.group, forKey: nil)
+                    if weakSelf.style == .normal{
+                        weakSelf.progressLayer?.add(weakSelf.group, forKey: nil)
+                    }else{
+                        if weakSelf.gradientColors?.count == 0{fatalError("未设置渐变颜色")}
+                        weakSelf.gradientLayer?.add(weakSelf.group, forKey: nil)
+                    }
                 }
             }
         }
@@ -83,13 +120,28 @@ public class JQProgressView: UIView {
         super.init(frame: frame)
     }
     
-    public override func awakeFromNib() {
-        super.awakeFromNib()
-        setUI()
+    public override func layoutIfNeeded() {
+        super.layoutIfNeeded()
+        gradientLayer?.frame = CGRect(x: 0, y: 0, width:0, height: self.bounds.height)
+        progressLayer?.frame = CGRect(x: 0, y: 0, width:0, height: self.bounds.height)
+        gradientLayer?.layoutIfNeeded()
+        progressLayer?.layoutIfNeeded()
     }
     
+    public override func awakeFromNib() {
+        super.awakeFromNib()
+        self.setUI()
+    }
+    
+    /// 初始化进度条
+    /// - Parameters:
+    ///   - corner: 圆角
+    ///   - tintColor: 填充颜色
+    ///   - animation: 是否有动画
+    ///   - duration: 持续时间
     public convenience init(corner:Bool = false,tintColor:UIColor,animation:Bool = true,duration:CGFloat = 1.5){
         self.init()
+        self.style = .normal
         self.corner = corner
         self.tinColor = tintColor
         self.animation = animation
@@ -98,11 +150,20 @@ public class JQProgressView: UIView {
         self.setUI()
     }
     
+    
+    /// 初始化进度条
+    /// - Parameters:
+    ///   - corner: 圆角
+    ///   - animation: 动画
+    ///   - duration: 持续时间
+    ///   - colors: 渐变颜色组
+    ///   - pradientType: 渐变方向
     public convenience init(corner:Bool = false,animation:Bool = true,duration:CGFloat = 1.5,colors:[CGColor],pradientType:JQPradientType){
         
         if colors.count == 0{fatalError("未设置渐变颜色")}
         
         self.init()
+        self.style = .gradient
         self.corner = corner
         self.animation = animation
         self.duration = duration
@@ -128,11 +189,14 @@ public class JQProgressView: UIView {
         
         gradientLayer?.masksToBounds = corner
         progressLayer?.masksToBounds = corner
+        
         progressLayer?.backgroundColor = tinColor.cgColor
         
         if gradientLayer != nil {
             layer.addSublayer(gradientLayer!)
-        }else{
+        }
+        
+        if progressLayer != nil{
             layer.addSublayer(progressLayer!)
         }
         
