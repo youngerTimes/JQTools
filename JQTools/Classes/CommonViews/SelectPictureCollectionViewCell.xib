@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="selectPicture" id="gTV-IL-0wX" customClass="SelectPictureCollectionViewCell" customModule="LeleBamboo" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="65" height="63"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="65" height="63"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tNP-57-YIm">
+                        <rect key="frame" x="5" y="5" width="55" height="53"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="xibBorderColor">
+                                <color key="value" red="0.90980392160000001" green="0.90588235289999997" blue="0.91764705879999997" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="xibBorderWidth">
+                                <real key="value" value="0.0"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UwD-bu-XIJ">
+                        <rect key="frame" x="10" y="10" width="45" height="43"/>
+                    </imageView>
+                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MNu-ve-miM">
+                        <rect key="frame" x="45" y="0.0" width="20" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="20" id="If1-pt-mtA"/>
+                            <constraint firstAttribute="height" constant="20" id="Y5y-W2-zWe"/>
+                        </constraints>
+                        <state key="normal" image="remove_image"/>
+                        <connections>
+                            <action selector="removeAction:" destination="gTV-IL-0wX" eventType="touchUpInside" id="Ec4-cx-hmL"/>
+                        </connections>
+                    </button>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="UwD-bu-XIJ" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="D8k-4U-pRO"/>
+                <constraint firstItem="tNP-57-YIm" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="Gob-ZA-S8J"/>
+                <constraint firstAttribute="bottom" secondItem="tNP-57-YIm" secondAttribute="bottom" constant="5" id="JUP-lc-vhe"/>
+                <constraint firstItem="tNP-57-YIm" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="5" id="JvM-ST-rrl"/>
+                <constraint firstItem="UwD-bu-XIJ" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="Mj5-wg-bg2"/>
+                <constraint firstAttribute="trailing" secondItem="UwD-bu-XIJ" secondAttribute="trailing" constant="10" id="Up8-bU-ubQ"/>
+                <constraint firstAttribute="trailing" secondItem="tNP-57-YIm" secondAttribute="trailing" constant="5" id="Vq0-kJ-zKf"/>
+                <constraint firstItem="MNu-ve-miM" firstAttribute="top" secondItem="UwD-bu-XIJ" secondAttribute="top" constant="-10" id="mEy-bu-gD9"/>
+                <constraint firstAttribute="bottom" secondItem="UwD-bu-XIJ" secondAttribute="bottom" constant="10" id="maw-fb-los"/>
+                <constraint firstItem="MNu-ve-miM" firstAttribute="trailing" secondItem="UwD-bu-XIJ" secondAttribute="trailing" constant="10" id="ook-E3-KnU"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <size key="customSize" width="65" height="63"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="color" keyPath="xibBorderColor">
+                    <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </userDefinedRuntimeAttribute>
+                <userDefinedRuntimeAttribute type="number" keyPath="xibBorderWidth">
+                    <real key="value" value="0.0"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="imageV" destination="UwD-bu-XIJ" id="2nz-nZ-dId"/>
+                <outlet property="removeBtn" destination="MNu-ve-miM" id="GHr-et-zPr"/>
+            </connections>
+            <point key="canvasLocation" x="142.75362318840581" y="140.95982142857142"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="remove_image" width="21" height="21"/>
+    </resources>
+</document>
