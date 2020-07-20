@@ -13,11 +13,22 @@ extension UIImage{
         let color = UIColor.clear
         UIGraphicsBeginImageContext(rect.size)
         let context = UIGraphicsGetCurrentContext()
-        context?.setFillColor(color.cgColor)
+        context?.setFillColor(color.withAlphaComponent(alpha).cgColor)
         context?.fill(rect)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         return image ?? UIImage()
     }
+    
+    /// 创建带有颜色的图片
+    public static func jq_createColorImg(rect:CGRect,color:UIColor,alpha:CGFloat = 0)->UIImage{
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()
+        context?.setFillColor(color.withAlphaComponent(alpha).cgColor)
+        context?.fill(rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        return image ?? UIImage()
+    }
+    
     
     /// 更改图片颜色
     public func jq_imageWithTintColor(color : UIColor) -> UIImage{

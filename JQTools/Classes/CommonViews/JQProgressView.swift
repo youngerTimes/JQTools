@@ -8,14 +8,16 @@
 
 import UIKit
 
+/// 渐变方向
 public enum JQPradientType{
     case LeftToRight
     case TopToDown
 }
 
+//进度条类型
 public enum JQProgressStyle{
-    case normal
-    case gradient
+    case normal //普通
+    case gradient //渐变
     case none
 }
 
@@ -59,6 +61,7 @@ public class JQProgressView: UIView {
         }
     }
     
+    //中间的提示文字
     public lazy var hintL:UILabel = {
         let label = UILabel()
         label.textAlignment = .center

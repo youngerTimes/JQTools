@@ -92,6 +92,61 @@ extension String{
     }
     
     // MARK: -- Instance Method
+    
+    public func jq_subString(sub:String)->(index:NSInteger,length:NSInteger){
+        if let range = self.range(of:sub) {
+            let startPos = self.distance(from: self.startIndex, to: range.lowerBound)
+            let endPos = self.distance(from: self.startIndex, to: range.upperBound)
+            return(startPos,endPos)
+        }
+        return (0,0)
+    }
+    
+    public subscript(start:Int, length:Int) -> String
+        {
+        get{
+            let index1 = self.index(self.startIndex, offsetBy: start)
+            let index2 = self.index(index1, offsetBy: length)
+            let range = Range(uncheckedBounds: (lower: index1, upper: index2))
+            return self.substring(with: range)
+        }
+        set{
+            let tmp = self
+            var s = ""
+            var e = ""
+            for (idx, item) in tmp.enumerated() {
+                if(idx < start)
+                {
+                    s += "\(item)"
+                }
+                if(idx >= start + length)
+                {
+                    e += "\(item)"
+                }
+            }
+            self = s + newValue + e
+        }
+    }
+    
+    public subscript(index:Int) -> String
+        {
+        get{
+            return String(self[self.index(self.startIndex, offsetBy: index)])
+        }
+        set{
+            let tmp = self
+            self = ""
+            for (idx, item) in tmp.enumerated() {
+                if idx == index {
+                    self += "\(newValue)"
+                }else{
+                    self += "\(item)"
+                }
+            }
+        }
+    }
+    
+    
     @available(*,deprecated,message: "废弃:建议使用jq_subRange")
     public func jq_nsRange(from range: Range<String.Index>) -> NSRange {
         let from = range.lowerBound.samePosition(in: utf16)
