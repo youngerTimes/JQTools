@@ -5,7 +5,85 @@
 //  Created by 杨锴 on 2020/3/15.
 //
 
+//水印位置枚举
+public enum WaterMarkCorner{
+    case TopLeft
+    case TopRight
+    case BottomLeft
+    case BottomRight
+}
+
 extension UIImage{
+    
+    /// 添加水印方法:添加文字
+    public func jq_waterMarkeText(waterMarkText:String, corner:WaterMarkCorner = .BottomLeft,
+                                  margin:CGPoint = CGPoint(x: 20, y: 20),
+                                  waterMarkTextColor:UIColor = UIColor.white,
+                                  waterMarkTextFont:UIFont = UIFont.systemFont(ofSize: 20),
+                                  backgroundColor:UIColor = UIColor.clear) -> UIImage?{
+        
+        let textAttributes = [NSAttributedString.Key.foregroundColor:waterMarkTextColor,
+                              NSAttributedString.Key.font:waterMarkTextFont,
+                              NSAttributedString.Key.backgroundColor:backgroundColor]
+        let textSize = NSString(string: waterMarkText).size(withAttributes: textAttributes)
+        var textFrame = CGRect(x: 0, y: 0, width: textSize.width, height: textSize.height)
+        
+        let imageSize = self.size
+        switch corner{
+            case .TopLeft:
+                textFrame.origin = margin
+            case .TopRight:
+                textFrame.origin = CGPoint(x: imageSize.width - textSize.width - margin.x, y: margin.y)
+            case .BottomLeft:
+                textFrame.origin = CGPoint(x: margin.x, y: imageSize.height - textSize.height - margin.y)
+            case .BottomRight:
+                textFrame.origin = CGPoint(x: imageSize.width - textSize.width - margin.x,
+                                           y: imageSize.height - textSize.height - margin.y)
+        }
+        
+        // 开始给图片添加文字水印
+        UIGraphicsBeginImageContext(imageSize)
+        draw(in: CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height))
+        NSString(string: waterMarkText).draw(in:textFrame, withAttributes: textAttributes)
+        
+        let waterMarkedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return waterMarkedImage
+    }
+    
+    //添加图片水印方法：添加图片
+    public func jq_waterMarkeImg(waterMarkImage:UIImage, corner:WaterMarkCorner = .BottomRight,
+                                 margin:CGPoint = CGPoint(x: 20, y: 20), alpha:CGFloat = 1) -> UIImage{
+        
+        var markFrame = CGRect(x:0, y: 0, width:waterMarkImage.size.width,
+                               height: waterMarkImage.size.height)
+        let imageSize = self.size
+        
+        switch corner{
+            case .TopLeft:
+                markFrame.origin = margin
+            case .TopRight:
+                markFrame.origin = CGPoint(x: imageSize.width - waterMarkImage.size.width - margin.x,
+                                           y: margin.y)
+            case .BottomLeft:
+                markFrame.origin = CGPoint(x: margin.x,
+                                           y: imageSize.height - waterMarkImage.size.height - margin.y)
+            case .BottomRight:
+                markFrame.origin = CGPoint(x: imageSize.width - waterMarkImage.size.width - margin.x,
+                                           y: imageSize.height - waterMarkImage.size.height - margin.y)
+        }
+        
+        // 开始给图片添加图片
+        UIGraphicsBeginImageContext(imageSize)
+        self.draw(in: CGRect(x: 0, y:0, width: imageSize.width, height: imageSize.height))
+        waterMarkImage.draw(in: markFrame, blendMode: .normal, alpha: alpha)
+        let waterMarkedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return waterMarkedImage!
+    }
+    
     
     /// 创建一个透明的图片，可用于nav:        navigationController?.navigationBar.isTranslucent = true
     /// - Parameter rect: 尺寸
@@ -29,6 +107,28 @@ extension UIImage{
         return image ?? UIImage()
     }
     
+    /*
+     滤镜
+     https://developer.apple.com/library/archive/documentation/GraphicsImaging/Reference/CoreImageFilterReference/index.html#//apple_ref/doc/uid/TP40004346
+     
+     【查看】CICategoryColorEffect
+     
+     */
+    func jq_filter(name:String) -> UIImage?
+    {
+        let imageData = self.pngData()
+        let inputImage = CoreImage.CIImage(data: imageData!)
+        let context = CIContext(options:nil)
+        let filter = CIFilter(name:name)
+        filter!.setValue(inputImage, forKey: kCIInputImageKey)
+        filter!.setValue(0.8, forKey: "inputIntensity")
+        if let outputImage = filter!.outputImage {
+            let outImage = context.createCGImage(outputImage, from: outputImage.extent)
+            return UIImage(cgImage: outImage!)
+        }
+        return nil
+    }
+    
     
     /// 更改图片颜色
     public func jq_imageWithTintColor(color : UIColor) -> UIImage{
@@ -46,7 +146,24 @@ extension UIImage{
         return newImage!
     }
     
-//重设颜色
+    
+    /// 更改图片颜色，根据mode
+    /// - Parameters:
+    ///   - color: 颜色
+    ///   - blendMode: 模型
+    /// - Returns: 颜色
+    public func jq_imageWithTintColor(color: UIColor, blendMode: CGBlendMode) -> UIImage?{
+        let drawRect = CGRect(x: 0.0, y: 0.0, width: size.width, height: size.height)
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        color.setFill()
+        UIRectFill(drawRect)
+        draw(in: drawRect, blendMode: blendMode, alpha: 1.0)
+        let tintedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return tintedImage
+    }
+    
+    //重设颜色
     public func jq_imageWithNewSize(size: CGSize) -> UIImage? {
         if self.size.height > size.height {
             let width = size.height / self.size.height * self.size.width

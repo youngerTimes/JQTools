@@ -91,6 +91,29 @@ extension String{
         return ranStr
     }
     
+    
+    /// 指定范围随机数值
+    public func jq_randomNumber(start: Int, end: Int) ->() ->Int? {
+        //根据参数初始化可选值数组
+        var nums = [Int]();
+        for i in start...end{
+            nums.append(i)
+        }
+         
+        func randomMan() -> Int! {
+            if !nums.isEmpty {
+                //随机返回一个数，同时从数组里删除
+                let index = Int(arc4random_uniform(UInt32(nums.count)))
+                return nums.remove(at: index)
+            }else {
+                //所有值都随机完则返回nil
+                return nil
+            }
+        }
+         
+        return randomMan
+    }
+    
     // MARK: -- Instance Method
     
     public func jq_subString(sub:String)->(index:NSInteger,length:NSInteger){
@@ -512,6 +535,13 @@ extension String{
     public var jq_isURL:Bool {
         let url = URL(string: self)
         return url != nil
+    }
+    
+    public var jq_isIP:Bool{
+        let pattern = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+        let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
+        let isMatch:Bool = pred.evaluate(with: self)
+        return isMatch;
     }
     
     /// 对Unicode编码进行转换

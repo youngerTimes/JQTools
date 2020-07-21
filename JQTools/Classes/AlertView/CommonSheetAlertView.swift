@@ -43,7 +43,6 @@ public class JQSheetAlertView: UIView {
             make.height.equalTo(0)
         }
         
-        titleL.text = "温馨提示"
         titleL.alpha = 0
         titleL.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         titleL.textColor = UIColor(hexStr: "#0E1823")
@@ -53,7 +52,6 @@ public class JQSheetAlertView: UIView {
             make.height.equalTo(25 * JQ_RateW)
         }
         
-        subTitleL.text = "开始输入每天限定的抽烟数，记得坚持哦~"
         subTitleL.alpha = 0
         subTitleL.font = UIFont.systemFont(ofSize: 14)
         subTitleL.textColor = UIColor(hexStr: "#0E1823")
@@ -66,7 +64,6 @@ public class JQSheetAlertView: UIView {
             make.height.greaterThanOrEqualTo(20 * JQ_RateW)
         }
         
-        cancelBtn.setTitle("暂不戒烟", for: .normal)
         cancelBtn.alpha = 0
         cancelBtn.backgroundColor = UIColor(hexStr:"#EBEFF2")
         cancelBtn.setTitleColor(UIColor(hexStr: "#0E1823"), for: .normal)
@@ -83,7 +80,6 @@ public class JQSheetAlertView: UIView {
             make.width.equalTo(155 * JQ_RateW)
         }
         
-        completeBtn.setTitle("开始戒烟", for: .normal)
         completeBtn.alpha = 0
         completeBtn.backgroundColor = UIColor(hexStr:"#01B09A")
         completeBtn.setTitleColor(UIColor.white, for: .normal)
@@ -103,7 +99,7 @@ public class JQSheetAlertView: UIView {
     }
     
     
-    public func show(type:SheetAlertViewType = .twoBtn, title:String = "温馨提示",content:String, cancelTitle:String = "取消",complele:String = "确定",clouse:@escaping SheetAlertClouse){
+    public func show(type:SheetAlertViewType = .twoBtn, title:String = "提示",content:String, cancelTitle:String = "取消",complele:String = "确定",clouse:@escaping SheetAlertClouse){
         sheetAlertClouse = clouse
         titleL.text = title
         subTitleL.text = content
@@ -112,6 +108,7 @@ public class JQSheetAlertView: UIView {
         
         
         if type == .oneBtn{
+            cancelBtn.isHidden = true
             cancelBtn.snp.removeConstraints()
             
             completeBtn.snp.remakeConstraints { (make) in

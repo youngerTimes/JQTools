@@ -167,12 +167,12 @@ extension UIView{
         }
     }
     
-   public func jq_backgroundColorClear(){
+    public func jq_backgroundColorClear(){
         self.backgroundColor = UIColor.white.withAlphaComponent(0)
     }
     
     /// 圆角加阴影
-     func jq_addShadows(shadowColor: UIColor, corner: CGFloat,radius:CGFloat,offset:CGSize, opacity: Double) {
+    func jq_addShadows(shadowColor: UIColor, corner: CGFloat,radius:CGFloat,offset:CGSize, opacity: Double) {
         self.layer.shadowColor = shadowColor.cgColor
         self.layer.cornerRadius = corner
         self.layer.shadowOpacity = Float(opacity)
@@ -212,5 +212,64 @@ extension UIView{
         subLayer.shadowOpacity = Float(shadowOpacity) //阴影透明度
         subLayer.shadowRadius = 5;//阴影半径，默认3
         return subLayer
+    }
+    
+    /// 进度圆环
+    /// - Parameters:
+    ///   - circleWeight: 圆环宽度
+    ///   - circleColor: 圆环颜色
+    ///   - barBgColor: 圆环底色
+    ///   - percent: 进度值 0 ~ 1.0
+    ///   - duration: 动画执行，为0 则没有动画
+    public func jq_addCircle(circleWeight: CGFloat, circleColor: UIColor,barBgColor:UIColor, percent:CGFloat,duration:CGFloat = 0){
+        let X = self.bounds.midX
+        let Y = self.bounds.midY
+        let startAngle = CGFloat(-Double.pi/2)
+        let endAngle = CGFloat(Double.pi*1.5)
+        
+        if percent > 1.0{
+            fatalError("范围0～1.0")
+        }
+        
+        
+        let barBgPath = UIBezierPath(arcCenter: CGPoint(x: X, y: Y), radius: jq_width/2,startAngle: startAngle, endAngle: endAngle,clockwise: true).cgPath
+        
+        self.addOval(lineWidth: circleWeight, path: barBgPath, strokeStart: 0, strokeEnd: 1,strokeColor: barBgColor, fillColor: UIColor.clear,shadowRadius: 0, shadowOpacity: 0, shadowOffsset: CGSize.zero)
+        
+        // 进度条圆弧
+        let barPath = UIBezierPath(arcCenter: CGPoint(x: X, y: Y), radius:jq_width/2,startAngle: startAngle, endAngle: endAngle,clockwise: true).cgPath
+        
+        let layer = self.addOval(lineWidth: circleWeight, path: barPath, strokeStart: 0, strokeEnd: percent,strokeColor: circleColor, fillColor: UIColor.clear,shadowRadius: 0, shadowOpacity: 0, shadowOffsset: CGSize.zero)
+        if duration != 0 {
+            addAnimation(layer, strokeStart: 0, strokeEnd: percent,duration: duration)
+        }
+    }
+    
+    //添加圆弧
+    @discardableResult
+    private func addOval(lineWidth: CGFloat, path: CGPath, strokeStart: CGFloat,strokeEnd: CGFloat, strokeColor: UIColor, fillColor: UIColor,shadowRadius: CGFloat, shadowOpacity: Float, shadowOffsset: CGSize)->CAShapeLayer {
+        
+        let arc = CAShapeLayer()
+        arc.lineWidth = lineWidth
+        arc.path = path
+        arc.strokeStart = strokeStart
+        arc.strokeEnd = strokeEnd
+        arc.strokeColor = strokeColor.cgColor
+        arc.fillColor = fillColor.cgColor
+        arc.shadowColor = UIColor.black.cgColor
+        arc.lineCap = CAShapeLayerLineCap(rawValue: "round")
+        arc.shadowRadius = shadowRadius
+        arc.shadowOpacity = shadowOpacity
+        arc.shadowOffset = shadowOffsset
+        layer.addSublayer(arc)
+        return arc
+    }
+    
+    private func addAnimation(_ layer:CAShapeLayer,strokeStart: CGFloat,strokeEnd: CGFloat,duration:CGFloat){
+        let basic = CABasicAnimation(keyPath: "strokeEnd")
+        basic.duration = CFTimeInterval(duration)
+        basic.fromValue = strokeStart
+        basic.toValue = strokeEnd
+        layer.add(basic, forKey: "checkAnimation")
     }
 }
