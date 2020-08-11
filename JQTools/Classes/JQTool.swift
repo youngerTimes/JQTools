@@ -126,8 +126,6 @@ public extension JQNibView where Self : UIView{
     }
 }
 
-
-
 //错误信息
 public func JQ_ErrorLog<T>(_ message:T,file:String = #file,funcName:String = #function,lineNum:Int = #line){
     #if DEBUG
@@ -136,7 +134,7 @@ public func JQ_ErrorLog<T>(_ message:T,file:String = #file,funcName:String = #fu
     #endif
 }
 
-//当前的VC
+///当前的VC
 public func JQ_currentViewController() -> UIViewController {
     var currVC:UIViewController?
     var Rootvc = UIApplication.shared.keyWindow?.rootViewController
@@ -160,6 +158,7 @@ public func JQ_currentViewController() -> UIViewController {
     return currVC!
 }
 
+///当前的NavVC
 public func JQ_currentNavigationController() -> UINavigationController {
     return JQ_currentViewController().navigationController!
 }
@@ -172,7 +171,7 @@ public class JQTool{
     }
     
     ///绘制虚线
-    public static func ky_drawDashLine(lineView : UIView,lineLength : Double ,lineSpacing : Int,lineColor : UIColor, type:DottedLineType){
+    public static func drawDashLine(lineView : UIView,lineLength : Double ,lineSpacing : Int,lineColor : UIColor, type:DottedLineType){
         let shapeLayer = CAShapeLayer()
         shapeLayer.bounds = lineView.bounds
         //        只要是CALayer这种类型,他的anchorPoint默认都是(0.5,0.5)
@@ -201,7 +200,7 @@ public class JQTool{
     }
     
     ///获取系统缓存大小（B）
-    public static func jq_cacheSize() -> String {
+    public static func cacheSize() -> String {
         var big = 0.0
         let cachePath = NSSearchPathForDirectoriesInDomains(
             .cachesDirectory, .userDomainMask, true).first
@@ -227,7 +226,7 @@ public class JQTool{
     }
     
     ///清除缓存
-    public static func jq_cleanCache(succuss:(()->Void)?) {
+    public static func cleanCache(succuss:(()->Void)?) {
         DispatchQueue.global().async {
             let cachePath = NSSearchPathForDirectoriesInDomains(
                 .cachesDirectory, .userDomainMask, true).first
@@ -255,7 +254,7 @@ public class JQTool{
     }
     
     ///横竖屏
-    public func jq_setNewOrientation(fullScreen: Bool) {
+    public func setNewOrientation(fullScreen: Bool) {
         if fullScreen {
             //横屏
             let resetOrientationTargert = NSNumber(integerLiteral: UIInterfaceOrientation.unknown.rawValue)
@@ -272,7 +271,7 @@ public class JQTool{
     }
     
     ///某个文件的大小（B）
-    public static func jq_fileSize(filePath:String) -> UInt64 {
+    public static func fileSize(filePath:String) -> UInt64 {
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: filePath) {
             if let file = try? fileManager.attributesOfItem(atPath: filePath) {
@@ -287,13 +286,13 @@ public class JQTool{
     
     ///判断相册是否开启权限
     @discardableResult
-    public static func jq_AlbumAuthorize() -> Bool {
+    public static func AlbumAuthorize() -> Bool {
         switch PHPhotoLibrary.authorizationStatus() {
             case .authorized:
                 return true
             case .notDetermined:
                 PHPhotoLibrary.requestAuthorization { (status) in
-                    self.jq_AlbumAuthorize()
+                    self.AlbumAuthorize()
             }
             default:
                 let alert = UIAlertController(title: "照片访问受限", message: "未在设置中允许保存图片权限？", preferredStyle: .alert)
@@ -317,7 +316,7 @@ public class JQTool{
     }
     
     ///判断定位权限
-    public static func jq_JudgeLoationService() -> Bool {
+    public static func JudgeLoationService() -> Bool {
         if CLLocationManager.authorizationStatus() != .denied {
             return true
         }else {
@@ -341,6 +340,21 @@ public class JQTool{
     }
     
     
+    #if canImport(AMap3DMap)
+    /// 高德地图：距离计算
+    public static func diastance(location:CLLocationCoordinate2D, lat:Double, lng:Double) -> String {
+        let currentL = MAMapPointForCoordinate(CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude))
+        let pointL = MAMapPointForCoordinate(CLLocationCoordinate2D(latitude: lat, longitude: lng))
+        var distanceN = MAMetersBetweenMapPoints(currentL,pointL)
+        if distanceN > 1000{
+            distanceN = distanceN/1000
+        }
+        let distanceStr = distanceN.jq_formatFloat()
+        return (MAMetersBetweenMapPoints(currentL,pointL) < 1000) ? "\(distanceStr)m" : "\(distanceStr)Km"
+    }
+    #endif
+    
+    
     /// 加载emoji的表情库
     /// - Returns: 返回字典
     public static func loadEmoji()->Dictionary<String, Any>?{
@@ -362,7 +376,7 @@ public class JQTool{
     #endif
     
     /// 版本信息
-    public static func jq_currentVersion()->String{
+    public static func currentVersion()->String{
         let info = Bundle.main.infoDictionary
         var version = ""
         #if DEBUG
@@ -371,6 +385,18 @@ public class JQTool{
         version = info!["CFBundleShortVersionString"]  as! String
         #endif
         return version
+    }
+    
+    /// 代码延迟运行
+    ///
+    /// - Parameters:
+    ///   - delayTime: 延时时间。比如：.seconds(5)、.milliseconds(500)
+    ///   - qosClass: 要使用的全局QOS类（默认为 nil，表示主线程）
+    ///   - closure: 延迟运行的代码
+    public static func delay(by delayTime: TimeInterval, qosClass: DispatchQoS.QoSClass? = nil,
+                      _ closure: @escaping () -> Void) {
+        let dispatchQueue = qosClass != nil ? DispatchQueue.global(qos: qosClass!) : .main
+        dispatchQueue.asyncAfter(deadline: DispatchTime.now() + delayTime, execute: closure)
     }
 }
 

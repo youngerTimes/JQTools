@@ -5,9 +5,9 @@
 //  Created by 杨锴 on 2020/3/15.
 //
 
-extension UIColor{
+public extension UIColor{
     ///ColorHex
-    public convenience init(hexStr:String) {
+    convenience init(hexStr:String) {
         var cString:String = hexStr.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         if (cString.hasPrefix("#")) {
             cString.remove(at: cString.startIndex)
@@ -24,19 +24,42 @@ extension UIColor{
         }
     }
     
-    public convenience init(r:CGFloat,g:CGFloat, b:CGFloat) {
+    convenience init(r:CGFloat,g:CGFloat, b:CGFloat) {
         self.init(red: r/255.0, green: g/255.0, blue: b/255.0, alpha: 1)
     }
     
-    //返回随机颜色
-    open class var jq_randomColor:UIColor{
-        get
-        {
+    ///使用rgb方式生成自定义颜色
+    convenience init(_ r : CGFloat, _ g : CGFloat, _ b : CGFloat) {
+        let red = r / 255.0
+        let green = g / 255.0
+        let blue = b / 255.0
+        self.init(red: red, green: green, blue: blue, alpha: 1)
+    }
+     
+    ///使用rgba方式生成自定义颜色
+    convenience init(_ r : CGFloat, _ g : CGFloat, _ b : CGFloat, _ a : CGFloat) {
+        
+        let red = r / 255.0
+        let green = g / 255.0
+        let blue = b / 255.0
+        self.init(red: red, green: green, blue: blue, alpha: a)
+    }
+    
+    ///返回随机颜色
+    static var jq_randomColor:UIColor{
+        get{
             let red = CGFloat(arc4random()%256)/255.0
             let green = CGFloat(arc4random()%256)/255.0
             let blue = CGFloat(arc4random()%256)/255.0
             return UIColor(red: red, green: green, blue: blue, alpha: 1.0)
         }
     }
+    
+    //获取反色
+    func jq_invertColor() -> UIColor {
+          var r:CGFloat = 0, g:CGFloat = 0, b:CGFloat = 0
+          self.getRed(&r, green: &g, blue: &b, alpha: nil)
+          return UIColor(red:1.0-r, green: 1.0-g, blue: 1.0-b, alpha: 1)
+      }
     
 }
