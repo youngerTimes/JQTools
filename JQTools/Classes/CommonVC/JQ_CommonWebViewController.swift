@@ -11,14 +11,12 @@ import WebKit
 
 #if canImport(SnapKit)
 
-class JQ_CommonWebViewController: UIViewController {
+public class JQ_CommonWebViewController: UIViewController {
 
     private var webView:WKWebView?
     private(set) var url = ""
     private(set) var htmlText = ""
     private var progressView = UIProgressView()
-    
-    
     private let jsCode = """
     var meta = document.createElement('meta');"
     "meta.name = 'viewport';"
@@ -26,17 +24,19 @@ class JQ_CommonWebViewController: UIViewController {
     "document.getElementsByTagName('head')[0].appendChild(meta);
 """
     
-    convenience init(url:String) {
+    public var tintColor = UIColor.blue
+    
+    public convenience init(url:String) {
         self.init()
         self.url = url
     }
     
-    convenience init(htmlText:String) {
+    public convenience init(htmlText:String) {
         self.init()
         self.htmlText = htmlText.jq_wrapHtml()
     }
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         let config = WKWebViewConfiguration()
@@ -48,11 +48,18 @@ class JQ_CommonWebViewController: UIViewController {
         webView?.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
         view.addSubview(webView!)
         webView?.snp.makeConstraints({ (make) in
-            make.edges.equalToSuperview()
+            make.top.equalToSuperview()
+            make.left.right.bottom.equalToSuperview()
         })
         
+        if #available(iOS 11.0, *) {
+            webView!.scrollView.contentInsetAdjustmentBehavior = .automatic
+        } else {
+            self.automaticallyAdjustsScrollViewInsets = false
+        }
         
-        progressView.tintColor = UIColor(hexStr: "#30C27C")
+        
+        progressView.tintColor = tintColor
         view.addSubview(progressView)
         progressView.snp.makeConstraints { (make) in
             make.top.left.right.equalToSuperview()
@@ -68,7 +75,7 @@ class JQ_CommonWebViewController: UIViewController {
         }
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         let value = change![NSKeyValueChangeKey(rawValue: "new")] as! Double
         print(value)
         

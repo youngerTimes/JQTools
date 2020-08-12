@@ -8,7 +8,7 @@
 import UIKit
 
 //刮刮卡涂层
-class JQ_ScratchMask: UIImageView {
+public class JQ_ScratchMask: UIImageView {
      
     //代理对象
     weak var delegate: ScratchCardDelegate?
@@ -33,7 +33,7 @@ class JQ_ScratchMask: UIImageView {
     }
      
     //触摸开始
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //多点触摸只考虑第一点
         guard  let touch = touches.first else {
             return
@@ -46,7 +46,7 @@ class JQ_ScratchMask: UIImageView {
     }
      
     //滑动
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         //多点触摸只考虑第一点
         guard  let touch = touches.first, let point = lastPoint, let img = image else {
             return
@@ -65,7 +65,7 @@ class JQ_ScratchMask: UIImageView {
         delegate?.scratchMoved?(progress: progress)
     }
      
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         //多点触摸只考虑第一点
         guard  touches.first != nil else {
             return

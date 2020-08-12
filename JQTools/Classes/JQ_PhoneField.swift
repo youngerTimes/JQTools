@@ -8,7 +8,7 @@
 import UIKit
 
 ///电话号码输入框
-class JQ_PhoneField: UITextField {
+public class JQ_PhoneField: UITextField {
     
     //保存上一次的文本内容
     var _previousText:String!
@@ -16,7 +16,7 @@ class JQ_PhoneField: UITextField {
     //保持上一次的文本范围
     var _previousRange:UITextRange!
     
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         
         //默认边框样式为圆角矩形
@@ -30,7 +30,7 @@ class JQ_PhoneField: UITextField {
     }
     
     //当本视图的父类视图改变的时候
-    override func willMove(toSuperview newSuperview: UIView?) {
+    public override func willMove(toSuperview newSuperview: UIView?) {
         //监听值改变通知事件
         if newSuperview != nil {
             
@@ -95,7 +95,7 @@ class JQ_PhoneField: UITextField {
     }
     
     //除去非数字字符，同时确定光标正确位置
-    func getDigitsText(string:String, cursorPosition:inout Int) -> String{
+    public func getDigitsText(string:String, cursorPosition:inout Int) -> String{
         //保存开始时光标的位置
         let originalCursorPosition = cursorPosition
         //处理后的结果字符串
@@ -121,7 +121,7 @@ class JQ_PhoneField: UITextField {
     }
     
     //将分隔符插入现在的string中，同时确定光标正确位置
-    func getHyphenText(string:String, cursorPosition:inout Int) -> String {
+    public func getHyphenText(string:String, cursorPosition:inout Int) -> String {
         //保存开始时光标的位置
         let originalCursorPosition = cursorPosition
         //处理后的结果字符串

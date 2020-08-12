@@ -8,22 +8,22 @@
 import UIKit
 
 ///顶部存在顶部图片，下拉放大
-class JQ_CommonTopImgViewController: UIViewController {
+public class JQ_CommonTopImgViewController: UIViewController {
     
-    let screenWidth = UIScreen.main.bounds.width // 屏幕宽度
-    let screenHeight = UIScreen.main.bounds.height  // 屏幕高度
+    private let screenWidth = UIScreen.main.bounds.width // 屏幕宽度
+    private let screenHeight = UIScreen.main.bounds.height  // 屏幕高度
     
     //导航栏背景视图
-    var barImageView: UIView?
+    public var barImageView: UIView?
     
-    var imageView: UIImageView! // 图片视图
-    let imageViewHeight: CGFloat = 200 // 图片默认高度
+    public var imageView: UIImageView! // 图片视图
+    public let imageViewHeight: CGFloat = 200 // 图片默认高度
     
-    var tableView: UITableView! //表格视图
-    let rowNumber = 50 // 表格数据条目数
-    let rowHeight: CGFloat = 40 // 表格行高
+    public var tableView: UITableView! //表格视图
+    public let rowNumber = 50 // 表格数据条目数
+    public let rowHeight: CGFloat = 40 // 表格行高
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         //获取导航栏背景视图
@@ -67,14 +67,14 @@ class JQ_CommonTopImgViewController: UIViewController {
         scrollView.addSubview(self.tableView!)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    public override func viewDidAppear(_ animated: Bool) {
         // 默认情况下导航栏全透明
         self.barImageView?.alpha = 0
     }
 }
 
 extension JQ_CommonTopImgViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         //获取偏移量
         let offset = scrollView.contentOffset.y
         // 改变图片大小
@@ -95,18 +95,18 @@ extension JQ_CommonTopImgViewController: UIScrollViewDelegate {
 
 extension JQ_CommonTopImgViewController: UITableViewDelegate, UITableViewDataSource {
     //在本例中，有1个分区
-    func numberOfSections(in tableView: UITableView) -> Int {
+    public func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     //返回表格行数（也就是返回控件数）
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int)
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int)
         -> Int {
             return rowNumber
     }
     
     //创建各单元显示内容(创建参数indexPath指定的单元）
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
         -> UITableViewCell {
             //为了提供表格显示性能，已创建完成的单元需重复使用
             let identify:String = "SwiftCell"

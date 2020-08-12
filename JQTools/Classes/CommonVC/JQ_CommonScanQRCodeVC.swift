@@ -1,43 +1,70 @@
 //
-//  JQ_CommonQRScanViewController.swift
-//  IQKeyboardManagerSwift
+//  JQ_CommonScanQRCodeVC.swift
+//  JQTools
 //
-//  Created by 无故事王国 on 2020/8/11.
+//  Created by 无故事王国 on 2020/8/12.
 //
 
 import UIKit
 import AVKit
 
+#if canImport(SnapKit)
 
-class JQ_CommonQRScanViewController: UIViewController,AVCaptureMetadataOutputObjectsDelegate {
+public class JQ_CommonScanQRCodeVC: UIViewController,AVCaptureMetadataOutputObjectsDelegate {
     
     //是否是第一次扫描到结果
-    var firstResult: Bool = true
+    public var firstResult: Bool = true
     //AVCaptureSession对象来执行输入设备和输出设备之间的数据传递
-    var session: AVCaptureSession?
+    public var session: AVCaptureSession?
     //输入设备
-    var videoInput: AVCaptureDeviceInput?
+    public var videoInput: AVCaptureDeviceInput?
     //输出对象
-    var metadataOutput: AVCaptureMetadataOutput = AVCaptureMetadataOutput()
+    public var metadataOutput: AVCaptureMetadataOutput = AVCaptureMetadataOutput()
     //预览图层
-    var previewLayer: AVCaptureVideoPreviewLayer?
-    var scanTimer: Timer?
+    public var previewLayer: AVCaptureVideoPreviewLayer?
+    public var scanTimer: Timer?
     //边框
-    lazy var borderView: UIImageView = UIImageView(image: UIImage(named:"ty_qrcode_bg"))
+    public var borderView:UIImageView?
     //line
-    lazy var scanLineView: UIImageView = UIImageView(image: UIImage(named: "ty_qrcode_line"))
+    public var scanLineView:UIImageView?
+    //返回按钮
+    public var closeBtn:UIButton?
+    
     private let borderWidth:CGFloat =  400
     private let topMargin: CGFloat =  230
     private var clouse:((String,Bool)->Void)?
     
     /// 返回扫描结果，是否时第一次扫描到结果
-    convenience init(clouse:@escaping (String,Bool)->Void){
+    public convenience init(clouse:@escaping (String,Bool)->Void){
         self.init()
         self.clouse = clouse
     }
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if borderView == nil {
+            let image = UIImage(named: "ty_qrcode_bg", in: Bundle(for:type(of: self)), compatibleWith: .none)
+            borderView = UIImageView(image: image)
+        }
+        
+        if scanLineView == nil {
+            let image = UIImage(named: "ty_qrcode_line", in: Bundle(for:type(of: self)), compatibleWith: .none)
+            scanLineView = UIImageView(image: image)
+        }
+        
+        if closeBtn == nil &&  modalPresentationStyle == .fullScreen && self.presentationController != nil {
+            closeBtn = UIButton(type: .custom)
+            closeBtn!.addTarget(self, action: #selector(closeView), for: .touchUpInside)
+            let image = UIImage(named: "close_btn", in: Bundle(for:type(of: self)), compatibleWith: .none)
+            closeBtn!.setImage(image, for: .normal)
+            view.addSubview(closeBtn!)
+            closeBtn!.snp.makeConstraints { (make) in
+                make.top.equalTo(30)
+                make.left.equalTo(20)
+                make.width.height.equalTo(30)
+            }
+        }
         
         if(!checkCameraAuth()){
             let alertController = UIAlertController(title: nil,message: "请在iphone的“设置-隐私-相机”选项中，允许应用访问你的相机", preferredStyle: .alert)
@@ -66,7 +93,7 @@ class JQ_CommonQRScanViewController: UIViewController,AVCaptureMetadataOutputObj
         scanTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(startAnimation), userInfo: nil, repeats: true)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         firstResult = true
         if let session = self.session {
             session.startRunning()
@@ -104,18 +131,12 @@ class JQ_CommonQRScanViewController: UIViewController,AVCaptureMetadataOutputObj
         
         
         //扫描边框
-        borderView.frame = CGRect.init(x: (UIScreen.main.bounds.size.width-(self.view.center.x+30))/2, y: (UIScreen.main.bounds.size.height-(self.view.center.x + 30))/2, width: self.view.center.x + 30, height: self.view.center.x + 30)
-        view.addSubview(borderView)
+        borderView!.frame = CGRect.init(x: (UIScreen.main.bounds.size.width-(self.view.center.x+30))/2, y: (UIScreen.main.bounds.size.height-(self.view.center.x + 30))/2, width: self.view.center.x + 30, height: self.view.center.x + 30)
+        view.addSubview(borderView!)
         
         //扫描的线
-        scanLineView.frame = CGRect(x:borderView.frame.origin.x+2, y:   borderView.frame.origin.y+2, width: borderView.bounds.size.width, height: 2)
-        view.addSubview(scanLineView)
-        
-        let closeBtn = UIButton(type: .custom)
-        closeBtn.setImage(UIImage(named: "close_btn"), for: .normal)
-        closeBtn.addTarget(self, action: #selector(closeView), for: .touchUpInside)
-        view.addSubview(closeBtn)
-        closeBtn.frame = CGRect(x: 20, y: 30, width: 30, height: 30)
+        scanLineView!.frame = CGRect(x:borderView!.frame.origin.x+2, y:   borderView!.frame.origin.y+2, width: borderView!.bounds.size.width, height: 2)
+        view.addSubview(scanLineView!)
         
         
         let tipLabel = UILabel();
@@ -124,7 +145,7 @@ class JQ_CommonQRScanViewController: UIViewController,AVCaptureMetadataOutputObj
         tipLabel.font = UIFont.systemFont(ofSize: 14)
         tipLabel.textAlignment = .center;
         tipLabel.frame = CGRect(x: 0, y:0, width:200, height: 40)
-        tipLabel.center = CGPoint(x: borderView.center.x , y: borderView.center.y + (self.view.center.x + 30)/2 + 30);
+        tipLabel.center = CGPoint(x: borderView!.center.x , y: borderView!.center.y + (self.view.center.x + 30)/2 + 30);
         view.addSubview(tipLabel)
     }
     
@@ -132,31 +153,31 @@ class JQ_CommonQRScanViewController: UIViewController,AVCaptureMetadataOutputObj
     @objc func startAnimation() -> Void {
         
         //让约束从顶部开始
-        var frame = self.scanLineView.frame
-        frame.origin.y = borderView.frame.origin.y
-        self.scanLineView.frame = frame
-        self.scanLineView.layoutIfNeeded()
+        var frame = self.scanLineView!.frame
+        frame.origin.y = borderView!.frame.origin.y
+        self.scanLineView!.frame = frame
+        self.scanLineView!.layoutIfNeeded()
         
         UIView.animate(withDuration: 3.0, animations: {
             //改变frame
-            frame.origin.y = self.borderView.frame.origin.y+self.borderView.bounds.size.height
-            self.scanLineView.frame = frame
+            frame.origin.y = self.borderView!.frame.origin.y+self.borderView!.bounds.size.height
+            self.scanLineView!.frame = frame
             //强制更新界面
-            self.scanLineView.layoutIfNeeded()
+            self.scanLineView!.layoutIfNeeded()
         })
     }
     
     func stopAnimation() -> Void {
         //让约束从顶部开始
-        var frame = self.scanLineView.frame
+        var frame = self.scanLineView!.frame
         frame.origin.y = 64 + topMargin
-        self.scanLineView.frame = frame
-        self.scanLineView.layoutIfNeeded()
+        self.scanLineView!.frame = frame
+        self.scanLineView!.layoutIfNeeded()
         scanTimer?.invalidate()
         scanTimer = nil
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         //关闭session
@@ -235,7 +256,7 @@ class JQ_CommonQRScanViewController: UIViewController,AVCaptureMetadataOutputObj
         }
     }
     
-    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+    public func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         self.session?.stopRunning();
         if (metadataObjects.count >= 1) {
             //数组中包含的都是AVMetadataMachineReadableCodeObject 类型的对象，该对象中包含解码后的数据
@@ -248,3 +269,4 @@ class JQ_CommonQRScanViewController: UIViewController,AVCaptureMetadataOutputObj
     }
     
 }
+#endif
