@@ -7,7 +7,7 @@
 
 import UIKit
 
-class JQ_VerifyCodeTextView: UITextField {
+public class JQ_VerifyCodeTextView: UITextField {
     
        /// 是否隐藏所有菜单
        var isHiddenAllMenu = false
@@ -30,7 +30,7 @@ class JQ_VerifyCodeTextView: UITextField {
        /// 删除 - 会调用两次此闭包  当isTrigger = true的时候才为实际删除
        var deleteClouruse: ((_ isTrigger: Bool) -> Bool)?
        
-       override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+    public override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
            if isHiddenAllMenu {
                UIMenuController.shared.isMenuVisible = false
                return false

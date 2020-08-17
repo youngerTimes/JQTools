@@ -7,16 +7,17 @@
 
 import UIKit
 
-class JQ_VerifyCodeView: UIView {
+///验证码输入
+public class JQ_VerifyCodeView: UIView {
     
     /// 输入值改变
-    var textValueChange: ((_ text: String) -> Void)?
+    public var textValueChange: ((_ text: String) -> Void)?
     /// 输入完成
-    var inputFinish: ((_ text: String) -> Void)?
+    public var inputFinish: ((_ text: String) -> Void)?
     /// 验证码输入框个数
-    var inputTextNum: Int = 6
+    public var inputTextNum: Int = 6
     /// 输入框
-    lazy var textFiled: JQ_VerifyCodeTextView = {
+     lazy public var textFiled: JQ_VerifyCodeTextView = {
         let textFiled = JQ_VerifyCodeTextView()
         textFiled.tintColor = .clear
         textFiled.backgroundColor = .clear
@@ -28,17 +29,18 @@ class JQ_VerifyCodeView: UIView {
         return textFiled
     }()
     /// 验证码数量
-    var codeViews: [JQ_VerifyCodeNumView] = []
+    public var codeViews: [JQ_VerifyCodeNumView] = []
     /// 验证码输入框距离两边的边距
-    var padding: CGFloat = 28*JQ_RateW
+    public var padding: CGFloat = 28*JQ_RateW
     /// 每个验证码输入框间距
-    var spacing: CGFloat = 10*JQ_RateW
+    public var spacing: CGFloat = 10*JQ_RateW
     /// 是否在输入中
-    var isInput = true
+    public var isInput = true
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-    convenience init(inputTextNum: Int) {
+    public convenience init(inputTextNum: Int) {
         self.init()
         self.inputTextNum = inputTextNum
         initSubviews()
@@ -111,7 +113,7 @@ extension JQ_VerifyCodeView {
 // MARK: - UITextViewDelegate
 extension JQ_VerifyCodeView: UITextFieldDelegate {
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         // 输入框已有的值
         var inputText = textFiled.text ?? ""
         

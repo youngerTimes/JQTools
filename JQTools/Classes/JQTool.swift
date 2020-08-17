@@ -120,9 +120,18 @@ extension Refreshable {
 public protocol JQNibView{}
 
 public extension JQNibView where Self : UIView{
+    
     @discardableResult
+    ///加载方式不同：用于非pod项目中，加载xib所使用
     static func jq_loadNibView() -> Self {
         return Bundle.main.loadNibNamed(Mirror(reflecting: self).description.replacingOccurrences(of: "Mirror for", with: "").replacingOccurrences(of: ".Type", with: "").trimmingCharacters(in: CharacterSet.whitespaces), owner: nil, options: nil)?.first as! Self
+    }
+    
+    @discardableResult
+    ////加载方式不同：用于加载JQTools中的xib项目
+    static func jq_loadToolNibView()->Self{
+        let a = Bundle(for: JQTool.self)
+        return a.loadNibNamed(Mirror(reflecting: self).description.replacingOccurrences(of: "Mirror for", with: "").replacingOccurrences(of: ".Type", with: "").trimmingCharacters(in: CharacterSet.whitespaces), owner: nil, options: nil)?.first as! Self
     }
 }
 

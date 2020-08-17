@@ -35,6 +35,15 @@ extension Double{
     public func jq_dm()->String{return "\(self/100)dm"}
     public func jq_m()->String{return "\(self/1000)m"}
     public func jq_km()->String{return "\(self/(1000*1000))km"}
+    public func jq_unit()->String{
+        if self > 0 && self < 1000{
+            return String(format: "%.2lf", self)
+        }else if self >= 1000 && self < 10000 {
+            return String(format: "%.2lfK", self/1000)
+        }else{
+            return String(format: "%.2lfW", self/10000)
+        }
+    }
     
     /// 小数点位数 最大3位
     public func jq_radix()->NSInteger{

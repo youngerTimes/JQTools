@@ -10,7 +10,7 @@ import UIKit
 import WebKit
 
 #if canImport(SnapKit)
-
+/// 网页
 public class JQ_CommonWebViewController: UIViewController {
 
     private var webView:WKWebView?

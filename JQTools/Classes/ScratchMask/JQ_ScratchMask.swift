@@ -7,7 +7,7 @@
 
 import UIKit
 
-//刮刮卡涂层
+///刮刮卡涂层
 public class JQ_ScratchMask: UIImageView {
      
     //代理对象

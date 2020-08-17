@@ -8,14 +8,14 @@
 import UIKit
 
 #if canImport(SnapKit)
-//刮刮卡代理协议
+///刮刮卡代理协议
  @objc public protocol ScratchCardDelegate {
     @objc optional func scratchBegan(point: CGPoint)
     @objc optional func scratchMoved(progress: Float)
     @objc optional func scratchEnded(point: CGPoint)
 }
  
-//刮刮卡
+///刮刮卡
 public class JQ_ScratchCard: UIView {
     //涂层
     public var scratchMask: JQ_ScratchMask!

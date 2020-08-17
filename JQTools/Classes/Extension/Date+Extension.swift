@@ -9,6 +9,7 @@ extension Date{
     public enum JQDateType {
         case MS
         case HMS
+        case HM
     }
     
     fileprivate static var lunar_month_days = [
@@ -474,6 +475,8 @@ extension Date{
         switch type {
             case .HMS:
                 return "\(hoursText):\(minutesText):\(secondsText)"
+            case .HM:
+                return "\(hoursText):\(minutesText)"
             default:
                 return "\(minutesText):\(secondsText)"
         }

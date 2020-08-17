@@ -129,7 +129,7 @@ public var jq_safeEdges:UIEdgeInsets{
 
 ///判断是否设备>= iPoneX
 public var jq_isDiffPhone: Bool  {
-    get {return UIScreen.main.bounds.size.height >= 812}
+    get {return UIScreen.main.bounds.size.height >= 812 || UIScreen.main.bounds.size.width >= 812}
 }
 
 ///是否是手机

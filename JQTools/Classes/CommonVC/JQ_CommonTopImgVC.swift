@@ -1,14 +1,13 @@
 //
-//  JQ_CommonTopImgViewController.swift
-//  IQKeyboardManagerSwift
+//  JQ_CommonTopImgVC.swift
+//  JQTools
 //
-//  Created by 无故事王国 on 2020/8/11.
+//  Created by 无故事王国 on 2020/8/12.
 //
 
 import UIKit
 
-///顶部存在顶部图片，下拉放大
-public class JQ_CommonTopImgViewController: UIViewController {
+public class JQ_CommonTopImgVC: UIViewController {
     
     private let screenWidth = UIScreen.main.bounds.width // 屏幕宽度
     private let screenHeight = UIScreen.main.bounds.height  // 屏幕高度
@@ -22,6 +21,11 @@ public class JQ_CommonTopImgViewController: UIViewController {
     public var tableView: UITableView! //表格视图
     public let rowNumber = 50 // 表格数据条目数
     public let rowHeight: CGFloat = 40 // 表格行高
+    
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,11 +73,12 @@ public class JQ_CommonTopImgViewController: UIViewController {
     
     public override func viewDidAppear(_ animated: Bool) {
         // 默认情况下导航栏全透明
-        self.barImageView?.alpha = 0
+        barImageView?.alpha = 0
+        navigationController?.setNavigationBarHidden(true, animated: true)
     }
 }
 
-extension JQ_CommonTopImgViewController: UIScrollViewDelegate {
+extension JQ_CommonTopImgVC: UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         //获取偏移量
         let offset = scrollView.contentOffset.y
@@ -93,7 +98,7 @@ extension JQ_CommonTopImgViewController: UIScrollViewDelegate {
     }
 }
 
-extension JQ_CommonTopImgViewController: UITableViewDelegate, UITableViewDataSource {
+extension JQ_CommonTopImgVC: UITableViewDelegate, UITableViewDataSource {
     //在本例中，有1个分区
     public func numberOfSections(in tableView: UITableView) -> Int {
         return 1

@@ -8,9 +8,13 @@
 
 import UIKit
 
+#if canImport(SnapKit)
+import SnapKit
+
+/// 具有国历和阴历转换
 public class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource {
     
-    enum DatePickerType {
+    public enum DatePickerType {
         case YM //年月
         case YMD //年月日
         case HM  //时分
@@ -23,7 +27,6 @@ public class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource 
     let endYear = 2100 //起始月
     var textField:UITextField? //受响应的输入框
     var type:DatePickerType? //日期类型
-    var coverButtonItem:UIBarButtonItem?
     let pickerView:UIPickerView = UIPickerView()
     var selectYear = 1900 //起始选择年
     var selectMonth = 1 //起始选择月
@@ -37,7 +40,25 @@ public class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource 
     var leapChineseMonths:Array<String>?  //如果上面条件成立，计算闰月数组
     var leapMonths:Dictionary<String, String>? //闰月年份对照表
     var days:Array<Int> = [] //日期
-    var dateFormat = "YYYY-MM-dd HH:mm:ss" //输出格式
+    var dateFormat = "" //输出格式
+    
+    public var cancelButtonItem:UIBarButtonItem?
+    public var coverButtonItem:UIBarButtonItem?
+    public var comfirmButtonItem:UIBarButtonItem?
+    
+    //设置取消按钮的颜色
+    public var cancelTincolor:UIColor?{
+        didSet{
+            cancelButtonItem?.tintColor = cancelTincolor
+        }
+    }
+    
+    //设置取消按钮的颜色
+    public var comfirmlTincolor:UIColor?{
+        didSet{
+            comfirmButtonItem?.tintColor = comfirmlTincolor
+        }
+    }
     
     //数组年
     lazy var years:Array = { () -> [Int] in
@@ -94,47 +115,70 @@ public class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource 
         return temp
     }()
     
-    init(textField:UITextField,type:DatePickerType = .YMD) {
-        super.init(frame: CGRect(x: 0, y: 0, width: JQ_ScreenW, height: 200 * JQ_RateW))
+    public init(textField:UITextField,type:DatePickerType = .YMD,format:String = "YYYY-MM-dd HH:mm:ss") {
+        super.init(frame: CGRect(x: 0, y: 0, width: JQ_ScreenW, height: 259 * JQ_RateW))
         self.backgroundColor = UIColor.white
         self.textField = textField
         self.type = type
+        self.dateFormat = format
         
         //toolBtns
-        let cancelButtonItem = UIBarButtonItem(title: "取消", style: .plain, target: self, action: #selector(cancelAction))
-        cancelButtonItem.tintColor = UIColor.black
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let coverButtonItem = UIBarButtonItem(title: "国历", style: .plain, target: self, action: #selector(coverAction(_:)))
-        coverButtonItem.tintColor = UIColor.red
-        self.coverButtonItem = coverButtonItem
+        cancelButtonItem = UIBarButtonItem(title: "取消", style: .plain, target: self, action: #selector(cancelAction))
+        cancelButtonItem!.tintColor = UIColor(hexStr: "#999999")
         
-        let comfirmButtonItem = UIBarButtonItem(title: "完成", style: .plain, target: self, action: #selector(comfirmAction))
-        comfirmButtonItem.tintColor = UIColor.black
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        coverButtonItem = UIBarButtonItem(title: "国历", style: .plain, target: self, action: #selector(coverAction(_:)))
+        coverButtonItem!.tintColor = UIColor.red
+
+        
+        comfirmButtonItem = UIBarButtonItem(title: "确定", style: .plain, target: self, action: #selector(comfirmAction))
+        comfirmButtonItem!.tintColor = UIColor.black
         
         let toolbar  = UIToolbar()
         toolbar.isTranslucent = false
-        toolbar.frame = CGRect(x: 0, y:0, width: JQ_ScreenW, height: 30 * JQ_RateW)
         
         //只有日期时，才创建”农历<->国历“切换
         if type == .YM || type == .YMD || type == .YMDHM || type == .YMDHMS{
-            toolbar.items = [cancelButtonItem,flexibleSpace,coverButtonItem,comfirmButtonItem]
+            toolbar.items = [cancelButtonItem!,flexibleSpace,coverButtonItem!,comfirmButtonItem!]
         }else{
-            toolbar.items = [cancelButtonItem,flexibleSpace,comfirmButtonItem]
+            toolbar.items = [cancelButtonItem!,flexibleSpace,comfirmButtonItem!]
         }
         
         toolbar.backgroundColor = UIColor.clear
         addSubview(toolbar)
-        
-        //加载闰月纪年
-        let path = Bundle.main.path(forResource: "LeapMonths", ofType: "plist")
-        if path != nil {
-            leapMonths = (NSDictionary(contentsOfFile: path!) as! Dictionary)
+        toolbar.snp.makeConstraints { (make) in
+            make.top.left.right.equalToSuperview()
+            make.height.equalTo(50 * JQ_RateW)
         }
         
-        pickerView.frame = CGRect(x: 0, y: toolbar.jq_height, width: JQ_ScreenW, height: JQ_ScreenH - toolbar.jq_height)
+        //加载闰月纪年
+        let mainBundle  = Bundle(for: JQTool.self)
+        let path = mainBundle.path(forResource: "JQToolsRes", ofType: "bundle")
+        let jqToolsBundle = Bundle(path: path!)
+        let filePath = jqToolsBundle?.path(forResource: "LeapMonths", ofType: "plist")
+        
+        if filePath != nil {
+            leapMonths = (NSDictionary(contentsOfFile: filePath!) as! Dictionary)
+        }
+        
         pickerView.delegate = self
         pickerView.dataSource = self
         addSubview(pickerView)
+        pickerView.snp.makeConstraints { (make) in
+            make.top.equalTo(toolbar.snp.bottom)
+            make.left.right.bottom.equalToSuperview()
+        }
+        
+        let lineView = UIView()
+        lineView.backgroundColor = UIColor(hexStr: "#000000").withAlphaComponent(0.1)
+        addSubview(lineView)
+        lineView.snp.makeConstraints { (make) in
+            make.top.equalTo(toolbar.snp.bottom)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(0.5)
+        }
+        
+        
         self.choseToDay()
     }
     
@@ -149,39 +193,39 @@ public class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource 
         selectSecond    = nowDate.second
         
         switch type! {
-        case .HMS:
-            pickerView.selectRow(selectSecond, inComponent: 2, animated: true)
-            fallthrough
-        case .HM:
-            pickerView.selectRow(selectHour, inComponent: 0, animated: true)
-            pickerView.selectRow(selectMinute, inComponent: 1, animated: true)
-        case .YMDHMS:
-            pickerView.selectRow(selectSecond, inComponent: 5, animated: true)
-            fallthrough
-        case .YMDHM:
-            pickerView.selectRow(selectMinute, inComponent: 4, animated: true)
-            pickerView.selectRow(selectHour, inComponent: 3, animated: true)
-            fallthrough
-        case .YMD:
-            pickerView.selectRow(selectDay, inComponent: 2, animated: true)
-            fallthrough
-        case .YM:
-            pickerView.selectRow(selectMonth, inComponent: 1, animated: true)
-            pickerView.selectRow(selectYear-startYear, inComponent: 0, animated: true)
+            case .HMS:
+                pickerView.selectRow(selectSecond, inComponent: 2, animated: true)
+                fallthrough
+            case .HM:
+                pickerView.selectRow(selectHour, inComponent: 0, animated: true)
+                pickerView.selectRow(selectMinute, inComponent: 1, animated: true)
+            case .YMDHMS:
+                pickerView.selectRow(selectSecond, inComponent: 5, animated: true)
+                fallthrough
+            case .YMDHM:
+                pickerView.selectRow(selectMinute, inComponent: 4, animated: true)
+                pickerView.selectRow(selectHour, inComponent: 3, animated: true)
+                fallthrough
+            case .YMD:
+                pickerView.selectRow(selectDay, inComponent: 2, animated: true)
+                fallthrough
+            case .YM:
+                pickerView.selectRow(selectMonth, inComponent: 1, animated: true)
+                pickerView.selectRow(selectYear-startYear, inComponent: 0, animated: true)
         }
     }
     
     //    MARK: - UIPickerViewDataSource
     public func numberOfComponents(in pickerView: UIPickerView) -> Int{
         switch type! {
-        case .HM,.YM:
-            return 2
-        case .HMS,.YMD:
-            return 3
-        case .YMDHM:
-            return 5
-        case .YMDHMS:
-            return 6
+            case .HM,.YM:
+                return 2
+            case .HMS,.YMD:
+                return 3
+            case .YMDHM:
+                return 5
+            case .YMDHMS:
+                return 6
         }
     }
     
@@ -237,54 +281,54 @@ public class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource 
     public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
         
         switch type! {
-        case .HMS:
-            if component == 2 {return 60}
-            fallthrough
-        case .HM:
-            if component == 0 {return 24}
-            if component == 1 {return 60}
-        case .YMDHMS:
-            if component == 5 {return 60}
-            fallthrough
-        case .YMDHM:
-            if component == 3 {return 24}
-            if component == 4 {return 60}
-            fallthrough
-        case .YMD:
-            if component == 2{
-                if gregorianCal{
-                    self.days.removeAll()
-                    //国历天数计算
-                    let days = SolarMonthDays(year: selectYear, month: selectMonth)
-                    var i = 0
-                    while i < days{
-                        self.days.append(i)
-                        i+=1
-                    }
-                    return days
-                }else{
-                    if selectYearLeap && (selectLeapMonth == selectMonth-1){
-                        //如果选中了闰月，计算农历的闰月份的天数
-                        return LunarMonthDays(year: selectYear, month: selectLeapMonth, leapMonth: true)
+            case .HMS:
+                if component == 2 {return 60}
+                fallthrough
+            case .HM:
+                if component == 0 {return 24}
+                if component == 1 {return 60}
+            case .YMDHMS:
+                if component == 5 {return 60}
+                fallthrough
+            case .YMDHM:
+                if component == 3 {return 24}
+                if component == 4 {return 60}
+                fallthrough
+            case .YMD:
+                if component == 2{
+                    if gregorianCal{
+                        self.days.removeAll()
+                        //国历天数计算
+                        let days = SolarMonthDays(year: selectYear, month: selectMonth)
+                        var i = 0
+                        while i < days{
+                            self.days.append(i)
+                            i+=1
+                        }
+                        return days
                     }else{
-                        //非闰月，计算农历天数
-                        return LunarMonthDays(year: selectYear, month: selectMonth, leapMonth: false)
+                        if selectYearLeap && (selectLeapMonth == selectMonth-1){
+                            //如果选中了闰月，计算农历的闰月份的天数
+                            return LunarMonthDays(year: selectYear, month: selectLeapMonth, leapMonth: true)
+                        }else{
+                            //非闰月，计算农历天数
+                            return LunarMonthDays(year: selectYear, month: selectMonth, leapMonth: false)
+                        }
                     }
                 }
-            }
-            fallthrough
-        case .YM:
-            if component == 0 {return endYear - startYear}
-            if component == 1 {
-                if gregorianCal {
-                    return 12
-                }else{
-                    if selectYearLeap{
-                        //闰月部分，有13条数据
-                        return leapChineseMonths!.count
+                fallthrough
+            case .YM:
+                if component == 0 {return endYear - startYear}
+                if component == 1 {
+                    if gregorianCal {
+                        return 12
+                    }else{
+                        if selectYearLeap{
+                            //闰月部分，有13条数据
+                            return leapChineseMonths!.count
+                        }
+                        return 12
                     }
-                    return 12
-                }
             }
         }
         return 0
@@ -298,7 +342,7 @@ public class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource 
             label!.adjustsFontSizeToFitWidth = true
             label!.textAlignment = .center
             label!.backgroundColor = UIColor.clear
-            label!.font = UIFont.systemFont(ofSize: 15)
+            label!.font = UIFont.systemFont(ofSize: 16)
         }
         label!.text = self.pickerView(pickerView, titleForRow: row, forComponent: component)
         return label!
@@ -307,50 +351,50 @@ public class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource 
     public func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         
         switch type! {
-        case .YMDHMS:
-            if component == 5 {return String(format: "%ld秒", seconds[row])}
-            fallthrough
-        case .YMDHM:
-            if component == 0 {return String(format: "%ld年", years[row])}
-            if component == 3 {return String(format: "%ld时", hours[row])}
-            if component == 4 {return String(format: "%ld分", minutes[row])}
-            
-            if gregorianCal{
-                if component == 1 {return String(format: "%ld月", months[row]+1)}
-                if component == 2 {return String(format: "%ld日", days[row]+1)}
-            }else{
-                if component == 1 {
-                    if selectYearLeap{
-                        return leapChineseMonths![row]
-                    }else{
-                        return chineseMonths[row]
+            case .YMDHMS:
+                if component == 5 {return String(format: "%02ld秒", seconds[row])}
+                fallthrough
+            case .YMDHM:
+                if component == 0 {return String(format: "%ld年", years[row])}
+                if component == 3 {return String(format: "%02ld时", hours[row])}
+                if component == 4 {return String(format: "%02ld分", minutes[row])}
+                
+                if gregorianCal{
+                    if component == 1 {return String(format: "%02ld月", months[row]+1)}
+                    if component == 2 {return String(format: "%02ld日", days[row]+1)}
+                }else{
+                    if component == 1 {
+                        if selectYearLeap{
+                            return leapChineseMonths![row]
+                        }else{
+                            return chineseMonths[row]
+                        }
                     }
+                    if component == 2 {return chineseDays[row]}
+            }
+            
+            case .HMS:
+                if component == 2 {return String(format: "%02ld秒", seconds[row])}
+                fallthrough
+            case .HM:
+                if component == 0 {return String(format: "%02ld时", hours[row])}
+                if component == 1 {return String(format: "%02ld分", minutes[row])}
+            
+            case .YMD:
+                if gregorianCal{
+                    if component == 2 {return String(format: "%02ld日", days[row]+1)}
+                }else{
+                    if component == 2 {return chineseDays[row]}
                 }
-                if component == 2 {return chineseDays[row]}
-            }
-            
-        case .HMS:
-            if component == 2 {return String(format: "%02ld秒", seconds[row])}
-            fallthrough
-        case .HM:
-            if component == 0 {return String(format: "%02ld时", hours[row])}
-            if component == 1 {return String(format: "%02ld分", minutes[row])}
-            
-        case .YMD:
-            if gregorianCal{
-                if component == 2 {return String(format: "%ld日", days[row]+1)}
-            }else{
-                if component == 2 {return chineseDays[row]}
-            }
-            
-            fallthrough
-        case .YM:
-            if component == 0 {return String(format: "%ld年", years[row])}
-            
-            if gregorianCal{
-                if component == 1 {return String(format: "%ld月", months[row]+1)}
-            }else{
-                if component == 1 {return chineseMonths[row]}
+                
+                fallthrough
+            case .YM:
+                if component == 0 {return String(format: "%02ld年", years[row])}
+                
+                if gregorianCal{
+                    if component == 1 {return String(format: "%02ld月", months[row]+1)}
+                }else{
+                    if component == 1 {return chineseMonths[row]}
             }
         }
         return ""
@@ -394,3 +438,4 @@ public class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource 
         pickerView.reloadAllComponents()
     }
 }
+#endif

@@ -8,9 +8,9 @@
 
 import UIKit
 
-class JQ_VerifyCodeNumView: UIView {
+public class JQ_VerifyCodeNumView: UIView {
     /// 光标颜色
-    var cursorColor = UIColor(hexStr: "#D8D8D8")
+    public var cursorColor = UIColor(hexStr: "#D8D8D8")
     fileprivate lazy var numLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -84,7 +84,7 @@ class JQ_VerifyCodeNumView: UIView {
         NotificationCenter.default.removeObserver(self)
     }
     
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         let path = UIBezierPath.init(rect: CGRect.init(x: self.frame.size.width * 0.5, y: self.frame.size.height * 0.1, width: 1, height: self.frame.size.height * 0.7))
         cursor.path = path.cgPath
