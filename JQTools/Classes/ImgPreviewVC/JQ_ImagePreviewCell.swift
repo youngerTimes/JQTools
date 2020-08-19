@@ -82,7 +82,7 @@ public class JQ_ImagePreviewCell: UICollectionViewCell {
     //图片单击事件响应
     @objc func tapSingleDid(_ ges:UITapGestureRecognizer){
         //显示或隐藏导航栏
-        if let nav = self.responderViewController()?.navigationController{
+        if let nav = self.jq_firstViewController()?.navigationController{
             nav.setNavigationBarHidden(!nav.isNavigationBarHidden, animated: true)
         }
     }
@@ -90,7 +90,7 @@ public class JQ_ImagePreviewCell: UICollectionViewCell {
     //图片双击事件响应
     @objc func tapDoubleDid(_ ges:UITapGestureRecognizer){
         //隐藏导航栏
-        if let nav = self.responderViewController()?.navigationController{
+        if let nav = self.jq_firstViewController()?.navigationController{
             nav.setNavigationBarHidden(true, animated: true)
         }
         //缩放视图（带有动画效果）
@@ -114,16 +114,16 @@ public class JQ_ImagePreviewCell: UICollectionViewCell {
     }
     
     //查找所在的ViewController
-    func responderViewController() -> UIViewController? {
-        for view in sequence(first: self.superview, next: { $0?.superview }) {
-            if let responder = view?.next {
-                if responder.isKind(of: UIViewController.self){
-                    return responder as? UIViewController
-                }
-            }
-        }
-        return nil
-    }
+//    func responderViewController() -> UIViewController? {
+//        for view in sequence(first: self.superview, next: { $0?.superview }) {
+//            if let responder = view?.next {
+//                if responder.isKind(of: UIViewController.self){
+//                    return responder as? UIViewController
+//                }
+//            }
+//        }
+//        return nil
+//    }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)

@@ -137,7 +137,7 @@ extension UIImage{
      【查看】CICategoryColorEffect
      
      */
-    func jq_filter(name:String) -> UIImage?
+    public func jq_filter(name:String) -> UIImage?
     {
         let imageData = self.pngData()
         let inputImage = CoreImage.CIImage(data: imageData!)

@@ -58,28 +58,28 @@ extension UIView{
     }
     
     /// centerY
-    public var centerY: CGFloat {
+    public var jq_centerY: CGFloat {
         get {return center.y}
         set {center.y = newValue}
     }
     
     /// size
-    public var size: CGSize {
+    public var jq_size: CGSize {
         get {return frame.size}
         set {frame.size = newValue}
     }
     
-    public var right: CGFloat {
+    public var jq_right: CGFloat {
         get {return frame.maxX}
     }
     
-    public var bottom: CGFloat {
+    public var jq_bottom: CGFloat {
         get {return frame.maxY}
     }
     
     
     //返回该view所在VC
-    public func firstViewController() -> UIViewController? {
+    public func jq_firstViewController() -> UIViewController? {
         for view in sequence(first: self.superview, next: { $0?.superview }) {
             if let responder = view?.next {
                 if responder.isKind(of: UIViewController.self){
