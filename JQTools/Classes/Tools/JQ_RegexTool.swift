@@ -22,7 +22,7 @@ import Foundation
  */
 
 /// 正则工具类
-public struct JQ_Regex {
+public struct JQ_RegexTool {
     
     public let EmailPattern = "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$" //邮箱
     public let ChinesePattern = "([\\u4e00-\\u9fa5]+):([\\d]+)" //
@@ -76,7 +76,7 @@ public struct JQ_Regex {
 }
  
 //正则匹配可选项
-extension JQ_Regex {
+extension JQ_RegexTool {
     /// Options 定义了正则表达式匹配时的行为
     public struct Options: OptionSet {
          
@@ -116,7 +116,7 @@ extension JQ_Regex {
 }
  
 //正则匹配结果
-extension JQ_Regex {
+extension JQ_RegexTool {
     // Match 封装有单个匹配结果
     public class Match: CustomStringConvertible {
         //匹配的字符串

@@ -13,8 +13,8 @@ enum JQ_FileType {
     case lib
 }
 
-public class JQ_FileTools: NSObject {
-    static let `default` = JQ_FileTools()
+public class JQ_FileTool: NSObject {
+    static let `default` = JQ_FileTool()
     private var type:JQ_FileType = .document
     private let manager = FileManager.default
     private(set) var documentUrl:URL?

@@ -25,7 +25,7 @@ public enum KYLocationError: Error {
     
 }
 
-public class JQ_LocationManager:NSObject,AMapSearchDelegate{
+public class JQ_LocationTool:NSObject,AMapSearchDelegate{
     public static let shareManager = JQ_LocationManager()
     public var complete: KYLocationManagerLocationComplete?
     public var search: KYLocationManagerSearchComplete?

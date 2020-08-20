@@ -58,7 +58,7 @@ class WechatUserInfoModel:Mappable{
     required init?(map: Map) {}
 }
 
-class WeChatTools{
+class JQ_WeChatTools{
     
     private var WechatKey = ""
     private var WechatSecret = ""

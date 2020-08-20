@@ -13,8 +13,8 @@ public typealias DownloadCompleteClosure = (String)->(Void)
 public typealias DownloadProgressClosure = (CGFloat)->(Void)
 
 /// 文件下载
-public class JQ_DownloadTools:NSObject {
-    static let `default` = JQ_DownloadTools()
+public class JQ_DownloadTool:NSObject {
+    static let `default` = JQ_DownloadTool()
     var completeClosure:DownloadCompleteClosure?
     var progressClosure:DownloadProgressClosure?
     //    var errorClosure:DownloadErrorClosure?
@@ -41,7 +41,7 @@ public class JQ_DownloadTools:NSObject {
     }
 }
 
-extension JQ_DownloadTools:URLSessionDownloadDelegate{
+extension JQ_DownloadTool:URLSessionDownloadDelegate{
     public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask,
                     didFinishDownloadingTo location: URL) {
         //下载结束

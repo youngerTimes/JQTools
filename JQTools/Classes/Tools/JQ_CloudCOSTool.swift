@@ -14,8 +14,8 @@ import AVKit
 typealias CompleteClosure = (String)->(Void)
 
 /// 腾讯云上传资源
-class QCloudCOSTools{
-    static let `default` = QCloudCOSTools()
+class JQ_CloudCOSTool{
+    static let `default` = JQ_CloudCOSTool()
     private init(){}
     
     /// 上传图片
