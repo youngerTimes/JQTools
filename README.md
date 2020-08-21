@@ -10,6 +10,16 @@
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 ## Requirements
+    s.dependency 'SnapKit'
+    s.dependency 'ObjectMapper'
+    s.dependency 'QMUIKit', '~> 4.0.4'
+    s.dependency 'IQKeyboardManagerSwift', '~> 6.5.5'
+    s.dependency 'RxSwift','~> 5.1.1'
+    s.dependency 'RxCocoa','~> 5.1.1'
+    s.dependency 'SwiftyUserDefaults', '4.0.0-alpha.1'
+    s.dependency 'WMPageController', '~> 2.5.2' #选项卡
+    s.dependency 'Then'
+    s.dependency 'MJRefresh'
 
 ## Installation
 

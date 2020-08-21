@@ -6,7 +6,7 @@
 //
 
 //通用的重复性代码块
-class JQ_CommonCodeBlock{
+public class JQ_CommonCodeBlock{
     
 
 }

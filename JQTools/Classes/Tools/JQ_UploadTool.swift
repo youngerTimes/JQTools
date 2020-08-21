@@ -9,8 +9,7 @@ import UIKit
 import MobileCoreServices
 
 /// 后台上传
-class JQ_UploadTool: NSObject, URLSessionDelegate, URLSessionTaskDelegate,UIApplicationDelegate,UIResponder,
-URLSessionDataDelegate {
+public class JQ_UploadTool: NSObject, URLSessionDelegate, URLSessionTaskDelegate,URLSessionDataDelegate {
     
     //单例模式
     public static let `default`:JQ_UploadTool = {
@@ -32,7 +31,7 @@ URLSessionDataDelegate {
     }()
     
     //上传代理方法，监听上传进度
-    func urlSession(_ session: URLSession, task: URLSessionTask,
+    public func urlSession(_ session: URLSession, task: URLSessionTask,
                     didSendBodyData bytesSent: Int64, totalBytesSent: Int64,
                     totalBytesExpectedToSend: Int64) {
         //获取进度
@@ -45,28 +44,28 @@ URLSessionDataDelegate {
     }
     
     //上传代理方法，传输完毕后服务端返回结果
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
         let str = String(data: data, encoding: String.Encoding.utf8)
         print("服务端返回结果：\(str!)")
     }
     
     //上传代理方法，上传结束
-    func urlSession(_ session: URLSession, task: URLSessionTask,
+    public func urlSession(_ session: URLSession, task: URLSessionTask,
                     didCompleteWithError error: Error?) {
         print("上传结束!")
     }
     
     //session完成事件
-    func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
+    public func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
         
         //主线程调用
         DispatchQueue.main.async {
-            if let appDelegate = UIApplication.shared.delegate as? APPdelegate,
-                let completionHandler = appDelegate.backgroundSessionCompletionHandler {
-                appDelegate.backgroundSessionCompletionHandler = nil
-                //调用此方法告诉操作系统，现在可以安全的重新suspend你的app
-                completionHandler()
-            }
+//            if let appDelegate = UIApplication.shared.delegate as? APPdelegate,
+//                let completionHandler = appDelegate.backgroundSessionCompletionHandler {
+//                appDelegate.backgroundSessionCompletionHandler = nil
+//                //调用此方法告诉操作系统，现在可以安全的重新suspend你的app
+//                completionHandler()
+//            }
         }
     }
     

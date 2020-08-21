@@ -10,12 +10,12 @@ import UIKit
 //#import <QuickLook/QuickLook.h>
 import QuickLook
 
-class JQ_OpenFile: NSObject,QLPreviewControllerDelegate,QLPreviewControllerDataSource{
-    func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
+public class JQ_OpenFile: NSObject,QLPreviewControllerDelegate,QLPreviewControllerDataSource{
+    public func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
         return 1
     }
     
-    func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+    public func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
         return datePathStr! as NSURL
     }
     

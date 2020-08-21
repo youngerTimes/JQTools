@@ -63,7 +63,7 @@ public class JQModel: Mappable {
 
 #if canImport(SwiftyUserDefaults)
 import SwiftyUserDefaults
-let Defaults = SwiftyUserDefaults.Defaults
+public let Defaults = SwiftyUserDefaults.Defaults
 #endif
 
 #if canImport(RxSwift) && canImport(RxCocoa)
@@ -102,7 +102,7 @@ public let JQ_LibaryPath = NSSearchPathForDirectoriesInDomains(FileManager.Searc
 public let JQ_TempPath = NSTemporaryDirectory() as String
 
 ///适配扩展
-extension NSLayoutConstraint {
+public extension NSLayoutConstraint {
     
     /// 重写constant,适配比例
     override open func awakeFromNib() {
