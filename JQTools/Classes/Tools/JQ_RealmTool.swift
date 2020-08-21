@@ -8,20 +8,16 @@
 
 import Foundation
 
-
 #if canImport(RealmSwift)
 import RealmSwift
 
-
 //https://www.hangge.com/blog/cache/detail_891.html
-
 /// RealmTool数据库
 public class JQ_RealmTool:NSObject{
-    static let `default` = JQ_RealmTool()
+    public static let `default` = JQ_RealmTool()
     public private(set) var dbVersion:UInt64 = 0
     public private(set) var dbName:String!
     public private(set) var realm:Realm?
-    
     
     let docPath =  NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory,FileManager.SearchPathDomainMask.userDomainMask,true).last!
     
