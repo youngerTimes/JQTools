@@ -13,10 +13,145 @@ public enum WaterMarkCorner{
     case BottomRight
 }
 
-extension UIImage{
+public extension UIImage{
+    
+    // MARK: -- Class func
+    ///生成群聊图标
+    class func jq_groupIcon(wh:CGFloat, images:[UIImage], bgColor:UIColor?) -> UIImage {
+        let finalSize = CGSize(width:wh, height:wh)
+        var rect: CGRect = CGRect.zero
+        rect.size = finalSize
+        
+        //开始图片处理上下文（由于输出的图不会进行缩放，所以缩放因子等于屏幕的scale即可
+        UIGraphicsBeginImageContextWithOptions(finalSize, false, 0)
+        
+        //绘制背景
+        if (bgColor != nil) {
+            let context: CGContext = UIGraphicsGetCurrentContext()!
+            //添加矩形背景区域
+            context.addRect(rect)
+            //设置填充颜色
+            context.setFillColor(bgColor!.cgColor)
+            context.drawPath(using: .fill)
+        }
+        
+        //绘制图片
+        if images.count >= 1 {
+            //获取群聊图标中每个小图片的位置尺寸
+            let rects = self.getRectsInGroupIcon(wh:wh, count:images.count)
+            var count = 0
+            //将每张图片绘制到对应的区域上
+            for image in images {
+                if count > rects.count-1 {
+                    break
+                }
+                
+                let rect = rects[count]
+                image.draw(in: rect)
+                count = count + 1
+            }
+        }
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!
+    }
+    
+    //获取群聊图标中每个小图片的位置尺寸
+    private class func getRectsInGroupIcon(wh:CGFloat, count:Int) -> [CGRect] {
+        //如果只有1张图片就直接占全部位置
+        if count == 1 {
+            return [CGRect(x:0, y:0, width:wh, height:wh)]
+        }
+        
+        //下面是图片数量大于1张的情况
+        var array = [CGRect]()
+        //图片间距
+        var padding: CGFloat = 10
+        //小图片尺寸
+        var cellWH: CGFloat
+        //用于后面计算的单元格数量（小于等于4张图片算4格单元格，大于4张算9格单元格）
+        var cellCount:Int
+        
+        if count <= 4 {
+            cellWH = (wh-padding*3)/2
+            cellCount = 4
+        } else {
+            padding = padding/2
+            cellWH = (wh-padding*4)/3
+            cellCount = 9
+        }
+        
+        //总行数
+        let rowCount = Int(sqrt(Double(cellCount)))
+        //根据单元格长宽，间距，数量返回所有单元格初步对应的位置尺寸
+        for i in 0..<cellCount {
+            //当前行
+            let row = i/rowCount
+            //当前列
+            let column = i%rowCount
+            let rect = CGRect(x:padding*CGFloat(column+1)+cellWH*CGFloat(column),
+                              y:padding*CGFloat(row+1)+cellWH*CGFloat(row),
+                              width:cellWH, height:cellWH)
+            array.append(rect)
+        }
+        
+        //根据实际图片的数量再调整单元格的数量和位置
+        if count == 2 {
+            array.removeSubrange(0...1)
+            for i in 0..<array.count {
+                array[i].origin.y = array[i].origin.y - (padding+cellWH)/2
+            }
+        }else if count == 3 {
+            array.remove(at: 0)
+            array[0].origin.x = (wh-cellWH)/2
+        }else if count == 5 {
+            array.removeSubrange(0...3)
+            for i in 0..<array.count {
+                if i<2 {
+                    array[i].origin.x = array[i].origin.x - (padding+cellWH)/2
+                }
+                array[i].origin.y = array[i].origin.y - (padding+cellWH)/2
+            }
+        }else if count == 6 {
+            array.removeSubrange(0...2)
+            for i in 0..<array.count {
+                array[i].origin.y = array[i].origin.y - (padding+cellWH)/2
+            }
+        }else if count == 7 {
+            array.removeSubrange(0...1)
+            array[0].origin.x = (wh-cellWH)/2
+        }
+        else if count == 8 {
+            array.remove(at: 0)
+            for i in 0..<2 {
+                array[i].origin.x = array[i].origin.x - (padding+cellWH)/2
+            }
+        }
+        return array
+    }
+    
+    // MARK: -- Instance
+    
+    /// 生成一张高斯模糊图
+    func jq_blur(_ value:CGFloat)->UIImage{
+        let context = CIContext(options: nil)
+        let inputImage =  CIImage(image: self)
+        //使用高斯模糊滤镜
+        let filter = CIFilter(name: "CIGaussianBlur")!
+        filter.setValue(inputImage, forKey:kCIInputImageKey)
+        //设置模糊半径值（越大越模糊）
+        filter.setValue(value, forKey: kCIInputRadiusKey)
+        let outputCIImage = filter.outputImage!
+        let rect = CGRect(origin: CGPoint.zero, size: self.size)
+        let cgImage = context.createCGImage(outputCIImage, from: rect)
+        //显示生成的模糊图片
+        return UIImage(cgImage: cgImage!)
+    }
+    
     
     ///生成圆形图片
-    public func toCircle() -> UIImage {
+    func jq_toCircle() -> UIImage {
         //取最短边长
         let shotest = min(self.size.width, self.size.height)
         //输出尺寸
@@ -39,11 +174,11 @@ extension UIImage{
     }
     
     /// 添加水印方法:添加文字
-    public func jq_waterMarkeText(waterMarkText:String, corner:WaterMarkCorner = .BottomLeft,
-                                  margin:CGPoint = CGPoint(x: 20, y: 20),
-                                  waterMarkTextColor:UIColor = UIColor.white,
-                                  waterMarkTextFont:UIFont = UIFont.systemFont(ofSize: 20),
-                                  backgroundColor:UIColor = UIColor.clear) -> UIImage?{
+    func jq_waterMarkeText(waterMarkText:String, corner:WaterMarkCorner = .BottomLeft,
+                           margin:CGPoint = CGPoint(x: 20, y: 20),
+                           waterMarkTextColor:UIColor = UIColor.white,
+                           waterMarkTextFont:UIFont = UIFont.systemFont(ofSize: 20),
+                           backgroundColor:UIColor = UIColor.clear) -> UIImage?{
         
         let textAttributes = [NSAttributedString.Key.foregroundColor:waterMarkTextColor,
                               NSAttributedString.Key.font:waterMarkTextFont,
@@ -76,8 +211,8 @@ extension UIImage{
     }
     
     //添加图片水印方法：添加图片
-    public func jq_waterMarkeImg(waterMarkImage:UIImage, corner:WaterMarkCorner = .BottomRight,
-                                 margin:CGPoint = CGPoint(x: 20, y: 20), alpha:CGFloat = 1) -> UIImage{
+    func jq_waterMarkeImg(waterMarkImage:UIImage, corner:WaterMarkCorner = .BottomRight,
+                          margin:CGPoint = CGPoint(x: 20, y: 20), alpha:CGFloat = 1) -> UIImage{
         
         var markFrame = CGRect(x:0, y: 0, width:waterMarkImage.size.width,
                                height: waterMarkImage.size.height)
@@ -110,7 +245,7 @@ extension UIImage{
     
     /// 创建一个透明的图片，可用于nav:        navigationController?.navigationBar.isTranslucent = true
     /// - Parameter rect: 尺寸
-    public static func jq_createClarityImg(rect:CGRect,alpha:CGFloat = 0)->UIImage{
+    static func jq_createClarityImg(rect:CGRect,alpha:CGFloat = 0)->UIImage{
         let color = UIColor.clear
         UIGraphicsBeginImageContext(rect.size)
         let context = UIGraphicsGetCurrentContext()
@@ -121,7 +256,7 @@ extension UIImage{
     }
     
     /// 创建带有颜色的图片
-    public static func jq_createColorImg(rect:CGRect,color:UIColor,alpha:CGFloat = 0)->UIImage{
+    static func jq_createColorImg(rect:CGRect,color:UIColor,alpha:CGFloat = 0)->UIImage{
         UIGraphicsBeginImageContext(rect.size)
         let context = UIGraphicsGetCurrentContext()
         context?.setFillColor(color.withAlphaComponent(alpha).cgColor)
@@ -137,7 +272,7 @@ extension UIImage{
      【查看】CICategoryColorEffect
      
      */
-    public func jq_filter(name:String) -> UIImage?
+    func jq_filter(name:String) -> UIImage?
     {
         let imageData = self.pngData()
         let inputImage = CoreImage.CIImage(data: imageData!)
@@ -154,7 +289,7 @@ extension UIImage{
     
     
     /// 更改图片颜色
-    public func jq_imageWithTintColor(color : UIColor) -> UIImage{
+    func jq_imageWithTintColor(color : UIColor) -> UIImage{
         UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
         let context = UIGraphicsGetCurrentContext()
         context?.translateBy(x: 0, y: self.size.height)
@@ -175,7 +310,7 @@ extension UIImage{
     ///   - color: 颜色
     ///   - blendMode: 模型
     /// - Returns: 颜色
-    public func jq_imageWithTintColor(color: UIColor, blendMode: CGBlendMode) -> UIImage?{
+    func jq_imageWithTintColor(color: UIColor, blendMode: CGBlendMode) -> UIImage?{
         let drawRect = CGRect(x: 0.0, y: 0.0, width: size.width, height: size.height)
         UIGraphicsBeginImageContextWithOptions(size, false, scale)
         color.setFill()
@@ -187,7 +322,7 @@ extension UIImage{
     }
     
     //重设颜色
-    public func jq_imageWithNewSize(size: CGSize) -> UIImage? {
+    func jq_imageWithNewSize(size: CGSize) -> UIImage? {
         if self.size.height > size.height {
             let width = size.height / self.size.height * self.size.width
             let newImgSize = CGSize(width: width, height: size.height)
@@ -217,20 +352,20 @@ extension UIImage{
         }else{
             newSize = CGSize(width: size.width, height: size.width / ratio)
         }
-     
+        
         ////图片绘制区域
         var rect = CGRect.zero
         rect.size.width  = size.width
         rect.size.height = size.height
         rect.origin.x    = (newSize.width - size.width ) / 2.0
         rect.origin.y    = (newSize.height - size.height ) / 2.0
-         
+        
         //绘制并获取最终图片
         UIGraphicsBeginImageContext(newSize)
         draw(in: rect)
         let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-         
+        
         return scaledImage!
     }
     
@@ -240,44 +375,44 @@ extension UIImage{
         let aspectWidth  = newSize.width/size.width
         let aspectHeight = newSize.height/size.height
         let aspectRatio = max(aspectWidth, aspectHeight)
-         
+        
         //图片绘制区域
         var scaledImageRect = CGRect.zero
         scaledImageRect.size.width  = size.width * aspectRatio
         scaledImageRect.size.height = size.height * aspectRatio
         scaledImageRect.origin.x    = (newSize.width - size.width * aspectRatio) / 2.0
         scaledImageRect.origin.y    = (newSize.height - size.height * aspectRatio) / 2.0
-         
+        
         //绘制并获取最终图片
         UIGraphicsBeginImageContext(newSize)
         draw(in: scaledImageRect)
         let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-         
+        
         return scaledImage!
     }
     
     /**
      根据坐标获取图片中的像素颜色值
      */
-    public subscript (x: Int, y: Int) -> UIColor? {
-         
+    subscript (x: Int, y: Int) -> UIColor? {
+        
         if x < 0 || x > Int(size.width) || y < 0 || y > Int(size.height) {
             return nil
         }
-         
+        
         let provider = self.cgImage!.dataProvider
         let providerData = provider!.data
         let data = CFDataGetBytePtr(providerData)
-         
+        
         let numberOfComponents = 4
         let pixelData = ((Int(size.width) * y) + x) * numberOfComponents
-         
+        
         let r = CGFloat(data![pixelData]) / 255.0
         let g = CGFloat(data![pixelData + 1]) / 255.0
         let b = CGFloat(data![pixelData + 2]) / 255.0
         let a = CGFloat(data![pixelData + 3]) / 255.0
-         
+        
         return UIColor(red: r, green: g, blue: b, alpha: a)
     }
 }

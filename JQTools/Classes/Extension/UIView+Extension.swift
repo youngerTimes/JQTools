@@ -177,22 +177,33 @@ extension UIView{
     }
     
     //UIView->UIImage
-    public func jq_convertViewToImage() -> UIImage {
+    public func jq_convertViewToImage(_ saveToAlbum:Bool = false) -> UIImage {
         var imageRet = UIImage()
         UIGraphicsBeginImageContextWithOptions(self.frame.size, true, UIScreen.main.scale)
         self.layer.render(in: UIGraphicsGetCurrentContext()!)
         imageRet = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
+        
+        if saveToAlbum {
+            UIImageWriteToSavedPhotosAlbum(imageRet, nil, nil, nil)
+        }
+        
         return imageRet
     }
     
     //将当前视图转为UIImage
-       public func jq_asImage() -> UIImage {
-           let renderer = UIGraphicsImageRenderer(bounds: bounds)
-           return renderer.image { rendererContext in
-               layer.render(in: rendererContext.cgContext)
-           }
-       }
+    public func jq_asImage(_ saveToAlbum:Bool = false) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(bounds: bounds)
+        let image = renderer.image { rendererContext in
+            layer.render(in: rendererContext.cgContext)
+        }
+        
+        if saveToAlbum {
+            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        }
+        
+        return image
+    }
     
     ///设置渐变色(Frame)
     public func jq_gradientColor(colorArr:[CGColor]) {

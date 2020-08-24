@@ -115,6 +115,22 @@ extension String{
     }
     
     // MARK: -- Instance Method
+    ///将 String/Data 类型转换成UnsafeMutablePointer<UInt8>类型
+    public func jq_mutableBytes(_ clouse:((UnsafeMutablePointer<UInt8>)->Void)?){
+        var data = self.data(using: .utf8)!
+        data.withUnsafeMutableBytes({ (bytes: UnsafeMutablePointer<UInt8>) -> Void in
+            //bytes即为指针地址
+            print("指针地址：\(bytes)")
+            //通过指针移动来取值（赋值也是可以的）
+            var bytesStart = bytes
+            for _ in 0..<6 {
+                print(bytesStart.pointee)
+                bytesStart += 1
+            }
+            clouse?(bytes)
+        })
+        
+    }
     
     public func jq_subString(sub:String)->(index:NSInteger,length:NSInteger){
         if let range = self.range(of:sub) {
