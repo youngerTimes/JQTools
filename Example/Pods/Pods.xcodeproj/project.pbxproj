@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		07E8CA44FE63663E025A3AB8C093BF9A /* Constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = C417784A7C0566CA3A4A90F972ECD6E6 /* Constraint.swift */; };
-		085BB86C3E451E2794C485057E6E1A0B /* JQ_DownloadTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA7881D6ABA03A41CC2CABBEBE644C1 /* JQ_DownloadTools.swift */; };
 		0A6DB3B0AC848C12862894D4D15D65D0 /* ConstraintRelatableTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA57917D5E295BADC0B25F3CDB9C4E8 /* ConstraintRelatableTarget.swift */; };
 		0ABA3F74887D0AC9C190EC5607FB58AB /* ConstraintMultiplierTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C12038B34951B9B002DAB0D5FE023DA /* ConstraintMultiplierTarget.swift */; };
 		102CFFE9B490DD470AF70EF7B50D5298 /* LayoutConstraintItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D1E72289667D4BA6D946E25320953 /* LayoutConstraintItem.swift */; };
@@ -16,20 +15,6 @@
 		135A7C81246534D80052D7ED /* Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 135A7C80246534D80052D7ED /* Header.h */; };
 		136D815DC682454292A327C0CB217AE8 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12EF67130FC414818C204F2500FAA681 /* UIColor+Extension.swift */; };
 		13AC030D24568F96003B19CA /* JQ_CommonCodeBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC030C24568F96003B19CA /* JQ_CommonCodeBlock.swift */; };
-		13AC032124568FB3003B19CA /* CommonSliderRoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC030F24568FB2003B19CA /* CommonSliderRoundView.swift */; };
-		13AC032224568FB3003B19CA /* CustomMoneyPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC031024568FB2003B19CA /* CustomMoneyPickerView.swift */; };
-		13AC032324568FB3003B19CA /* CustomCitysPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC031124568FB2003B19CA /* CustomCitysPickerView.swift */; };
-		13AC032424568FB3003B19CA /* CustomDatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC031224568FB2003B19CA /* CustomDatePickerView.swift */; };
-		13AC032524568FB3003B19CA /* CustomPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC031324568FB2003B19CA /* CustomPickerView.swift */; };
-		13AC032624568FB3003B19CA /* QCloudCOSTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC031424568FB2003B19CA /* QCloudCOSTools.swift */; };
-		13AC032724568FB3003B19CA /* CitysOptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC031624568FB2003B19CA /* CitysOptionModel.swift */; };
-		13AC032824568FB3003B19CA /* DateFormatUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC031824568FB3003B19CA /* DateFormatUtil.swift */; };
-		13AC032924568FB3003B19CA /* DatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC031924568FB3003B19CA /* DatePickerView.swift */; };
-		13AC032A24568FB3003B19CA /* LeapMonths.plist in Resources */ = {isa = PBXBuildFile; fileRef = 13AC031A24568FB3003B19CA /* LeapMonths.plist */; };
-		13AC032B24568FB3003B19CA /* WeChatTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC031C24568FB3003B19CA /* WeChatTools.swift */; };
-		13AC032C24568FB3003B19CA /* WeChatOptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC031D24568FB3003B19CA /* WeChatOptView.swift */; };
-		13AC032D24568FB3003B19CA /* WeChatOptView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13AC031E24568FB3003B19CA /* WeChatOptView.xib */; };
-		13AC033024568FDD003B19CA /* JQ_AnisTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC032F24568FDD003B19CA /* JQ_AnisTools.swift */; };
 		183ACC1C929A88C9F47733A24FC14704 /* ConstraintRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21B2FDCEA78DB15010A749F9203D21F /* ConstraintRelation.swift */; };
 		1B97EA35E7E8E870BB14BEC36115CA4C /* LayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EFBC475A6AD866A5083DC5F61B3563 /* LayoutConstraint.swift */; };
 		202C3C16767E9A4D4912F657811DA3CA /* ConstraintPriorityTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC92BE130C0A4CE98F06E9D397E55AF /* ConstraintPriorityTarget.swift */; };
@@ -73,7 +58,6 @@
 		CC40EBACD70ADF6FFA75FE95D92C7897 /* ConstraintView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB05D22C92E5A571A653D510E552AC0 /* ConstraintView+Extensions.swift */; };
 		CDF0CCA79D36ECEEDCF98A07C26D5EBE /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EB5DD90257DC0440CDF1F29C4427EA /* String+Extension.swift */; };
 		D433DCB0D5CBB4E48A5D91022151F694 /* Debugging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C5937AEDD4F642E09E0A1980BCC652 /* Debugging.swift */; };
-		E04DEA62B912FFF82DF04D7E23B34A93 /* JQTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 973EB50102A3384C2F96DE6ABE28539E /* JQTool.swift */; };
 		E893160AB79EE0C562E032F7CA0C4F74 /* ConstraintLayoutGuide+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144DAF3614C757BDAABBA78E4B4866FC /* ConstraintLayoutGuide+Extensions.swift */; };
 		E966F9D6BCC1AD2A7EC6BC2FEBCBD601 /* SnapKit-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = FED189CE3C9928FFAF66C86038ABFDB1 /* SnapKit-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EC05C20B6D0EADC0D91145DB534B5140 /* ConstraintAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD64C66CE4DDF29ECD54691C69DE81 /* ConstraintAttributes.swift */; };
@@ -113,20 +97,6 @@
 		12EF67130FC414818C204F2500FAA681 /* UIColor+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		135A7C80246534D80052D7ED /* Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Header.h; path = JQTools/Classes/Header.h; sourceTree = "<group>"; };
 		13AC030C24568F96003B19CA /* JQ_CommonCodeBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JQ_CommonCodeBlock.swift; path = JQTools/Classes/JQ_CommonCodeBlock.swift; sourceTree = "<group>"; };
-		13AC030F24568FB2003B19CA /* CommonSliderRoundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonSliderRoundView.swift; sourceTree = "<group>"; };
-		13AC031024568FB2003B19CA /* CustomMoneyPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMoneyPickerView.swift; sourceTree = "<group>"; };
-		13AC031124568FB2003B19CA /* CustomCitysPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCitysPickerView.swift; sourceTree = "<group>"; };
-		13AC031224568FB2003B19CA /* CustomDatePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomDatePickerView.swift; sourceTree = "<group>"; };
-		13AC031324568FB2003B19CA /* CustomPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPickerView.swift; sourceTree = "<group>"; };
-		13AC031424568FB2003B19CA /* QCloudCOSTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCloudCOSTools.swift; sourceTree = "<group>"; };
-		13AC031624568FB2003B19CA /* CitysOptionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CitysOptionModel.swift; sourceTree = "<group>"; };
-		13AC031824568FB3003B19CA /* DateFormatUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatUtil.swift; sourceTree = "<group>"; };
-		13AC031924568FB3003B19CA /* DatePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerView.swift; sourceTree = "<group>"; };
-		13AC031A24568FB3003B19CA /* LeapMonths.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = LeapMonths.plist; sourceTree = "<group>"; };
-		13AC031C24568FB3003B19CA /* WeChatTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeChatTools.swift; sourceTree = "<group>"; };
-		13AC031D24568FB3003B19CA /* WeChatOptView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeChatOptView.swift; sourceTree = "<group>"; };
-		13AC031E24568FB3003B19CA /* WeChatOptView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WeChatOptView.xib; sourceTree = "<group>"; };
-		13AC032F24568FDD003B19CA /* JQ_AnisTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JQ_AnisTools.swift; path = JQTools/Classes/JQ_AnisTools.swift; sourceTree = "<group>"; };
 		144DAF3614C757BDAABBA78E4B4866FC /* ConstraintLayoutGuide+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "ConstraintLayoutGuide+Extensions.swift"; path = "Source/ConstraintLayoutGuide+Extensions.swift"; sourceTree = "<group>"; };
 		14FE473E37EFB8571E729F9B375CE60E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		15E730D3489BE9D2EF65330BEB9C56B3 /* NSInterger+extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "NSInterger+extension.swift"; sourceTree = "<group>"; };
@@ -158,7 +128,6 @@
 		8526195E12DFC7919D6784BED18FFE2F /* UIImage+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		889A1C0C2676CC8402C67301B08286F8 /* JQTools.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = JQTools.xcconfig; sourceTree = "<group>"; };
 		8A26D91B0E800F3CC711EB9D4B7D643D /* ConstraintMakerEditable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintMakerEditable.swift; path = Source/ConstraintMakerEditable.swift; sourceTree = "<group>"; };
-		973EB50102A3384C2F96DE6ABE28539E /* JQTool.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JQTool.swift; path = JQTools/Classes/JQTool.swift; sourceTree = "<group>"; };
 		979486118B3E90C08386079D57962701 /* SnapKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SnapKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C12038B34951B9B002DAB0D5FE023DA /* ConstraintMultiplierTarget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintMultiplierTarget.swift; path = Source/ConstraintMultiplierTarget.swift; sourceTree = "<group>"; };
 		9C87F70E835D22459F492D40CB584A67 /* UILayoutSupport+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UILayoutSupport+Extensions.swift"; path = "Source/UILayoutSupport+Extensions.swift"; sourceTree = "<group>"; };
@@ -194,7 +163,6 @@
 		E51D030DE29C26DD21C61851735F5912 /* Pods-JQTools_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-JQTools_Tests-dummy.m"; sourceTree = "<group>"; };
 		E8D094B2BB87FF7710AF8FA3D68325B3 /* JQTools-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "JQTools-umbrella.h"; sourceTree = "<group>"; };
 		EC0E4E3541BF32A5C4247EA2CC09B4BE /* ConstraintViewDSL.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintViewDSL.swift; path = Source/ConstraintViewDSL.swift; sourceTree = "<group>"; };
-		ECA7881D6ABA03A41CC2CABBEBE644C1 /* JQ_DownloadTools.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JQ_DownloadTools.swift; path = JQTools/Classes/JQ_DownloadTools.swift; sourceTree = "<group>"; };
 		ED05C0772840EE66B3EB754BEF846F7A /* ConstraintMakerRelatable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintMakerRelatable.swift; path = Source/ConstraintMakerRelatable.swift; sourceTree = "<group>"; };
 		F5C9D6FEF48994711991A348A7B0B99A /* ConstraintView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintView.swift; path = Source/ConstraintView.swift; sourceTree = "<group>"; };
 		F63DC83113A26BB1DB9ED37E0EE3F512 /* ConstraintDSL.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintDSL.swift; path = Source/ConstraintDSL.swift; sourceTree = "<group>"; };
@@ -245,51 +213,6 @@
 			);
 			name = "Support Files";
 			path = "Example/Pods/Target Support Files/JQTools";
-			sourceTree = "<group>";
-		};
-		13AC030E24568FB2003B19CA /* CustomPickerView */ = {
-			isa = PBXGroup;
-			children = (
-				13AC030F24568FB2003B19CA /* CommonSliderRoundView.swift */,
-				13AC031024568FB2003B19CA /* CustomMoneyPickerView.swift */,
-				13AC031124568FB2003B19CA /* CustomCitysPickerView.swift */,
-				13AC031224568FB2003B19CA /* CustomDatePickerView.swift */,
-				13AC031324568FB2003B19CA /* CustomPickerView.swift */,
-				13AC031424568FB2003B19CA /* QCloudCOSTools.swift */,
-				13AC031524568FB2003B19CA /* Model */,
-			);
-			name = CustomPickerView;
-			path = JQTools/Classes/CustomPickerView;
-			sourceTree = "<group>";
-		};
-		13AC031524568FB2003B19CA /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				13AC031624568FB2003B19CA /* CitysOptionModel.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		13AC031724568FB3003B19CA /* DatePickerView */ = {
-			isa = PBXGroup;
-			children = (
-				13AC031824568FB3003B19CA /* DateFormatUtil.swift */,
-				13AC031924568FB3003B19CA /* DatePickerView.swift */,
-				13AC031A24568FB3003B19CA /* LeapMonths.plist */,
-			);
-			name = DatePickerView;
-			path = JQTools/Classes/DatePickerView;
-			sourceTree = "<group>";
-		};
-		13AC031B24568FB3003B19CA /* WechatTools */ = {
-			isa = PBXGroup;
-			children = (
-				13AC031C24568FB3003B19CA /* WeChatTools.swift */,
-				13AC031D24568FB3003B19CA /* WeChatOptView.swift */,
-				13AC031E24568FB3003B19CA /* WeChatOptView.xib */,
-			);
-			name = WechatTools;
-			path = JQTools/Classes/WechatTools;
 			sourceTree = "<group>";
 		};
 		14A96B7315858B442DED3D67502899B8 /* Extension */ = {
@@ -368,18 +291,12 @@
 			isa = PBXGroup;
 			children = (
 				135A7C80246534D80052D7ED /* Header.h */,
-				13AC032F24568FDD003B19CA /* JQ_AnisTools.swift */,
 				13AC030C24568F96003B19CA /* JQ_CommonCodeBlock.swift */,
-				ECA7881D6ABA03A41CC2CABBEBE644C1 /* JQ_DownloadTools.swift */,
 				B0BB58DB2597A690BA367E125978F43E /* JQ_Def.swift */,
 				5AA954AA864BA3DC431BF254FD633E6D /* JQ_Stack.swift */,
-				973EB50102A3384C2F96DE6ABE28539E /* JQTool.swift */,
-				13AC030E24568FB2003B19CA /* CustomPickerView */,
-				13AC031724568FB3003B19CA /* DatePickerView */,
 				14A96B7315858B442DED3D67502899B8 /* Extension */,
 				22C226EC8592ECB31DA1BFE282C3B93B /* Pod */,
 				0C4793E31DABF3DB70BA08002AAC4633 /* Support Files */,
-				13AC031B24568FB3003B19CA /* WechatTools */,
 			);
 			name = JQTools;
 			path = ../..;
@@ -613,8 +530,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13AC032D24568FB3003B19CA /* WeChatOptView.xib in Resources */,
-				13AC032A24568FB3003B19CA /* LeapMonths.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -626,33 +541,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				B66E471838F60D02D1D180CA66CFF91E /* AVURLAsset+Extension.swift in Sources */,
-				13AC032224568FB3003B19CA /* CustomMoneyPickerView.swift in Sources */,
 				3D63C1DB08A6A512B403F76ADD2B5AC7 /* Date+Extension.swift in Sources */,
-				13AC032324568FB3003B19CA /* CustomCitysPickerView.swift in Sources */,
-				13AC032B24568FB3003B19CA /* WeChatTools.swift in Sources */,
-				13AC032624568FB3003B19CA /* QCloudCOSTools.swift in Sources */,
-				13AC032424568FB3003B19CA /* CustomDatePickerView.swift in Sources */,
 				F88CAC19B2AE43C017C464B0A890FFB4 /* Double+Extension.swift in Sources */,
-				085BB86C3E451E2794C485057E6E1A0B /* JQ_DownloadTools.swift in Sources */,
 				A10065B4F460CD24B3E8444FAD3FDE0D /* JQ_Def.swift in Sources */,
-				13AC032824568FB3003B19CA /* DateFormatUtil.swift in Sources */,
 				C6C504BC9E29B444BB7EDCA6694232CD /* JQ_Stack.swift in Sources */,
-				E04DEA62B912FFF82DF04D7E23B34A93 /* JQTool.swift in Sources */,
-				13AC032C24568FB3003B19CA /* WeChatOptView.swift in Sources */,
 				A9AA3E66EB749BB38EE2542F8F0F4EFE /* JQTools-dummy.m in Sources */,
 				88364CC5EE2A57269BA5E67A4C8555F7 /* NSInterger+extension.swift in Sources */,
 				CDF0CCA79D36ECEEDCF98A07C26D5EBE /* String+Extension.swift in Sources */,
 				BDAD5389F247109F6B3F8E1F4DECF23E /* UIButton+Extension.swift in Sources */,
 				136D815DC682454292A327C0CB217AE8 /* UIColor+Extension.swift in Sources */,
-				13AC032724568FB3003B19CA /* CitysOptionModel.swift in Sources */,
-				13AC032124568FB3003B19CA /* CommonSliderRoundView.swift in Sources */,
-				13AC032924568FB3003B19CA /* DatePickerView.swift in Sources */,
 				74A12620CCDAB4806D7680239AF5288F /* UIImage+Extension.swift in Sources */,
 				6B4C845453C41E62E796DEB96E8C0B8E /* UIImageView+Extension.swift in Sources */,
 				13AC030D24568F96003B19CA /* JQ_CommonCodeBlock.swift in Sources */,
 				30C6891745C2BC22AEE135335C355A44 /* UIView+Extension.swift in Sources */,
-				13AC032524568FB3003B19CA /* CustomPickerView.swift in Sources */,
-				13AC033024568FDD003B19CA /* JQ_AnisTools.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -821,6 +722,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1040,6 +942,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
