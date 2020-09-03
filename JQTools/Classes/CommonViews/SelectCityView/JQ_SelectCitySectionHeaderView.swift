@@ -7,7 +7,8 @@
 
 import UIKit
 
-class JQ_SelectCitySectionHeaderView: UITableViewHeaderFooterView {
+#if canImport(SnapKit)
+public class JQ_SelectCitySectionHeaderView: UITableViewHeaderFooterView {
 
     var indexL = UILabel()
     
@@ -28,3 +29,4 @@ class JQ_SelectCitySectionHeaderView: UITableViewHeaderFooterView {
     }
 
 }
+#endif

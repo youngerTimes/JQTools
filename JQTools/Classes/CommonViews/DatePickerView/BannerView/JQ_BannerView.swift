@@ -8,6 +8,7 @@
 
 import UIKit
 
+#if canImport(SnapKit)
 public class JQ_BannerView: UIView,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate{
     var offset:CGFloat?
     var timer:Timer?
@@ -130,3 +131,4 @@ public class JQ_BannerView: UIView,UICollectionViewDataSource,UICollectionViewDe
         print("page:\(currentPage)")
     }
 }
+#endif

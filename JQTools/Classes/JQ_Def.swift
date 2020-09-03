@@ -63,13 +63,13 @@ public class JQModel: Mappable {
 
 #if canImport(SwiftyUserDefaults)
 import SwiftyUserDefaults
-public let Defaults = SwiftyUserDefaults.Defaults
+public let JQ_Defaults = SwiftyUserDefaults.Defaults
 #endif
 
-#if canImport(RxSwift) && canImport(RxCocoa)
+#if canImport(RxCocoa)
 import RxSwift
 import RxCocoa
-public var disposeBag = DisposeBag()
+public var JQ_disposeBag = DisposeBag()
 #endif
 
 
@@ -105,7 +105,7 @@ public let JQ_TempPath = NSTemporaryDirectory() as String
 public extension NSLayoutConstraint {
     
     /// 重写constant,适配比例
-    override open func awakeFromNib() {
+    override func awakeFromNib() {
         super.awakeFromNib()
         self.constant = self.constant * JQ_RateW
     }

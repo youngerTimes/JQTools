@@ -7,6 +7,7 @@
 
 import UIKit
 
+#if canImport(SnapKit)
 ///刮刮卡涂层
 public class JQ_ScratchMask: UIImageView {
      
@@ -139,3 +140,4 @@ public class JQ_ScratchMask: UIImageView {
         return Float(alphaPixelCount) / Float(bitmapByteCount)
     }
 }
+#endif

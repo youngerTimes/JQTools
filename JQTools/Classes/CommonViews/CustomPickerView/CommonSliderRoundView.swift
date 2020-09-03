@@ -8,6 +8,7 @@
 
 import UIKit
 
+#if canImport(SnapKit)
 public typealias CommonSliderRoundClouse = (NSInteger,NSInteger)->(Void)
 
 /// 双向滑动图
@@ -154,3 +155,4 @@ public class JCommonSliderRoundView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 }
+#endif

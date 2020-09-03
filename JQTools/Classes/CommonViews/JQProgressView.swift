@@ -8,6 +8,7 @@
 
 import UIKit
 
+#if canImport(SnapKit)
 /// 渐变方向
 public enum JQPradientType{
     case LeftToRight
@@ -236,3 +237,4 @@ public class JQProgressView: UIView {
     }
 }
 
+#endif

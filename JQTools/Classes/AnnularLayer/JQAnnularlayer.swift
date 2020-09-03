@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+#if canImport(SnapKit)
 class JQ_Annularlayer: UIView {
 
     var progress:CGFloat = 0.0
@@ -104,3 +104,4 @@ class JQ_Annularlayer: UIView {
         self.layer.addSublayer(gradientLayer)
     }
 }
+#endif

@@ -7,6 +7,8 @@
 
 import UIKit
 
+#if canImport(RxSwift) && canImport(RxCocoa)
+
 public class JQ_DatePickerAreaView: UIView,JQNibView{
     
     @IBOutlet weak var centerView: UIView!
@@ -41,7 +43,7 @@ public class JQ_DatePickerAreaView: UIView,JQNibView{
             if !weakSelf!.centerView.frame.contains(tap.location(in: weakSelf!)) {
                 weakSelf!.dismiss()
             }
-        }).disposed(by: disposeBag)
+        }).disposed(by: JQ_disposeBag)
         self.addGestureRecognizer(tap)
     }
     
@@ -179,3 +181,4 @@ extension JQ_DatePickerAreaView:UIPickerViewDataSource{
     }
     
 }
+#endif

@@ -8,6 +8,7 @@
 
 import UIKit
 
+#if canImport(SnapKit)
 /// 时间选择器
 public enum DatePickerType {
     case YMD
@@ -745,3 +746,4 @@ extension CustomDatePickerView:UIPickerViewDelegate{
         pickerView.reloadAllComponents()
     }
 }
+#endif

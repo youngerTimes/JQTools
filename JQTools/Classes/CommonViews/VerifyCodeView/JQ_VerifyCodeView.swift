@@ -7,6 +7,7 @@
 
 import UIKit
 
+#if canImport(SnapKit)
 ///验证码输入
 public class JQ_VerifyCodeView: UIView {
     
@@ -193,3 +194,4 @@ public extension UIScreen {
         return UIScreen.main.bounds.size
     }
 }
+#endif

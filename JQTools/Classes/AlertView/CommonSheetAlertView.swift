@@ -8,6 +8,7 @@
 
 import UIKit
 
+#if canImport(SnapKit)
 public typealias SheetAlertClouse = (NSInteger)->Void
 
 public enum SheetAlertViewType {
@@ -181,3 +182,4 @@ public class JQSheetAlertView: UIView {
     }
     
 }
+#endif

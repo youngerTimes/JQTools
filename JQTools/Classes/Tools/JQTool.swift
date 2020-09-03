@@ -11,7 +11,10 @@ import Foundation
 
 
 #if canImport(RxSwift) && canImport(RxCocoa) && canImport(MJRefresh)
- 
+import RxSwift
+import RxCocoa
+import MJRefresh
+
 public enum RefreshStatus {
     case none
     case beingHeaderRefresh

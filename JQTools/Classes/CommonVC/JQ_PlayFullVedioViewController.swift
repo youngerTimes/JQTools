@@ -9,7 +9,8 @@
 import UIKit
 import AVKit
 
-class JQ_PlayFullVedioViewController: AVPlayerViewController, AVPlayerViewControllerDelegate {
+#if canImport(QMUIKit)
+public class JQ_PlayFullVedioViewController: AVPlayerViewController, AVPlayerViewControllerDelegate {
 
     var vedioUrl = ""
     var time: CMTime!
@@ -18,7 +19,7 @@ class JQ_PlayFullVedioViewController: AVPlayerViewController, AVPlayerViewContro
     
     var refreshData: ((_ time:CMTime)->Void)!
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.duckOthers, .allowBluetooth])
@@ -53,7 +54,7 @@ class JQ_PlayFullVedioViewController: AVPlayerViewController, AVPlayerViewContro
         self.player?.seek(to: CMTimeMake(value: 1, timescale: 1))
     }
     
-    func playerViewController(_ playerViewController: AVPlayerViewController, willEndFullScreenPresentationWithAnimationCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    public func playerViewController(_ playerViewController: AVPlayerViewController, willEndFullScreenPresentationWithAnimationCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         if playItem != nil {
             player?.pause()
             refreshData(playItem.currentTime())
@@ -64,3 +65,4 @@ class JQ_PlayFullVedioViewController: AVPlayerViewController, AVPlayerViewContro
 
 
 }
+#endif

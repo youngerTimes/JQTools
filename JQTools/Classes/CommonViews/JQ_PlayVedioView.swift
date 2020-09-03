@@ -9,6 +9,7 @@
 import UIKit
 import AVKit
 
+#if canImport(SnapKit)
 let AllVedioStopNotification = "AllVedioStopNotification"
 let AllAudioPlayerPauseNotification = "AllAudioPlayerPauseNotification"
 class JQ_PlayVedioView: UIView {
@@ -145,3 +146,4 @@ class JQ_PlayVedioView: UIView {
         }
     }
 }
+#endif

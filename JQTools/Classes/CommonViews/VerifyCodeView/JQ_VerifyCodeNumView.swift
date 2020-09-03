@@ -8,6 +8,7 @@
 
 import UIKit
 
+#if canImport(SnapKit)
 public class JQ_VerifyCodeNumView: UIView {
     /// 光标颜色
     public var cursorColor = UIColor(hexStr: "#D8D8D8")
@@ -156,3 +157,4 @@ extension JQ_VerifyCodeNumView {
         return numLabel.text
     }
 }
+#endif
