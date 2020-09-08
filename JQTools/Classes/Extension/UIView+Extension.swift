@@ -176,8 +176,10 @@ extension UIView{
         self.layer.rasterizationScale = UIScreen.main.scale
     }
     
-    //UIView->UIImage
-    public func jq_convertViewToImage(_ saveToAlbum:Bool = false) -> UIImage {
+    //【截图】UIView->UIImage
+    @discardableResult
+    @available(*,deprecated,message: "废弃")
+    public func jq_captureToImage(_ saveToAlbum:Bool = false) -> UIImage {
         var imageRet = UIImage()
         UIGraphicsBeginImageContextWithOptions(self.frame.size, true, UIScreen.main.scale)
         self.layer.render(in: UIGraphicsGetCurrentContext()!)
@@ -191,8 +193,9 @@ extension UIView{
         return imageRet
     }
     
-    //将当前视图转为UIImage
-    public func jq_asImage(_ saveToAlbum:Bool = false) -> UIImage {
+    //【截图】将当前视图转为UIImage
+    @available(*,deprecated,message: "废弃")
+    public func jq_captureAsImage(_ saveToAlbum:Bool = false) -> UIImage {
         let renderer = UIGraphicsImageRenderer(bounds: bounds)
         let image = renderer.image { rendererContext in
             layer.render(in: rendererContext.cgContext)
@@ -203,6 +206,27 @@ extension UIView{
         }
         
         return image
+    }
+    
+    /// 合并两个图片
+    public func jq_combinTwoImage(image1:UIImage,image2:UIImage) -> UIImage{
+        let width = max(image1.size.width, image2.size.width)
+        let height = image1.size.height + image2.size.height
+        let offScreenSize = CGSize.init(width: width, height: height)
+        
+        UIGraphicsBeginImageContext(offScreenSize);
+        
+        let rect = CGRect.init(x:0, y:0, width:width, height:image1.size.height)
+        image1.draw(in: rect)
+        
+        let rect2 = CGRect.init(x:0, y:image1.size.height, width:width, height:image2.size.height)
+        image1.draw(in: rect2)
+        
+        let image:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        
+        UIGraphicsEndImageContext();
+        
+        return image;
     }
     
     ///设置渐变色(Frame)
