@@ -13,16 +13,16 @@ public class JQ_RollNumberLabel: UIView {
     
     var defaultNumber:NSNumber?
     var financeType = false
-    var isFloatType = false
     var financeStyle:NumberFormatter.Style = .currency
-    var format:String = ""
+    var format:String = ",###.##"
     var rawText = ""
     var items = [String]()
-    public var font = UIFont.systemFont(ofSize: 18)
-    public var textColor = UIColor.black
+    var font = UIFont.systemFont(ofSize: 18)
+    var textColor = UIColor.black
     var digalScrollView = [UIScrollView]()
+    var totalScrollView = [UIScrollView]()
     
-    public var valueNumber:NSNumber = NSNumber(floatLiteral: 0){
+    var valueNumber:NSNumber = NSNumber(floatLiteral: 0){
         didSet{
             if self.valueNumber.stringValue.contains(".") {
                 rawText =  financeType ? valueNumber.doubleValue.jq_fuCoin(financeStyle, format: format) : "\(defaultNumber!.doubleValue)"
@@ -39,7 +39,7 @@ public class JQ_RollNumberLabel: UIView {
     ///   - financeType: 是否是金融类型（如果为false，以下的值无需设置）
     ///   - financeStyle: 【金融】类型数值类型
     ///   - format: 【金融】格式
-    public convenience init(_ defaultNumber:NSNumber = NSNumber(value: 0),financeType:Bool = false,financeStyle:NumberFormatter.Style = .decimal,format:String = ",###.##") {
+    convenience init(_ defaultNumber:NSNumber = NSNumber(value: 0),financeType:Bool = false,financeStyle:NumberFormatter.Style = .decimal,format:String = ",###.##") {
         self.init()
         self.defaultNumber = defaultNumber
         self.financeType = financeType
@@ -54,7 +54,7 @@ public class JQ_RollNumberLabel: UIView {
     }
     
     private func layout(){
-    
+        
         qmui_removeAllSubviews()
         digalScrollView.removeAll()
         items.removeAll()
@@ -63,46 +63,72 @@ public class JQ_RollNumberLabel: UIView {
             items.append(b.lowercased())
         }
         
+        var lastScrollView:UIScrollView!
         for (index,item) in items.enumerated() {
             let scrollView = UIScrollView()
             scrollView.showsVerticalScrollIndicator = false
             scrollView.showsHorizontalScrollIndicator = false
             scrollView.isPagingEnabled = true
             addSubview(scrollView)
+            totalScrollView.append(scrollView)
             
-            scrollView.snp.remakeConstraints { (make) in
-                make.top.equalToSuperview()
-                make.left.equalToSuperview().offset(CGFloat(index) * font.pointSize * 0.6)
-                make.width.equalTo(font.pointSize * 0.6)
-                make.height.equalTo(font.pointSize)
-                
-                if items.count == index + 1{
-                    make.right.equalToSuperview()
-                    make.bottom.equalToSuperview()
+            if index == 0 {
+                scrollView.snp.makeConstraints { (make) in
+                    make.top.equalToSuperview()
+                    make.left.equalToSuperview()
+                    make.width.equalTo(font.pointSize * 0.6)
+                    make.height.equalTo(font.pointSize)
+                    
+                    if items.count == index + 1{
+                        make.right.equalToSuperview()
+                    }
+                }
+            }else if items.count > index + 1{
+                scrollView.snp.makeConstraints { (make) in
+                    make.top.equalToSuperview()
+                    make.left.equalTo(lastScrollView.snp.right)
+                    
+                    if item.contains(".") || item.contains(",") {
+                        make.width.equalTo(20)
+                    }else{
+                        make.width.equalTo(font.pointSize * 0.6)
+                    }
+                    make.height.equalTo(font.pointSize)
+                }
+            }else{
+                scrollView.snp.makeConstraints { (make) in
+                    make.top.equalToSuperview()
+                    make.left.equalTo(lastScrollView.snp.right)
+                    make.width.equalTo(font.pointSize * 0.6)
+                    make.height.equalTo(font.pointSize)
+                    
+                    if items.count == index + 1{
+                        make.right.equalToSuperview()
+                    }
                 }
             }
             
+            
             if item.contains(".") || item.contains(",") {
-                
                 let label = UILabel()
                 label.text = item
-                label.font = UIFont.systemFont(ofSize: font.pointSize, weight: .medium)
+                label.font = font
                 label.textColor = textColor
                 label.textAlignment = .center
                 scrollView.addSubview(label)
                 label.snp.remakeConstraints { (make) in
                     make.edges.equalToSuperview()
-                    make.width.equalTo(font.pointSize * 0.6)
                 }
-                scrollView.contentSize = CGSize(width: font.pointSize * 0.6, height: font.pointSize)
+                scrollView.contentSize = CGSize(width: 20, height: font.pointSize)
                 scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
                 scrollView.contentInset = UIEdgeInsets(top: -6 * JQ_RateW, left: 0, bottom: 0, right: 0)
                 
             }else{
+                
                 for num in 0...9{
                     let label = UILabel()
                     label.text = "\(num)"
-                    label.font = UIFont.systemFont(ofSize: font.pointSize, weight: .medium)
+                    label.font = font
                     label.textColor = textColor
                     label.textAlignment = .center
                     scrollView.addSubview(label)
@@ -118,6 +144,8 @@ public class JQ_RollNumberLabel: UIView {
                 scrollView.contentSize = CGSize(width: font.pointSize * 0.6, height: font.pointSize * 10)
                 digalScrollView.append(scrollView)
             }
+            
+            lastScrollView = scrollView
         }
     }
     
@@ -142,7 +170,11 @@ public class JQ_RollNumberLabel: UIView {
     }
     
     private func setUI(){
-        
+        if valueNumber.stringValue.contains(".") {
+            rawText =  financeType ? valueNumber.doubleValue.jq_fuCoin(financeStyle, format: format) : "\(valueNumber.doubleValue)"
+        }else{
+            rawText = financeType ? valueNumber.intValue.jq_fuCoin(financeStyle, format: format) : "\(valueNumber.intValue)"
+        }
     }
 }
 
