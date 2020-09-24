@@ -10,6 +10,7 @@ Pod::Spec.new do |s|
   s.name             = 'JQTools'
   s.version          = '0.1.0'
   s.summary          = 'JQKit 自己常用的工具集合，加快开发进度'
+  s.swift_versions   = '5.0'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -28,6 +29,9 @@ TODO: Add long description of the pod here.
   s.source           = { :git => 'https://github.com/youngerTimes/JQTools.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
+  #s.libraries  'z.1', 'sqlite3' 引用系统库
+#  s.static_framework = true
+
   s.ios.deployment_target = '10.0'
 
   s.source_files = 'JQTools/Classes/**/*'
@@ -36,7 +40,7 @@ TODO: Add long description of the pod here.
      'JQToolsRes' => ['JQTools/Assets/*']
    }
 
-   s.public_header_files = 'Pod/Classes/OC/Header.h'
+#   s.public_header_files = 'JQTools/Classes/OC/Header.h'
    
    s.frameworks = 'UIKit'
    s.dependency 'SnapKit'

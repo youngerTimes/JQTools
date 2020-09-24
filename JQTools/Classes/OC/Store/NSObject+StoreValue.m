@@ -9,10 +9,10 @@
 #import "NSObject+StoreValue.h"
 
 @implementation NSObject (StoreValue)
--(void)storeValueWithKey:(NSString *)key{
+-(void)jq_storeValueWithKey:(NSString *)key{
     [[JQCenter share]jq_storeValue:self withKey:key];
 }
-+(id)valueBykey:(NSString *)key{
++(id)jq_valueBykey:(NSString *)key{
     return  [[JQCenter share]jq_valueWithKey:key];
 }
 @end

@@ -8,8 +8,8 @@
 #ifndef Header_h
 #define Header_h
 
-#import "JQFileManger.h"
 #import "QRCodeImage.h"
+#import "JQFileManger.h"
 #import "UIImage+GenerateQRCode.h"
 #import "KeyChainStore.h"
 #import "ZoomImageView.h"
@@ -17,6 +17,7 @@
 #import "UIBarButtonItem+Util.h"
 #import "UITabBar+Badge.h"
 #import "UIImage+Util.h"
+#import "JQLocationManager.h"
 
 #endif /* Header_h */
 
