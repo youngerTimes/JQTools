@@ -8,6 +8,8 @@
 
 import UIKit
 #if canImport(SnapKit)
+
+/// 环形进度条
 class JQ_Annularlayer: UIView {
 
     var progress:CGFloat = 0.0
