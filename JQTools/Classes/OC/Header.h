@@ -18,6 +18,7 @@
 #import "UITabBar+Badge.h"
 #import "UIImage+Util.h"
 #import "JQLocationManager.h"
+#import "UIView+CornerRadius.h"
 
 #endif /* Header_h */
 

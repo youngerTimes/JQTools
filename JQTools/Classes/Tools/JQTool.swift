@@ -175,6 +175,22 @@ public func JQ_currentNavigationController() -> UINavigationController {
     return JQ_currentViewController().navigationController!
 }
 
+
+/// 动态加载VC
+public func JQ_loadVC(string:String)->UIViewController?{
+    //动态获得命名空间
+    let name = Bundle.main.infoDictionary!["CFBundleExecutable"] as! String
+    //这里以控制器为例
+    let vc1:AnyClass? = NSClassFromString(name + "." + string)
+    if let vc = vc1 {
+        let nameVc = vc as! UIViewController.Type
+        //nameVc就是通过字符串动态加载后的类，我们可以通过他创建新的实例
+        let newObject = nameVc.init()
+        return newObject
+    }
+    return nil
+}
+
 public class JQTool{
     
     public enum DottedLineType {

@@ -55,6 +55,7 @@ public func JQ_WarningLog<T>(_ message:T,file:String = #file,funcName:String = #
 
 #if canImport(ObjectMapper)
 import ObjectMapper
+//使用时，需要继承于它
 public class JQModel: Mappable {
     required public init?(map: Map) {}
     public func mapping(map: Map) {}
