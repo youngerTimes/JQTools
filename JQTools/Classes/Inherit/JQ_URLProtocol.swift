@@ -12,7 +12,9 @@ import Foundation
 //记录请求数量
 var requestCount = 0
 
+//拦截器 将网页缓存到本地（抓取html页面，并实现离线浏览）
 /// APPDelegate [URLProtocol.registerClass(MyURLProtocol.self)]
+// https://www.hangge.com/blog/cache/detail_1118.html
 public class JQ_URLProtocol: URLProtocol , URLSessionDataDelegate, URLSessionTaskDelegate{
     
     //URLSession数据请求任务
