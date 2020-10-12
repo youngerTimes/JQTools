@@ -19,4 +19,9 @@ extension Data{
             return nil
         }
     }
+
+    ///Data转16进制字符串
+    func jq_hexString() -> String {
+        return map { String(format: "%02x", $0) }.joined(separator: "").uppercased()
+    }
 }

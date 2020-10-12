@@ -11,6 +11,7 @@ import UIKit
 import XCGLogger
 
 //https://github.com/DaveWoodCom/XCGLogger
+//https://www.hangge.com/blog/cache/detail_1418.html
 
 /**
 ```
@@ -69,14 +70,19 @@ public func JQ_SetUpLogger(_ path:String = "log.txt",showIdentifier:Bool = false
 
     //日期格式化
     let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "MM/dd/yyyy hh:mma"
+    dateFormatter.dateFormat = "MM/dd/yyyy hh:mm:ss"
     dateFormatter.locale = Locale.current
     log.dateFormatter = dateFormatter
 
     //文件出输出
-    let fileSize = AutoRotatingFileDestination.autoRotatingFileDefaultMaxFileSize
-    let timeInterval = AutoRotatingFileDestination.autoRotatingFileDefaultMaxTimeInterval
-    let fileDestination = AutoRotatingFileDestination(owner: log, writeToFile: logURL, identifier: "advancedLogger.fileDestination", shouldAppend: true, appendMarker: "-- Relauched App --", maxFileSize: fileSize, maxTimeInterval: timeInterval, archiveSuffixDateFormatter: dateFormatter, targetMaxLogFiles: 30)
+//    let fileSize = AutoRotatingFileDestination.autoRotatingFileDefaultMaxFileSize
+//    let timeInterval = AutoRotatingFileDestination.autoRotatingFileDefaultMaxTimeInterval
+//
+//    let fileDestination = AutoRotatingFileDestination(owner: log, writeToFile: logURL, identifier: "advancedLogger.fileDestination", shouldAppend: true, appendMarker: "-- Relauched App --", maxFileSize: fileSize, maxTimeInterval: timeInterval, archiveSuffixDateFormatter: dateFormatter, targetMaxLogFiles: 30)
+
+    let fileDestination = FileDestination(writeToFile: logURL,
+                                          identifier: "advancedLogger.fileDestination",
+                                          shouldAppend: true, appendMarker: "-- Relauched App --")
 
 
     //将当前的日志文件复制到用户文档目录中去

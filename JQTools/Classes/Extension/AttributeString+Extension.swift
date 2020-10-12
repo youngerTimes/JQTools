@@ -7,8 +7,10 @@
 
 import Foundation
 
-extension NSMutableAttributedString {
-    public func jq_addLink(_ source: String, link: String, attributes: [NSAttributedString.Key : Any]? = nil) {
+public extension NSMutableAttributedString {
+
+    /// 添加链接富文本
+    func jq_addLink(_ source: String, link: String, attributes: [NSAttributedString.Key : Any]? = nil) {
         let linkString = NSMutableAttributedString(string: source, attributes: attributes)
         let range: NSRange = NSRange(location: 0, length: linkString.length)
         linkString.beginEditing()
@@ -17,7 +19,8 @@ extension NSMutableAttributedString {
         self.append(linkString)
     }
 
-    public func jq_append(_ string: String, attributes: [NSAttributedString.Key : Any]? = nil) {
+    ///添加富文本
+    func jq_append(_ string: String, attributes: [NSAttributedString.Key : Any]? = nil) {
         let attrString = NSAttributedString(string: string, attributes: attributes)
         self.append(attrString)
     }

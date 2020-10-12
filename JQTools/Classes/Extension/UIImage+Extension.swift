@@ -148,6 +148,35 @@ public extension UIImage{
         //显示生成的模糊图片
         return UIImage(cgImage: cgImage!)
     }
+
+    ///返回一个将白色背景变透明的UIImage
+    func jq_imageByRemoveWhiteBg() -> UIImage? {
+        let colorMasking: [CGFloat] = [222, 255, 222, 255, 222, 255]
+        return transparentColor(colorMasking: colorMasking)
+    }
+
+    ///返回一个将黑色背景变透明的UIImage
+    func jq_imageByRemoveBlackBg() -> UIImage? {
+        let colorMasking: [CGFloat] = [0, 32, 0, 32, 0, 32]
+        return transparentColor(colorMasking: colorMasking)
+    }
+
+    private func transparentColor(colorMasking:[CGFloat]) -> UIImage? {
+        if let rawImageRef = self.cgImage {
+            UIGraphicsBeginImageContext(self.size)
+            if let maskedImageRef = rawImageRef.copy(maskingColorComponents: colorMasking) {
+                let context: CGContext = UIGraphicsGetCurrentContext()!
+                context.translateBy(x: 0.0, y: self.size.height)
+                context.scaleBy(x: 1.0, y: -1.0)
+                context.draw(maskedImageRef, in: CGRect(x:0, y:0, width:self.size.width,
+                                                        height:self.size.height))
+                let result = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                return result
+            }
+        }
+        return nil
+    }
     
     
     ///生成圆形图片

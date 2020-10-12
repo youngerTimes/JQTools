@@ -8,17 +8,17 @@
 import Foundation
 import CommonCrypto
 
-extension String{
+public extension String{
      private static let random_str_characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
-   public enum JQSafeBase64Type {
+    enum JQSafeBase64Type {
         ///加密
         case encode
         ///解密
         case decode
     }
     
-    public enum HMACAlgorithm {
+    enum HMACAlgorithm {
         case MD5, SHA1, SHA224, SHA256, SHA384, SHA512
         
         func toCCHmacAlgorithm() -> CCHmacAlgorithm {
@@ -62,27 +62,27 @@ extension String{
     
     // MARK: -- Static
     /// 获取字符串宽度
-    public static func jq_getWidth(text: String, height: CGFloat, font: CGFloat) -> CGFloat {
+    static func jq_getWidth(text: String, height: CGFloat, font: CGFloat) -> CGFloat {
         let text = text as NSString
         let rect = text.boundingRect(with: CGSize(width: CGFloat(Int.max), height: height), options: .usesLineFragmentOrigin, attributes: [.font : UIFont.systemFont(ofSize: font)], context: nil)
         return rect.size.width
     }
     ///获取字符串高度
-    public static func jq_getHeight(text: String, width: CGFloat, font: CGFloat) -> CGFloat {
+    static func jq_getHeight(text: String, width: CGFloat, font: CGFloat) -> CGFloat {
         let text = text as NSString
         let rect = text.boundingRect(with: CGSize(width: width, height: CGFloat(Int.max)), options: .usesLineFragmentOrigin, attributes: [.font : UIFont.systemFont(ofSize: font)], context: nil)
         return rect.size.height
     }
     
     ///获取字符串高度(带font)
-    public static func jq_getHeightwithFont(text: String, width: CGFloat, font: UIFont) -> CGFloat {
+    static func jq_getHeightwithFont(text: String, width: CGFloat, font: UIFont) -> CGFloat {
         let text = text as NSString
         let rect = text.boundingRect(with: CGSize(width: width, height: CGFloat(Int.max)), options: .usesLineFragmentOrigin, attributes: [.font : font], context: nil)
         return rect.size.height
     }
     
      ///获取指定长度的随机字符串
-    public static func jq_randomStr(len : Int) -> String{
+    static func jq_randomStr(len : Int) -> String{
         var ranStr = ""
         for _ in 0..<len {
             let index = Int(arc4random_uniform(UInt32(random_str_characters.count)))
@@ -93,7 +93,7 @@ extension String{
     
     
     /// 指定范围随机数值
-    public func jq_randomNumber(start: Int, end: Int) ->() ->Int? {
+    func jq_randomNumber(start: Int, end: Int) ->() ->Int? {
         //根据参数初始化可选值数组
         var nums = [Int]();
         for i in start...end{
@@ -116,7 +116,7 @@ extension String{
     
     // MARK: -- Instance Method
     ///将 String/Data 类型转换成UnsafeMutablePointer<UInt8>类型
-    public func jq_mutableBytes(_ clouse:((UnsafeMutablePointer<UInt8>)->Void)?){
+    func jq_mutableBytes(_ clouse:((UnsafeMutablePointer<UInt8>)->Void)?){
         var data = self.data(using: .utf8)!
         data.withUnsafeMutableBytes({ (bytes: UnsafeMutablePointer<UInt8>) -> Void in
             //bytes即为指针地址
@@ -131,8 +131,25 @@ extension String{
         })
         
     }
+
+    ///16进制字符串转Data
+    func jq_hexData() -> Data? {
+        var data = Data(capacity: count / 2)
+        let regex = try! NSRegularExpression(pattern: "[0-9a-f]{1,2}", options: .caseInsensitive)
+        regex.enumerateMatches(in: self, range: NSMakeRange(0, utf16.count)) { match, flags, stop in
+            let byteString = (self as NSString).substring(with: match!.range)
+            var num = UInt8(byteString, radix: 16)!
+            data.append(&num, count: 1)
+        }
+        guard data.count > 0 else { return nil }
+        return data
+    }
+
+    func jq_utf8Data()-> Data? {
+        return self.data(using: .utf8)
+    }
     
-    public func jq_subString(sub:String)->(index:NSInteger,length:NSInteger){
+    func jq_subString(sub:String)->(index:NSInteger,length:NSInteger){
         if let range = self.range(of:sub) {
             let startPos = self.distance(from: self.startIndex, to: range.lowerBound)
             let endPos = self.distance(from: self.startIndex, to: range.upperBound)
@@ -141,7 +158,7 @@ extension String{
         return (0,0)
     }
     
-    public subscript(start:Int, length:Int) -> String
+    subscript(start:Int, length:Int) -> String
         {
         get{
             let index1 = self.index(self.startIndex, offsetBy: start)
@@ -167,7 +184,7 @@ extension String{
         }
     }
     
-    public subscript(index:Int) -> String
+    subscript(index:Int) -> String
         {
         get{
             return String(self[self.index(self.startIndex, offsetBy: index)])
@@ -187,7 +204,7 @@ extension String{
     
     
     @available(*,deprecated,message: "废弃:建议使用jq_subRange")
-    public func jq_nsRange(from range: Range<String.Index>) -> NSRange {
+    func jq_nsRange(from range: Range<String.Index>) -> NSRange {
         let from = range.lowerBound.samePosition(in: utf16)
         let to = range.upperBound.samePosition(in: utf16)
         return NSRange(location: utf16.distance(from: utf16.startIndex, to: from!),
@@ -195,7 +212,7 @@ extension String{
     }
     
     /// 获取子字符串的NSRange
-    public func jq_subRange(_ subText:String)->NSRange{
+    func jq_subRange(_ subText:String)->NSRange{
         let range = self.range(of: subText)
         let from = range?.lowerBound.samePosition(in: utf16)
         let to = range?.upperBound.samePosition(in: utf16)
@@ -205,7 +222,7 @@ extension String{
     
     /// 将字符串转换为字典类型
     @available(*,deprecated,message: "废弃")
-    public func toDict() -> [String : Any]?{
+    func toDict() -> [String : Any]?{
          let data = self.data(using: String.Encoding.utf8)
          if let dict = try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String : Any] {
              return dict
@@ -214,7 +231,7 @@ extension String{
      }
     
     /// 将字符串转换为字典类型
-    public func jq_toDict() -> [String : Any]?{
+    func jq_toDict() -> [String : Any]?{
          let data = self.data(using: String.Encoding.utf8)
          if let dict = try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String : Any] {
              return dict
@@ -223,7 +240,7 @@ extension String{
      }
     
     ///JSONString转换为数组
-    public func jq_toArray(jsonString:String) ->NSArray{
+    func jq_toArray(jsonString:String) ->NSArray{
         let jsonData:Data = jsonString.data(using: .utf8)!
         let array = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
         if array != nil {
@@ -233,7 +250,7 @@ extension String{
     }
     
     ///字符串分割成数组
-    public func jq_toArray(character:String) -> Array<String>{
+    func jq_toArray(character:String) -> Array<String>{
         let array : Array = components(separatedBy: character)
         return array
     }
@@ -241,7 +258,7 @@ extension String{
     
     /// NSRange 转 Range
     @available(*,deprecated,message: "废弃")
-    public func jq_range(from nsRange: NSRange) -> Range<String.Index>? {
+    func jq_range(from nsRange: NSRange) -> Range<String.Index>? {
         guard
             let from16 = utf16.index(utf16.startIndex, offsetBy: nsRange.location, limitedBy: utf16.endIndex),
             let to16 = utf16.index(from16, offsetBy: nsRange.length, limitedBy: utf16.endIndex),
@@ -252,7 +269,7 @@ extension String{
     }
     
     ///去掉首尾空格 后 指定开头空格数
-    public func jq_beginSpaceNum(num: Int) -> String {
+    func jq_beginSpaceNum(num: Int) -> String {
         var beginSpace = ""
         for _ in 0..<num {
             beginSpace += " "
@@ -261,7 +278,7 @@ extension String{
     }
     
     ///配合 TextDelegate -> shouldChangeCharactersIn
-    public func jq_filterDecimals(replacementString:String,range:NSRange,limit:NSInteger = 2)->Bool{
+    func jq_filterDecimals(replacementString:String,range:NSRange,limit:NSInteger = 2)->Bool{
         let futureString: NSMutableString = NSMutableString(string: self)
         futureString.insert(replacementString, at: range.location)
         var flag = 0
@@ -280,12 +297,12 @@ extension String{
     }
     
     ///适配Web,填充HTML的完整
-    public func jq_wrapHtml()-> String{
+    func jq_wrapHtml()-> String{
         return "<html><head><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'><style>*{ width: 100%%; margin: 0; padding: 0 3; box-sizing: border-box;} img{ width: 100%%;}</style></head><body>\(self)</body></html>"
     }
     
     ///JsonString->字典
-    public func jq_dictionaryFromJsonString() -> Any? {
+    func jq_dictionaryFromJsonString() -> Any? {
         let jsonData = self.data(using: String.Encoding.utf8)
         if jsonData != nil {
             let dic = try? JSONSerialization.jsonObject(with: jsonData!, options: [])
@@ -300,7 +317,7 @@ extension String{
     }
     
     /// 手机号转138****6372
-    public func jq_blotOutPhone() -> String{
+    func jq_blotOutPhone() -> String{
         if self.count != 11{
             print("传入手机号格式错误")
             return ""
@@ -312,19 +329,19 @@ extension String{
     }
     
     ///将原始的url编码为合法的url
-    public func jq_urlEncoded() -> String {
+    func jq_urlEncoded() -> String {
         let encodeUrlString = self.addingPercentEncoding(withAllowedCharacters:
             .urlQueryAllowed)
         return encodeUrlString ?? ""
     }
     
     ///将编码后的url转换回原始的url
-    public func jq_urlDecoded() -> String {
+    func jq_urlDecoded() -> String {
         return self.removingPercentEncoding ?? ""
     }
     
     ///获取子字符串
-    public func jq_substingInRange(_ r: Range<Int>) -> String? {
+    func jq_substingInRange(_ r: Range<Int>) -> String? {
         if r.lowerBound < 0 || r.upperBound > self.count {
             return nil
         }
@@ -334,7 +351,7 @@ extension String{
     }
     
     ///时间转换为Date
-    public func jq_toDate(format:String = "YYYY-MM-dd") ->Date?{
+    func jq_toDate(format:String = "YYYY-MM-dd") ->Date?{
         let dateformatter = DateFormatter()
         dateformatter.dateFormat = format
         dateformatter.timeZone = TimeZone.current
@@ -342,7 +359,7 @@ extension String{
     }
     
     /// 将HTML标签中<>去除
-    public func jq_filterFromHTML(_ htmlString:String)->String{
+    func jq_filterFromHTML(_ htmlString:String)->String{
         var html = htmlString
         let scanner = Scanner(string: htmlString)
         let text:String = ""
@@ -355,7 +372,7 @@ extension String{
     }
     
     ///减少内存(截取)
-     public func jq_substring(from index: Int) -> String {
+     func jq_substring(from index: Int) -> String {
          if self.count > index {
              let startIndex = self.index(self.startIndex, offsetBy: index)
              let subString = self[startIndex..<self.endIndex]
@@ -366,7 +383,7 @@ extension String{
      }
      
      ///减少内存(截取)
-     public func jq_substring(to index: Int) -> String {
+     func jq_substring(to index: Int) -> String {
          if self.count > index {
              let endIndex = self.index(self.startIndex, offsetBy: index)
              let subString = self[self.startIndex..<endIndex]
@@ -377,7 +394,7 @@ extension String{
      }
      
     ///转化为Base64
-     public func jq_safeBase64(type: JQSafeBase64Type) -> String {
+     func jq_safeBase64(type: JQSafeBase64Type) -> String {
          var base64Str: String!
          if type == .encode {
              base64Str = self.replacingOccurrences(of: "+", with: "-")
@@ -396,7 +413,7 @@ extension String{
      
      
      ///MD5
-     public func jq_md5String() -> String {
+     func jq_md5String() -> String {
          let str = self.cString(using: String.Encoding.utf8)
          let strLen = CC_LONG(self.lengthOfBytes(using: String.Encoding.utf8))
          let digestLen = Int(CC_MD5_DIGEST_LENGTH)
@@ -412,7 +429,7 @@ extension String{
      }
      
      ///获取字符串拼音
-     public func jq_getPinyin() -> String {
+     func jq_getPinyin() -> String {
          let str = NSMutableString(string: self)
          CFStringTransform(str as CFMutableString, nil, kCFStringTransformMandarinLatin, false)
          CFStringTransform(str as CFMutableString, nil, kCFStringTransformStripDiacritics, false)
@@ -420,7 +437,7 @@ extension String{
      }
      
      ///获取字符串首字母大写
-     public func jq_FirstLetter() -> String {
+     func jq_FirstLetter() -> String {
          let str = NSMutableString(string: self)
          CFStringTransform(str as CFMutableString, nil, kCFStringTransformMandarinLatin, false)
          CFStringTransform(str as CFMutableString, nil, kCFStringTransformStripDiacritics, false)
@@ -429,13 +446,13 @@ extension String{
      }
      
      ///判断是否为汉字
-     public func jq_isValidateChinese() -> Bool {
+     func jq_isValidateChinese() -> Bool {
          let match: String = "[\\u4e00-\\u9fa5]+$"
          return NSPredicate(format: "SELF MATCHES %@", match).evaluate(with:self)
      }
      
      ///获取文件/文件夹大小
-     public func jq_getFileSize() -> UInt64  {
+     func jq_getFileSize() -> UInt64  {
          var size: UInt64 = 0
          let fileManager = FileManager.default
          var isDir: ObjCBool = false
@@ -465,7 +482,7 @@ extension String{
          return size
      }
      
-     public func jq_hmac(algorithm: HMACAlgorithm, key: String) -> String {
+     func jq_hmac(algorithm: HMACAlgorithm, key: String) -> String {
          let cKey = key.cString(using: String.Encoding.utf8)
          let cData = self.cString(using: String.Encoding.utf8)
          //        var result = [CUnsignedChar](count: Int(algorithm.digestLength()), repeatedValue: 0)
@@ -490,24 +507,24 @@ extension String{
     
     // MARK: -- property
   ///去掉首尾空格
-    public var jq_removeHeadAndTailSpace:String {
+    var jq_removeHeadAndTailSpace:String {
         let whitespace = NSCharacterSet.whitespaces
         return self.trimmingCharacters(in: whitespace)
     }
     
     ///去掉首尾空格 包括后面的换行 \n
-    public var jq_removeHeadAndTailSpacePro:String {
+    var jq_removeHeadAndTailSpacePro:String {
         let whitespace = NSCharacterSet.whitespacesAndNewlines
         return self.trimmingCharacters(in: whitespace)
     }
     
     ///去掉所有空格
-    public var jq_removeAllSapce: String {
+    var jq_removeAllSapce: String {
         return self.replacingOccurrences(of: " ", with: "", options: .literal, range: nil)
     }
    
     /// 判断是否为手机号
-    public var jq_isPhone:Bool{
+    var jq_isPhone:Bool{
         let pattern2 = "^1[0-9]{10}$"
         if NSPredicate(format: "SELF MATCHES %@", pattern2).evaluate(with: self) {
             return true
@@ -516,7 +533,7 @@ extension String{
     }
     
     /// 判断是否是身份证
-    public var jq_isIdCard:Bool{
+    var jq_isIdCard:Bool{
         let pattern = "(^[0-9]{15}$)|([0-9]{17}([0-9]|X)$)";
         let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
         let isMatch:Bool = pred.evaluate(with: self)
@@ -524,7 +541,7 @@ extension String{
     }
     
     ///正则匹配用户密码6-18位数字和字母组合
-    public var jq_isComplexPassword:Bool{
+    var jq_isComplexPassword:Bool{
         let pattern = "^(?![0-9]+$)(?![a-zA-Z]+$)[a-zA-Z0-9]{6,18}"
         let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
         let isMatch:Bool = pred.evaluate(with: self)
@@ -532,7 +549,7 @@ extension String{
     }
     
     /// 判断是否是邮箱
-    public var jq_isEmail:Bool {
+    var jq_isEmail:Bool {
         let pattern = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
         let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
         let isMatch:Bool = pred.evaluate(with: self)
@@ -540,7 +557,7 @@ extension String{
     }
     
     /// 判断是否是中文
-    public var jq_isChinese:Bool {
+    var jq_isChinese:Bool {
         let pattern = "^[a-zA-Z\\u4E00-\\u9FA5]{1,20}"
         let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
         let isMatch:Bool = pred.evaluate(with: self)
@@ -548,12 +565,12 @@ extension String{
     }
     
     /// 判断是否是链接
-    public var jq_isURL:Bool {
+    var jq_isURL:Bool {
         let url = URL(string: self)
         return url != nil
     }
     
-    public var jq_isIP:Bool{
+    var jq_isIP:Bool{
         let pattern = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
         let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
         let isMatch:Bool = pred.evaluate(with: self)
@@ -561,11 +578,11 @@ extension String{
     }
     
     /// 对Unicode编码进行转换
-    public var jq_unicodeDescription : String{
+    var jq_unicodeDescription : String{
         return self.jq_stringByReplaceUnicode
     }
     
-    public var jq_stringByReplaceUnicode : String{
+    var jq_stringByReplaceUnicode : String{
         let tempStr1 = self.replacingOccurrences(of: "\\u", with: "\\U")
         let tempStr2 = tempStr1.replacingOccurrences(of: "\"", with: "\\\"")
         let tempStr3 = "\"".appending(tempStr2).appending("\"")
