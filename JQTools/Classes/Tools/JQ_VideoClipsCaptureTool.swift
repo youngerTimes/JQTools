@@ -129,7 +129,7 @@ public class JQ_VideoClipsCaptureTool: NSObject {
     //剩余时间计时器
     func startTimer() {
         timer = Timer(timeInterval: remainingTime, target: self,
-                      selector: #selector(JQ_AVClipsCaptureVC.timeout), userInfo: nil,
+                      selector: #selector(JQ_VideoClipsCaptureTool.timeout), userInfo: nil,
                       repeats:true)
         RunLoop.current.add(timer!, forMode: .default)
     }
@@ -146,7 +146,7 @@ public class JQ_VideoClipsCaptureTool: NSObject {
     //进度条计时器
     func startProgressBarTimer() {
         progressBarTimer = Timer(timeInterval: incInterval, target: self,
-                                 selector: #selector(JQ_AVClipsCaptureVC.progress),
+                                 selector: #selector(JQ_VideoClipsCaptureTool.progress),
                                  userInfo: nil, repeats: true)
         RunLoop.current.add(progressBarTimer!, forMode: .default)
     }
