@@ -410,6 +410,14 @@ public extension String{
          }
          return base64Str
      }
+
+    ///base64 转Data
+    func jq_base64ToData()->Data?{
+        if self.contains("%") {
+            return Data(base64Encoded: self.removingPercentEncoding!)
+        }
+        return Data(base64Encoded: self)
+    }
      
      
      ///MD5
@@ -444,6 +452,36 @@ public extension String{
          let strPinYin = str.capitalized
          return strPinYin.jq_substring(to: 1)
      }
+
+    /// 去除emoji表情
+    func jq_fliterEmoji()->String{
+        let a = try! JQ_RegexTool(.emoji)
+        return a.replacingMatches(in: self, with: "")
+    }
+
+
+    /// 精准身份证号码判断
+    func jq_idCard()->Bool{
+        let idArray = NSMutableArray()
+        for i in 0..<18 {
+            let range = NSMakeRange(i, 1);
+            let subString = NSString(string: self).substring(with: range)
+            idArray.add(subString)
+        }
+
+        let coefficientArray = NSArray(arrayLiteral:"7","9","10","5","8","4","2","1","6","3","7","9","10","5","8","4","2")
+        let remainderArray = NSArray(arrayLiteral:"1","0","X","9","8","7","6","5","4","3","2")
+        var sum = 0
+        for i in 0..<17 {
+            let coefficient = NSInteger((coefficientArray[i] as! String))!
+            let id = NSInteger((idArray[i] as! String))!
+            sum += coefficient * id
+        }
+
+        let str = remainderArray[(sum % 11)] as! String
+        let string = NSString(string: self).substring(from: 17)
+        return str == string
+    }
      
      ///判断是否为汉字
      func jq_isValidateChinese() -> Bool {
@@ -569,6 +607,13 @@ public extension String{
         let url = URL(string: self)
         return url != nil
     }
+
+    /// 返回字数
+    var jq_count: Int {
+        let string_NS = self as NSString
+        return string_NS.length
+    }
+
     
     var jq_isIP:Bool{
         let pattern = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"

@@ -23,16 +23,30 @@ import Foundation
 
 /// 正则工具类
 public struct JQ_RegexTool {
-    
-    public let EmailPattern = "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$" //邮箱
-    public let ChinesePattern = "([\\u4e00-\\u9fa5]+):([\\d]+)" //
+
+    //正则pattern
+    public enum RegexPattern:String {
+        case email = "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$"//电子邮箱
+        case chinese = "([\\u4e00-\\u9fa5]+):([\\d]+)"//中文
+        case emoji = "[\\ud83c\\udc00-\\ud83c\\udfff]|[\\ud83d\\udc00-\\ud83d\\udfff]|[\\u2600-\\u27ff]"//emoji表情
+        case ipAddress = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"//ip地址
+        case complexPwd = "^(?![0-9]+$)(?![a-zA-Z]+$)[a-zA-Z0-9]{6,18}" //复杂性密码建议
+        case idCard = "(^[0-9]{15}$)|([0-9]{17}([0-9]|X)$)" //身份证验证
+        case phone = "^1[0-9]{10}$" //电话号码
+        case carNo = "^[\\u4e00-\\u9fa5]{1}[a-zA-Z]{1}[a-zA-Z_0-9]{4}[a-zA-Z_0-9_\\u4e00-\\u9fa5]$" //车牌
+        case userName = "^[A-Za-z0-9]{6,20}+$" //用户名
+        case nickName = "^[\\u4e00-\\u9fa5]{3,8}$"//中文昵称
+        case macAddress = "([A-Fa-f\\\\d]{2}:){5}[A-Fa-f\\\\d]{2}" //Mac地址
+        case postCode = "^[0-8]\\\\d{5}(?!\\\\d)$" //邮政编码
+        case taxCode = "[0-9]\\\\d{13}([0-9]|X)$" //工商税号
+    }
  
     private let regularExpression: NSRegularExpression
      
     //使用正则表达式进行初始化
-    public init(_ pattern: String, options: Options = []) throws {
+    public init(_ pattern: RegexPattern, options: Options = []) throws {
         regularExpression = try NSRegularExpression(
-            pattern: pattern,
+            pattern: pattern.rawValue,
             options: options.toNSRegularExpressionOptions
         )
     }
@@ -60,7 +74,13 @@ public struct JQ_RegexTool {
         return matches
     }
      
-    //正则替换
+
+    /// 正则替换
+    /// - Parameters:
+    ///   - input: 原文
+    ///   - template: 替换的文字
+    ///   - count: 替换次数
+    /// - Returns: 替换后的文字
     public func replacingMatches(in input: String, with template: String,
                                  count: Int? = nil) -> String {
         var output = input

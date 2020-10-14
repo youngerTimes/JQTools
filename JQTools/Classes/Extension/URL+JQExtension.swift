@@ -12,7 +12,7 @@ import MobileCoreServices
 public extension URL{
     
     ///根据后缀获取对应的Mime-Type
-    var mimeType:String{
+    var jq_mimeType:String{
         get{
             if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension,pathExtension as NSString,nil)?.takeRetainedValue() {
                 if let mimetype = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType)?

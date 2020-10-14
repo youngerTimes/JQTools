@@ -6,10 +6,10 @@
 //
 
 import Foundation
-extension Data{
+public extension Data{
     
     /// data 转字典
-    public func jq_toDict() ->Dictionary<String, Any>?{
+    func jq_toDict() ->Dictionary<String, Any>?{
         do{
             let json = try JSONSerialization.jsonObject(with: self, options: .allowFragments)
             let dic = json as! Dictionary<String, Any>
@@ -23,5 +23,10 @@ extension Data{
     ///Data转16进制字符串
     func jq_hexString() -> String {
         return map { String(format: "%02x", $0) }.joined(separator: "").uppercased()
+    }
+
+    /// 转化为Base64
+    func jq_toBase64()->String{
+        return self.base64EncodedString(options: .endLineWithLineFeed).addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
     }
 }
