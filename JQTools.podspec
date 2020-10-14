@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'JQTools'
-  s.version          = '0.1.1'
+  s.version          = '0.1.2'
   s.summary          = 'JQKit 自己常用的工具集合，加快开发进度'
   s.swift_versions   = '5.0'
 
