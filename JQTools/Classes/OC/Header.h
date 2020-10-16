@@ -19,6 +19,7 @@
 #import "UIImage+Util.h"
 #import "JQLocationManager.h"
 #import "UIView+CornerRadius.h"
+#import "VPImageCropperViewController.h"
 
 #endif /* Header_h */
 

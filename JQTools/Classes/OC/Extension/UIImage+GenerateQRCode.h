@@ -12,8 +12,8 @@
  生成二维码
  */
 @interface UIImage (GenerateQRCode)
-+(UIImage *)GenerateQRCodeWith:(NSString *)string Width:(CGFloat)size;
-+(UIImage *)imageResize :(UIImage*)img andResizeTo:(CGSize)newSize;
--(NSData *)compressWithMaxLength:(NSUInteger)maxLength;
-+(UIImage *)image:(UIImage *)image rotation:(UIImageOrientation)orientation;
++(UIImage *)JQ_GenerateQRCodeWith:(NSString *)string Width:(CGFloat)size;
++(UIImage *)JQ_ImageResize :(UIImage*)img andResizeTo:(CGSize)newSize;
+-(NSData *)jq_compressWithMaxLength:(NSUInteger)maxLength;
++(UIImage *)JQ_Image:(UIImage *)image rotation:(UIImageOrientation)orientation;
 @end

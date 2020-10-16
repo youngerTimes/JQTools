@@ -298,7 +298,18 @@ public extension String{
     
     ///适配Web,填充HTML的完整
     func jq_wrapHtml()-> String{
-        return "<html><head><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'><style>*{ width: 100%%; margin: 0; padding: 0 3; box-sizing: border-box;} img{ width: 100%%;}</style></head><body>\(self)</body></html>"
+        return "<html><head><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'><style>*{ width: 100%; margin: 0; padding: 0 3; box-sizing: border-box;} img{ width: 100%;}</style></head><body>\(self)</body></html>"
+    }
+
+
+    /// 适配Web,JS代码，WKWebView代理didFinish执行
+    /// /*
+    ///  webView.evaluateJavaScript('')
+    /// */
+    func jq_adaptJS()->String{
+        return """
+document.createElement('meta');script.name = 'viewport';script.content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\";document.getElementsByTagName('head')[0].appendChild(script);var style = document.createElement('style');style.type='text/css';style.innerHTML='body{width:100%;height:auto;margin:auto;background-color:#ffffff}img{max-width:100%}p{word-wrap: break-word;color: #222;list-style-position: inside;list-style-type: square;margin-top: 17px;font-size: 18px;line-height: 1.76;border: none;outline: none;display: block;margin-block-start: 1em;margin-block-end: 1em;margin-inline-start: 0px;margin-inline-end: 0px;} p img {margin-bottom: -9px}';document.body.appendChild(style);
+"""
     }
     
     ///JsonString->字典

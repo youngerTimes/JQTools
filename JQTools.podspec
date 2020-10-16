@@ -51,6 +51,7 @@ TODO: Add long description of the pod here.
    s.dependency 'RxSwift'
    s.dependency 'RxCocoa'
    s.dependency 'SwiftyUserDefaults', '4.0.0-alpha.1'
+   s.dependency 'TZImagePickerController'
 #   s.dependency 'WMPageController', '~> 2.5.2' #选项卡
 #   s.dependency 'Then'
 #   s.dependency 'MJRefresh'

@@ -27,9 +27,9 @@ class Ys_CMPicture: NSObject,TZImagePickerControllerDelegate {
             imagePic!.selectedAssets = selectedAssets
         }
         // 设置竖屏下的裁剪尺寸
-        let left:CGFloat = 30*Ratio
-        let widthHeight:CGFloat = Ky_Width - 2 * left;
-        let top:CGFloat = (Ky_Height - widthHeight)/2.0;
+        let left:CGFloat = 30*JQ_RateW
+        let widthHeight:CGFloat = JQ_ScreenW - 2 * left;
+        let top:CGFloat = (JQ_ScreenH - widthHeight)/2.0;
         imagePic!.cropRect = CGRect(x: left, y: top, width: widthHeight, height: widthHeight)
         
         imagePic?.didFinishPickingPhotosHandle = { photos, asset, isSelectOriginalPhoto in
@@ -39,7 +39,8 @@ class Ys_CMPicture: NSObject,TZImagePickerControllerDelegate {
             selectedAssets.addObjects(from: asset!)
             chooseOver?()
         }
-        KYTool.ky_currentNavigationController().present(imagePic!, animated: true, completion: nil)
+
+        JQ_currentNavigationController().present(imagePic!, animated: true, completion: nil)
     }
     
     //MARK: -- 预览图片
@@ -60,7 +61,7 @@ class Ys_CMPicture: NSObject,TZImagePickerControllerDelegate {
             print("用户选择了一张gif图片")
         }
         imagePVc!.selectedAssets = selectedAssets
-        KYTool.ky_currentNavigationController().present(imagePVc!, animated: true, completion: nil)
+        JQ_currentNavigationController().present(imagePVc!, animated: true, completion: nil)
     }
 }
 #endif

@@ -10,7 +10,7 @@
 
 @implementation UIImage (GenerateQRCode)
 
-+(UIImage *)GenerateQRCodeWith:(NSString *)string Width:(CGFloat)size{
++(UIImage *)JQ_GenerateQRCodeWith:(NSString *)string Width:(CGFloat)size{
     //1. 实例化二维码滤镜
     CIFilter *filter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
     // 2. 恢复滤镜的默认属性
@@ -43,7 +43,7 @@
     return [UIImage imageWithCGImage:scaledImage];
 }
 
-+(UIImage *)imageResize :(UIImage*)img andResizeTo:(CGSize)newSize{
++(UIImage *)JQ_ImageResize :(UIImage*)img andResizeTo:(CGSize)newSize{
     CGFloat scale = [[UIScreen mainScreen]scale];
     
     //UIGraphicsBeginImageContext(newSize);
@@ -56,7 +56,7 @@
 
 
 
--(NSData *)compressWithMaxLength:(NSUInteger)maxLength{
+-(NSData *)jq_compressWithMaxLength:(NSUInteger)maxLength{
     // Compress by quality
     CGFloat compression = 1;
     NSData *data = UIImageJPEGRepresentation(self, compression);
@@ -100,7 +100,7 @@
     return data;
 }
 
-+(UIImage *)image:(UIImage *)image rotation:(UIImageOrientation)orientation{
++(UIImage *)JQ_Image:(UIImage *)image rotation:(UIImageOrientation)orientation{
     long double rotate = 0.0;
     CGRect rect;
     float translateX = 0;
