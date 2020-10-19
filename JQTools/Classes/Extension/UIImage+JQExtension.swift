@@ -14,10 +14,10 @@ public enum WaterMarkCorner{
 }
 
 public extension UIImage{
-    
+
     // MARK: -- Class func
     ///生成群聊图标
-    class func jq_groupIcon(wh:CGFloat, images:[UIImage], bgColor:UIColor?) -> UIImage {
+    class func JQ_GroupIcon(wh:CGFloat, images:[UIImage], bgColor:UIColor?) -> UIImage {
         let finalSize = CGSize(width:wh, height:wh)
         var rect: CGRect = CGRect.zero
         rect.size = finalSize
@@ -55,6 +55,18 @@ public extension UIImage{
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return newImage!
+    }
+
+
+    /// 加载JQTools XXX.bundle中的数据
+    /// - Parameters:
+    ///   - name: 数据名称
+    ///   - atResoure: 资源路径
+    /// - Returns: 返回图片
+    class func JQ_Bundle(_ name:String, resoure atResoure:String = "Icon")->UIImage?{
+        let a = Bundle(for: JQTool.self).path(forResource: atResoure, ofType: "bundle")
+        let jqToolBundle = Bundle(path: a!)
+        return UIImage(named: name, in: jqToolBundle, compatibleWith: .none)
     }
     
     //获取群聊图标中每个小图片的位置尺寸
@@ -132,7 +144,7 @@ public extension UIImage{
     }
     
     // MARK: -- Instance
-    
+
     /// 生成一张高斯模糊图
     func jq_blur(_ value:CGFloat)->UIImage{
         let context = CIContext(options: nil)

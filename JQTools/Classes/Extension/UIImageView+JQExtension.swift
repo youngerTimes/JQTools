@@ -35,4 +35,12 @@ public extension UIImageView{
             closure?(image)
         }
     }
+
+    /// 加载JQTools中 Assets.xcassets中数据
+    /// - Parameter name: 图片名称
+    func jq_Bundle(_ name:String){
+        let a = Bundle(for: JQTool.self)
+        let image = UIImage(named: name, in: a, compatibleWith: .none)
+        self.image = image
+    }
 }

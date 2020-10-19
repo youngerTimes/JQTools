@@ -8,9 +8,6 @@
 import Photos
 import UIKit
 import Foundation
-
-
-#if canImport(RxSwift) && canImport(RxCocoa) && canImport(MJRefresh)
 import RxSwift
 import RxCocoa
 import MJRefresh
@@ -30,58 +27,6 @@ public protocol Refreshable {
 }
 
 extension Refreshable {
-    
-    /*
-     var page = 1
-     var totalPages = -1
-     let refreshStatus = BehaviorSubject(value: RefreshStatus.others)
-     
-     func getDataWithHeader(isHeader:Bool) {
-         if isHeader {
-             self.page = 1
-         }else {
-             self.page += 1
-             if self.page == self.totalPages {
-                 self.refreshStatus.onNext(RefreshStatus.noMoreData)
-                 return
-             }
-         }
-     }
-     
-     func endRefresh() {
-         if self.tableView.mj_header != nil {
-             self.refreshStatus.onNext(RefreshStatus.endHeaderRefresh)
-         }
-         if self.tableView.mj_footer != nil {
-             self.refreshStatus.onNext(RefreshStatus.endFooterRefresh)
-         }
-     }
-     
-     func addReresh(_ tableView:UITableView, footer: Bool) {
-         if tableView.mj_header != nil {
-             return
-         }
-         weak var weakSelf = self
-         if (footer) {
-             self.refreshStatusBind(to: tableView, {
-                 weakSelf!.getDataWithHeader(isHeader: true)
-             }) {
-                 weakSelf!.getDataWithHeader(isHeader: false)
-                 }.disposed(by: disposeBag)
-         }else {
-             self.refreshStatusBind(to: tableView, {
-                 weakSelf!.getDataWithHeader(isHeader: true)
-             }, nil).disposed(by: disposeBag)
-         }
-         if #available(iOS 11.0, *) {
-             tableView.contentInsetAdjustmentBehavior = .never
-         }else {
-             automaticallyAdjustsScrollViewInsets = false
-         }
-         (tableView.mj_header as! MJRefreshNormalHeader).lastUpdatedTimeLabel!.isHidden = true
-     }
-     */
-    
     @discardableResult
     public func refreshStatusBind(to scrollView: UIScrollView, _ header: (() -> Void)? = nil, _ footer: (() -> Void)? = nil) -> Disposable {
         
@@ -113,11 +58,9 @@ extension Refreshable {
                 break
             case .others: break
             }
-            
         })
     }
 }
-#endif
 
 //MARK: - 加载xib视图
 public protocol JQNibView{}
