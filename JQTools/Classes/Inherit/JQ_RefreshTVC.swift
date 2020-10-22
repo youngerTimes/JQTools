@@ -52,14 +52,14 @@ public class JQ_RefreshTVC: UIViewController,Refreshable{
     ///   - tableView: 被添加的UITableView
     ///   - noticeStr: 提示内容
     ///   - clouse: DataSetView需要重新定义
-    func jq_setEmptyView(_ tableView:UITableView, _ noticeStr:String? = nil,clouse:((EmptyDataSetView)->Void)? = nil) {
+    func jq_setEmptyView(_ tableView:UITableView, _ noticeStr:String? = nil,image:UIImage? = nil,bgColor:UIColor = UIColor.white,clouse:((EmptyDataSetView)->Void)? = nil) {
 
         tableView.separatorStyle = .none
 
         unowned let weakSelf = self
         tableView.emptyDataSetView { (emptyDataSetView) in
-            emptyDataSetView.titleLabelString(NSAttributedString.init(string: (noticeStr != nil) ? noticeStr! : "暂无数据", attributes: [.font:UIFont.systemFont(ofSize: 16), .foregroundColor:UIColor.qmui_color(withHexString: "#AAAAAA") as Any]))
-                .image(UIImage(named: "img_empty_statelayout"))
+            emptyDataSetView.titleLabelString(NSAttributedString.init(string: (noticeStr != nil) ? noticeStr! : "暂无数据", attributes: [.font:UIFont.systemFont(ofSize: 16), .foregroundColor:bgColor as Any]))
+                .image(image)
                 .dataSetBackgroundColor(UIColor.white)
                 .verticalOffset(0)
                 .verticalSpace(15)
