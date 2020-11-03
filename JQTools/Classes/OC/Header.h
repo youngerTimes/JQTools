@@ -20,6 +20,7 @@
 #import "JQLocationManager.h"
 #import "UIView+CornerRadius.h"
 #import "VPImageCropperViewController.h"
+#import "JQ_Safe.h"
 
 #endif /* Header_h */
 

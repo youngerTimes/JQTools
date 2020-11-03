@@ -55,6 +55,7 @@ TODO: Add long description of the pod here.
    s.dependency 'TZImagePickerController'
    s.dependency 'MJRefresh'
    s.dependency 'EmptyDataSet-Swift'
+#   s.dependency 'SnapKitExtend'
 #   s.dependency 'WMPageController', '~> 2.5.2' #选项卡
 #   s.dependency 'Then'
 end

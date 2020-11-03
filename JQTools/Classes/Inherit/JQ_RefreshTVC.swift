@@ -11,7 +11,7 @@ import MJRefresh
 import EmptyDataSet_Swift
 import UIKit
 
-public class JQ_RefreshTVC: UIViewController,Refreshable{
+open class JQ_RefreshTVC: UIViewController,Refreshable{
     public var page = 1 //当前页数
     public var totalPages = -1 //总页数
     private var scrollView:UIScrollView?
@@ -20,7 +20,7 @@ public class JQ_RefreshTVC: UIViewController,Refreshable{
 
     /// 获取数据
     /// - Parameter isHeader: 是否是头部刷新
-    public func jq_getData(isHeader:Bool = true) {
+    open func jq_getData(isHeader:Bool = true) {
         if isHeader {
             self.page = 1
             self.refreshStatus.onNext(RefreshStatus.beingHeaderRefresh)
@@ -52,7 +52,7 @@ public class JQ_RefreshTVC: UIViewController,Refreshable{
     ///   - tableView: 被添加的UITableView
     ///   - noticeStr: 提示内容
     ///   - clouse: DataSetView需要重新定义
-    func jq_setEmptyView(_ tableView:UITableView, _ noticeStr:String? = nil,image:UIImage? = nil,bgColor:UIColor = UIColor.white,clouse:((EmptyDataSetView)->Void)? = nil) {
+    public func jq_setEmptyView(_ tableView:UITableView, _ noticeStr:String? = nil,image:UIImage? = nil,bgColor:UIColor = UIColor.white,clouse:((EmptyDataSetView)->Void)? = nil) {
 
         tableView.separatorStyle = .none
 

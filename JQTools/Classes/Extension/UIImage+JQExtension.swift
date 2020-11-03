@@ -25,7 +25,7 @@ public extension UIImage{
 
     // MARK: -- Class func
     ///生成群聊图标
-    class func JQ_GroupIcon(wh:CGFloat, images:[UIImage], bgColor:UIColor?) -> UIImage {
+    static func JQ_GroupIcon(wh:CGFloat, images:[UIImage], bgColor:UIColor?) -> UIImage {
         let finalSize = CGSize(width:wh, height:wh)
         var rect: CGRect = CGRect.zero
         rect.size = finalSize
@@ -71,14 +71,14 @@ public extension UIImage{
     ///   - name: 数据名称
     ///   - atResoure: 资源路径
     /// - Returns: 返回图片
-    class func JQ_Bundle(_ name:String, resoure atResoure:String = "Icon")->UIImage?{
+    static func JQ_Bundle(_ name:String, resoure atResoure:String = "Icon")->UIImage?{
         let a = Bundle(for: JQTool.self).path(forResource: atResoure, ofType: "bundle")
         let jqToolBundle = Bundle(path: a!)
         return UIImage(named: name, in: jqToolBundle, compatibleWith: .none)
     }
     
     //获取群聊图标中每个小图片的位置尺寸
-    private class func getRectsInGroupIcon(wh:CGFloat, count:Int) -> [CGRect] {
+    private static func getRectsInGroupIcon(wh:CGFloat, count:Int) -> [CGRect] {
         //如果只有1张图片就直接占全部位置
         if count == 1 {
             return [CGRect(x:0, y:0, width:wh, height:wh)]

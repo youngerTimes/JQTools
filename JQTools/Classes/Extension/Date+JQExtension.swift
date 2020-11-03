@@ -358,7 +358,7 @@ extension Date{
         }
         return dates
     }
-    
+
     
     // MARK: -- Property
     ///该时间所在周的第一天日期（2017年12月17日 00:00:00）
@@ -412,6 +412,17 @@ extension Date{
         components.second = -1
         return calendar.date(byAdding: components, to: self.jq_startOfWeek)!
     }
+
+    /// 根据描述获取时分秒
+    /// - Parameter interval: 秒数
+    /// - Returns: 返回元祖
+    public static func JQ_secondToDate(interval:Int)->(hour:Int,minute:Int,second:Int){
+        let timeStamp = lroundf(Float(interval))
+        let s = timeStamp % 60
+        let m = (timeStamp - s) / 60 % 60
+        let h = ((timeStamp - s) / 60 - m) / 60 % 24;
+        return (h,m,s)
+    }
     
     // MARK: -- Instance
     
@@ -451,9 +462,10 @@ extension Date{
             return String(format: "%02ld天%02ld时%02ld分%02ld秒", days,hours,minutes,seconds)
         }
     }
-    
+
     
     ///将秒数转换为时分秒的字符串
+    @available(*,deprecated,message: "废弃:使用 JQ_secondToDate")
     public func jq_transSingleToHourMinSec(time: Float,type:JQDateType = .HMS) -> String{
         let allTime: Int = Int(time)
         var hours = 0
@@ -462,16 +474,16 @@ extension Date{
         var hoursText = ""
         var minutesText = ""
         var secondsText = ""
-        
+
         hours = allTime / 3600
         hoursText = hours > 9 ? "\(hours)" : "0\(hours)"
-        
+
         minutes = allTime % 3600 / 60
         minutesText = minutes > 9 ? "\(minutes)" : "0\(minutes)"
-        
+
         seconds = allTime % 3600 % 60
         secondsText = seconds > 9 ? "\(seconds)" : "0\(seconds)"
-        
+
         switch type {
             case .HMS:
                 return "\(hoursText):\(minutesText):\(secondsText)"
@@ -481,7 +493,7 @@ extension Date{
                 return "\(minutesText):\(secondsText)"
         }
     }
-    
+
     //是否是闰年
     public func jq_leapYear(_ year:Int)->Bool{
         if year % 4 == 0 && year % 100 != 0 {

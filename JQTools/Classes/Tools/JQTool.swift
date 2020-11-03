@@ -11,6 +11,8 @@ import Foundation
 import RxSwift
 import RxCocoa
 import MJRefresh
+import LocalAuthentication
+import StoreKit
 
 public enum RefreshStatus {
     case none
@@ -20,6 +22,13 @@ public enum RefreshStatus {
     case endFooterRefresh
     case noMoreData
     case others
+}
+
+public enum JQTouchAuthType {
+    case Success
+    case Faild
+    case Password
+    case Unable
 }
 
 public protocol Refreshable {
@@ -38,25 +47,25 @@ extension Refreshable {
         }
         return refreshStatus.subscribe(onNext: { (status) in
             switch status {
-            case .beingHeaderRefresh:
-                scrollView.mj_header!.beginRefreshing()
-                break
-            case .endHeaderRefresh:
-                scrollView.mj_header?.endRefreshing()
-                break
-            case .beingFooterRefresh:
-                scrollView.mj_footer!.beginRefreshing()
-                break
-            case .endFooterRefresh:
-                scrollView.mj_footer!.endRefreshing()
-                break
-            case .noMoreData:
-                scrollView.mj_footer!.endRefreshingWithNoMoreData()
-                break
-            case .none:
-                scrollView.mj_footer!.isHidden = true
-                break
-            case .others: break
+                case .beingHeaderRefresh:
+                    scrollView.mj_header!.beginRefreshing()
+                    break
+                case .endHeaderRefresh:
+                    scrollView.mj_header?.endRefreshing()
+                    break
+                case .beingFooterRefresh:
+                    scrollView.mj_footer!.beginRefreshing()
+                    break
+                case .endFooterRefresh:
+                    scrollView.mj_footer!.endRefreshing()
+                    break
+                case .noMoreData:
+                    scrollView.mj_footer!.endRefreshingWithNoMoreData()
+                    break
+                case .none:
+                    scrollView.mj_footer!.isHidden = true
+                    break
+                case .others: break
             }
         })
     }
@@ -139,6 +148,33 @@ public class JQTool{
     public enum DottedLineType {
         case Vertical
         case Horizontal
+    }
+
+
+    /// app对账号密码自动填充,交给iCloud 进行同步管理
+    /// https://www.jianshu.com/p/96f0c009d285
+    /// https://www.jianshu.com/p/20c94cb00b1b
+    /// - Parameters:
+    ///   - server: 标示一般是公司域名
+    ///   - username: 账号:已开启TextField的textContentType = .username | .email 等
+    ///   - password: 密码:已开启TextField的textContentType = .password
+    ///   - clouse: 设置回调
+    public static func SaveAccount(_ server:String? = nil,username:String,password:String, _  clouse: @escaping (Bool)->Void){
+
+        var temp = ""
+        if server == nil {
+            let bundleId = Bundle.main.bundleIdentifier?.identity
+            if bundleId == nil {
+                print("----bundleID发生错误");clouse(false);return
+            }
+            temp = bundleId!
+        }else{
+            temp = server!
+        }
+
+        SecAddSharedWebCredential(temp as CFString, username as CFString, password as CFString) { (error) in
+            error == nil ? clouse(true) : clouse(false)
+        }
     }
     
     ///绘制虚线
@@ -254,6 +290,90 @@ public class JQTool{
             return 0
         }
     }
+
+
+    /// 跳转至AppStore评论
+    /// - Parameters:
+    ///   - appleId: appId
+    ///   - delegate: 代理
+    ///   - clouse: 回调状态
+    public static func commentVc(appleId:String,delegate:SKStoreProductViewControllerDelegate,clouse:@escaping ((Bool,Error?)->Void)){
+        let productVC = SKStoreProductViewController()
+        productVC.delegate = delegate
+        productVC.loadProduct(withParameters: [SKStoreProductParameterITunesItemIdentifier:appleId]) { (status, error) in
+            if error == nil{
+                JQ_currentViewController().present(productVC, animated: true, completion: nil)
+            }
+            clouse(status,error)
+        }
+    }
+
+    /// 跳转至AppStore评论
+    @available(iOS 10.3, *)
+    public static func commentAlert(){
+        SKStoreReviewController.requestReview()
+    }
+
+
+    /// 跳转至AppStore评论
+    /// - Parameters:
+    ///   - appid: appId
+    ///   - clouse: 回调状态
+    public static func commentDeepLink(_ appid:String,_ clouse: @escaping ((Bool)->Void)){
+        let urlstring = "itms-apps://itunes.apple.com/app/id\(appid)?action=write-review"
+        let url = URL(string: urlstring)
+        if UIApplication.shared.canOpenURL(url!) {
+            UIApplication.shared.open(url!, options: [:]) { (status) in
+                clouse(status)
+            }
+        }else{
+            clouse(false)
+        }
+    }
+
+    /// 进行TouchID验证
+    /// - Parameters:
+    ///   - cancelTitle: 取消
+    ///   - clouse: 回调结果
+    public static func touchIDAuth(_ cancelTitle:String = "取消认证",clouse:@escaping(JQTouchAuthType,NSError?)->Void){
+        let context = LAContext()
+        context.localizedCancelTitle = cancelTitle
+        var error:NSError?
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "指纹解锁") { (success, error) in
+                if success{
+                    clouse(.Success,nil)
+                }else{
+                    if let e = error as NSError? {
+                        switch Int32(e.code) {
+                            case kLAErrorSystemCancel:print("系统取消授权");fallthrough
+                            case kLAErrorUserCancel:print("用户取消认证");fallthrough
+                            case kLAErrorAuthenticationFailed:print("认证失败");fallthrough
+                            case kLAErrorTouchIDNotAvailable:print("设备TouchID不可用");fallthrough
+                            case kLAErrorTouchIDNotEnrolled:print("设备TouchID未录入");fallthrough
+                            case kLAErrorPasscodeNotSet:
+                                print("系统未设置密码")
+                                clouse(.Faild,e)
+                            case kLAErrorUserFallback:
+                                print("切换密码")
+                                OperationQueue.main.addOperation {
+                                    print("选择密码模式")
+                                    clouse(.Password,nil)
+                                }
+                            default:
+                                OperationQueue.main.addOperation {
+                                    print("选其他")
+                                    clouse(.Password,nil)
+                                }
+                        }
+                    }
+                }
+            }
+        }else{
+            print("不支持指纹识别")
+            clouse(.Unable,error! as NSError)
+        }
+    }
     
     ///判断相册是否开启权限
     @discardableResult
@@ -264,7 +384,7 @@ public class JQTool{
             case .notDetermined:
                 PHPhotoLibrary.requestAuthorization { (status) in
                     self.AlbumAuthorize()
-            }
+                }
             default:
                 let alert = UIAlertController(title: "照片访问受限", message: "未在设置中允许保存图片权限？", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "去设置", style: .destructive) { (action) in
@@ -365,7 +485,7 @@ public class JQTool{
     ///   - qosClass: 要使用的全局QOS类（默认为 nil，表示主线程）
     ///   - closure: 延迟运行的代码
     public static func delay(by delayTime: TimeInterval, qosClass: DispatchQoS.QoSClass? = nil,
-                      _ closure: @escaping () -> Void) {
+                             _ closure: @escaping () -> Void) {
         let dispatchQueue = qosClass != nil ? DispatchQueue.global(qos: qosClass!) : .main
         dispatchQueue.asyncAfter(deadline: DispatchTime.now() + delayTime, execute: closure)
     }
