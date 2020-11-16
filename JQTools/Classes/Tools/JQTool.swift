@@ -155,24 +155,12 @@ public class JQTool{
     /// https://www.jianshu.com/p/96f0c009d285
     /// https://www.jianshu.com/p/20c94cb00b1b
     /// - Parameters:
-    ///   - server: 标示一般是公司域名
+    ///   - server: 标示一般是公司域名:webcredentials:example.com的example.com部分
     ///   - username: 账号:已开启TextField的textContentType = .username | .email 等
     ///   - password: 密码:已开启TextField的textContentType = .password
     ///   - clouse: 设置回调
-    public static func SaveAccount(_ server:String? = nil,username:String,password:String, _  clouse: @escaping (Bool)->Void){
-
-        var temp = ""
-        if server == nil {
-            let bundleId = Bundle.main.bundleIdentifier?.identity
-            if bundleId == nil {
-                print("----bundleID发生错误");clouse(false);return
-            }
-            temp = bundleId!
-        }else{
-            temp = server!
-        }
-
-        SecAddSharedWebCredential(temp as CFString, username as CFString, password as CFString) { (error) in
+    public static func SaveAccount(_ server:String,username:String,password:String, _  clouse: @escaping (Bool)->Void){
+        SecAddSharedWebCredential(server as CFString, username as CFString, password as CFString) { (error) in
             error == nil ? clouse(true) : clouse(false)
         }
     }

@@ -71,4 +71,11 @@ extension UIButton{
         });
         timer.resume()
     }
+
+    /// 重新绘制颜色
+    public func jq_tintColor(_ color:UIColor){
+        let image = self.imageView?.image
+        let tinImage = image?.qmui_image(withTintColor: color)
+        setImage(tinImage, for: .normal)
+    }
 }

@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM (NSInteger ,GradientColorDirection)
+{
+    GradientColorDirectionLeft,         // 从左到右渐变
+    GradientColorDirectionRight,        // 从右到左渐变
+    GradientColorDirectionTop,          // 从上到下渐变
+    GradientColorDirectionBottom,       // 从下到上渐变
+};
+
 @interface UIImage (Util)
 /**
  *  用颜色渲染一张图片
@@ -47,6 +55,21 @@
  */
 -(UIImage *)jq_resizedImageWidth:(CGFloat)width;
 
+
+/// 生成二维码
+/// @param string 文字
+/// @param size 大小
 +(UIImage *)JQ_generateQRCodeWith:(NSString *)string Width:(CGFloat)size;
 
+/**
+ *  根据颜色生成渐变色图片
+ *
+ *  @param fromColor 开始颜色
+ *  @param toColor   结束颜色
+ *  @param frame     渐变图片大小
+ *  @param direction 渐变方向
+ *
+ *  @return 渐变图片
+ */
++ (UIImage *)JQ_gradientImageWithFromColor:(UIColor *)fromColor ToColor:(UIColor *)toColor frame:(CGRect)frame Direction:(GradientColorDirection)direction;
 @end

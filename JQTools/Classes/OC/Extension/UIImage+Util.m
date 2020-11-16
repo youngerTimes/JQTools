@@ -164,4 +164,99 @@
     CGImageRelease(bitmapImage);
     return [UIImage imageWithCGImage:scaledImage];
 }
+
+
++ (UIImage *)JQ_gradientImageWithFromColor:(UIColor *)fromColor ToColor:(UIColor *)toColor frame:(CGRect)frame Direction:(GradientColorDirection)direction
+{
+    if (direction == GradientColorDirectionLeft || direction == GradientColorDirectionTop) {
+        UIColor* colors[2] = {fromColor,toColor};
+        CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
+        CGFloat colorComponents[8];
+
+        UIGraphicsBeginImageContextWithOptions(frame.size, YES, 0.0);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        //    CGContextSaveGState(context);
+
+        for (int i = 0; i<2; i++) {
+            //
+            UIColor* color = colors[i];
+            CGColorRef temcolorRef = color.CGColor;
+            const CGFloat* components = CGColorGetComponents(temcolorRef);
+            for (int j = 0; j < 4; j++) {
+                colorComponents[i * 4 + j] = components[j];
+            }
+        }
+
+        CGPoint startPoint;
+        CGPoint endPoint;
+
+        //从上到下渐变
+        if (direction == GradientColorDirectionTop) {
+            startPoint = CGPointZero;
+            endPoint = CGPointMake(0, frame.size.height);
+        }
+
+        //从左到右渐变
+        else
+        {
+            startPoint = CGPointZero;
+            endPoint = CGPointMake(frame.size.width, 0);
+        }
+        CGGradientRef gradient =  CGGradientCreateWithColorComponents(rgb, colorComponents, NULL, 2);
+        CGColorSpaceRelease(rgb);
+        CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation);
+        CGGradientRelease(gradient);
+
+        CGImageRef cgImage2 = CGBitmapContextCreateImage(context);
+        UIImage *image = [UIImage imageWithCGImage:cgImage2];//UIGraphicsGetImageFromCurrentImageContext();
+        CGImageRelease(cgImage2);
+        return image;
+    }
+    else
+    {
+        UIColor* colors[2] = {toColor,fromColor};
+        CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
+        CGFloat colorComponents[8];
+
+        UIGraphicsBeginImageContextWithOptions(frame.size, YES, 0.0);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        //    CGContextSaveGState(context);
+
+        for (int i = 0; i<2; i++) {
+            //
+            UIColor* color = colors[i];
+            CGColorRef temcolorRef = color.CGColor;
+            const CGFloat* components = CGColorGetComponents(temcolorRef);
+            for (int j = 0; j < 4; j++) {
+                colorComponents[i * 4 + j] = components[j];
+            }
+        }
+
+        CGPoint startPoint;
+        CGPoint endPoint;
+
+        //从下到上渐变
+        if (direction == GradientColorDirectionBottom) {
+            startPoint = CGPointZero;
+            endPoint = CGPointMake(0, frame.size.height);
+        }
+
+        //从右到左渐变
+        else
+        {
+            startPoint = CGPointZero;
+            endPoint = CGPointMake(frame.size.width, 0);
+        }
+        CGGradientRef gradient =  CGGradientCreateWithColorComponents(rgb, colorComponents, NULL, 2);
+        CGColorSpaceRelease(rgb);
+        CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation);
+        CGGradientRelease(gradient);
+
+        CGImageRef cgImage2 = CGBitmapContextCreateImage(context);
+        UIImage *image = [UIImage imageWithCGImage:cgImage2];//UIGraphicsGetImageFromCurrentImageContext();
+        CGImageRelease(cgImage2);
+        return image;
+    }
+}
+
 @end

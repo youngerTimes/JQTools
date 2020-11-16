@@ -113,6 +113,7 @@ public extension NSLayoutConstraint {
 }
 
 /// 异形屏的安全距离
+@available(*,deprecated,message: "废弃:使用UIDevice的扩展;同名")
 public var jq_safeEdges:UIEdgeInsets{
     get{
         let window = UIApplication.shared.keyWindow
@@ -129,11 +130,13 @@ public var jq_safeEdges:UIEdgeInsets{
 }
 
 ///判断是否设备>= iPoneX
+@available(*,deprecated,message: "废弃:使用UIDevice的扩展;同名")
 public var jq_isDiffPhone: Bool  {
     get {return UIScreen.main.bounds.size.height >= 812 || UIScreen.main.bounds.size.width >= 812}
 }
 
 ///是否是手机
+@available(*,deprecated,message: "废弃:使用UIDevice的扩展;同名")
 public var jq_isIpone: Bool {
     get {return UIDevice.current.userInterfaceIdiom == .phone}
 }

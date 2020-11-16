@@ -150,9 +150,9 @@ public extension UIView{
     }
     
     ///切圆角并且设置阴影
-    func jq_cornerWith(radii: CGFloat, isXib:Bool) {
+    func jq_cornerWith(radii: CGFloat, isXib:Bool,shadowColor:UIColor) {
         self.layer.masksToBounds = false
-        self.layer.shadowColor = UIColor(hexStr: "E6E6E6").cgColor
+        self.layer.shadowColor = shadowColor.cgColor
         self.layer.shadowOpacity = 0.4
         self.layer.shadowRadius = radii
         self.layer.cornerRadius = radii
@@ -160,6 +160,26 @@ public extension UIView{
         self.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: isXib ?self.bounds.size.width : self.bounds.size.width, height: isXib ? self.bounds.size.height : self.bounds.size.height), cornerRadius: radii).cgPath
         self.layer.shouldRasterize = true
         self.layer.rasterizationScale = UIScreen.main.scale
+    }
+
+
+    /// 切部分圆角
+    /// - Returns: 返回阴影Layer,需要自定义颜色和范围
+    func jq_cornerPartWithShadow(byRoundingCorners corners: UIRectCorner, radii: CGFloat)->CALayer {
+        let maskPath = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radii, height: radii))
+        let maskLayer = CAShapeLayer()
+        maskLayer.frame = self.bounds
+        maskLayer.path = maskPath.cgPath
+        self.layer.mask = maskLayer
+
+        let shadowLayer = CALayer()
+        shadowLayer.frame = self.frame
+        shadowLayer.cornerRadius = radii
+        shadowLayer.backgroundColor = UIColor.white.cgColor
+        self.superview?.layer.addSublayer(shadowLayer)
+        self.superview?.layer.qmui_sendSublayer(toBack: shadowLayer)
+
+        return shadowLayer
     }
     
     

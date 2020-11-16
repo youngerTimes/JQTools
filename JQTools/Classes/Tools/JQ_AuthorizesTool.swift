@@ -17,6 +17,7 @@ import AVFoundation
 /// 权限
 public class JQ_AuthorizesTool:NSObject{
     public static let `default` = JQ_AuthorizesTool()
+    let manager = CLLocationManager()
     
     public enum JQ_PermissionsType{
         /// 相机
@@ -242,7 +243,7 @@ public class JQ_AuthorizesTool:NSObject{
     }
     
     // MARK: - 跳转系统设置界面
-    private func openURL(_ type: JQ_PermissionsType? = nil) {
+    public func openURL(_ type: JQ_PermissionsType? = nil) {
         let title = "访问受限"
         var message = "请点击“前往”，允许访问权限"
         let appName: String = (Bundle.main.infoDictionary!["CFBundleDisplayName"] ?? "") as! String //App 名称
@@ -251,7 +252,7 @@ public class JQ_AuthorizesTool:NSObject{
         } else if type == .photo { // 相册
             message = "请在iPhone的\"设置-隐私-照片\"选项中，允许\"\(appName)\"访问您的相册"
         } else if type == .location { // 位置
-            message = "请在iPhone的\"设置-隐私-定位服务\"选项中，允许\"\(appName)\"访问您的位置，获得更多商品信息"
+            message = "请在iPhone的\"设置-隐私-定位服务\"选项中，允许\"\(appName)\"访问您的位置"
         } else if type == .network { // 网络
             message = "请在iPhone的\"设置-蜂窝移动网络\"选项中，允许\"\(appName)\"访问您的移动网络"
         } else if type == .microphone { // 麦克风
