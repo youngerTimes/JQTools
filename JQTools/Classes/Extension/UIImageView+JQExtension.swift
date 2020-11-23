@@ -43,4 +43,25 @@ public extension UIImageView{
         let image = UIImage(named: name, in: a, compatibleWith: .none)
         self.image = image
     }
+
+
+    /// 加载GIF动态图
+    func jq_showGIFWith(name:String,duration:Int){
+        self.stopAnimating()
+        let gifImageUrl = Bundle.main.url(forResource: name, withExtension: nil)
+
+        let gifSource = CGImageSourceCreateWithURL( gifImageUrl! as CFURL, nil)
+        let gifcount = CGImageSourceGetCount(gifSource!)
+        var images = [UIImage]()
+        for i in 0..<gifcount{
+            let imageRef = CGImageSourceCreateImageAtIndex(gifSource!, i, nil)
+            let image = UIImage(cgImage: imageRef!)
+            images.append(image)
+        }
+        self.animationImages = images
+        self.animationDuration = TimeInterval(duration)
+        self.animationRepeatCount = 0
+        self.contentMode = .scaleAspectFit
+        self.startAnimating()
+    }
 }

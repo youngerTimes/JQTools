@@ -247,9 +247,36 @@ public class JQTool{
             }
         }
     }
-    
-    ///横竖屏
-    public func setNewOrientation(fullScreen: Bool) {
+
+    /// 横竖屏 https://www.dazhuanlan.com/2019/12/21/5dfe225dcb723/
+    /// - Parameter fullScreen: 是否全屏
+    /**
+     var blockRotation = Bool()
+
+     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+             if blockRotation {
+                 return .landscapeLeft
+             }
+             return .portrait
+     }
+
+     override func viewWillAppear(_ animated: Bool) {
+         super.viewWillAppear(animated)
+         appDelegate.blockRotation = true
+      }
+
+     override func viewWillDisappear(_ animated: Bool) {
+         super.viewWillDisappear(animated)
+         appDelegate.blockRotation = false
+
+         //判断退出时是否是横屏
+         if UIApplication.shared.statusBarOrientation.isLandscape {
+             //是横屏让变回竖屏
+             setNewOrientation(fullScreen: false)
+         }
+     }
+     */
+    public static func setNewOrientation(fullScreen: Bool) {
         if fullScreen {
             //横屏
             let resetOrientationTargert = NSNumber(integerLiteral: UIInterfaceOrientation.unknown.rawValue)
@@ -300,6 +327,26 @@ public class JQTool{
     @available(iOS 10.3, *)
     public static func commentAlert(){
         SKStoreReviewController.requestReview()
+    }
+
+    /// 打印服务
+    /// - Parameter str: 打印文本,支持HTML
+    public static func printText(_ str:String,insets:UIEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)){
+        // 打印控制器
+        let printController = UIPrintInteractionController.shared
+        // 打印任务相关信息
+        let printInfo = UIPrintInfo(dictionary:nil)
+        printInfo.outputType = UIPrintInfo.OutputType.general
+        printInfo.jobName = "my print Job"
+        printController.printInfo = printInfo
+
+        // 格式化打印文本
+        let formatter = UIMarkupTextPrintFormatter(markupText: str)
+        // 设置页面Insets边距
+        formatter.perPageContentInsets = insets
+        printController.printFormatter = formatter
+        // 提供打印界面让用户选择打印机和副本的数量
+        printController.present(animated: true, completionHandler: nil)
     }
 
 

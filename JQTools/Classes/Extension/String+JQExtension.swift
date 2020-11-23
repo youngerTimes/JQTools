@@ -67,6 +67,69 @@ public extension String{
         let rect = text.boundingRect(with: CGSize(width: CGFloat(Int.max), height: height), options: .usesLineFragmentOrigin, attributes: [.font : UIFont.systemFont(ofSize: font)], context: nil)
         return rect.size.width
     }
+
+    /// 从文本中提取所有链接
+    /// - Returns: 提取的url
+    func jq_pickUpUrls() -> [String] {
+        var urls = [String]()
+        // 创建一个正则表达式对象
+        do {
+            let dataDetector = try NSDataDetector(types:NSTextCheckingTypes(NSTextCheckingResult.CheckingType.link.rawValue))
+            // 匹配字符串,返回结果集
+            let res = dataDetector.matches(in: self,options: NSRegularExpression.MatchingOptions(rawValue: 0),range: NSMakeRange(0, self.count))
+            // 取出结果
+            for checkingRes in res {
+                urls.append((self as NSString).substring(with: checkingRes.range))
+            }
+        }
+        catch {
+            print(error)
+        }
+        return urls
+    }
+
+
+    /// 从文本中提取所有时间
+    /// - Returns: 提取的时间
+    func jq_pickUpDate() -> [String] {
+        var urls = [String]()
+        // 创建一个正则表达式对象
+        do {
+            let dataDetector = try NSDataDetector(types:NSTextCheckingTypes(NSTextCheckingResult.CheckingType.date.rawValue))
+            // 匹配字符串,返回结果集
+            let res = dataDetector.matches(in: self,options: NSRegularExpression.MatchingOptions(rawValue: 0),range: NSMakeRange(0, self.count))
+            // 取出结果
+            for checkingRes in res {
+                urls.append((self as NSString).substring(with: checkingRes.range))
+            }
+        }
+        catch {
+            print(error)
+        }
+        return urls
+    }
+
+
+    /// 从文本中提取所有电话号码
+    /// - Returns: 提取的电话号码
+    func jq_pickUpPhone() -> [String] {
+        var urls = [String]()
+        // 创建一个正则表达式对象
+        do {
+            let dataDetector = try NSDataDetector(types:NSTextCheckingTypes(NSTextCheckingResult.CheckingType.phoneNumber.rawValue))
+            // 匹配字符串,返回结果集
+            let res = dataDetector.matches(in: self,options: NSRegularExpression.MatchingOptions(rawValue: 0),range: NSMakeRange(0, self.count))
+            // 取出结果
+            for checkingRes in res {
+                urls.append((self as NSString).substring(with: checkingRes.range))
+            }
+        }
+        catch {
+            print(error)
+        }
+        return urls
+    }
+
     ///获取字符串高度
     static func jq_getHeight(text: String, width: CGFloat, font: CGFloat) -> CGFloat {
         let text = text as NSString

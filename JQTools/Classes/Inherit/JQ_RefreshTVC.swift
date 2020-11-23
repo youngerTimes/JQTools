@@ -11,7 +11,7 @@ import MJRefresh
 import EmptyDataSet_Swift
 import UIKit
 
-open class JQ_RefreshTVC: UIViewController,Refreshable{
+open class JQ_RefreshTVC: JQ_BaseVC,Refreshable{
     public var page = 1 //当前页数
     public var totalPages = -1 //总页数
     private var scrollView:UIScrollView?

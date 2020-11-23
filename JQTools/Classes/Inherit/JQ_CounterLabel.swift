@@ -8,8 +8,6 @@
 
 import UIKit
 
-#if canImport(SnapKit)
-
 public class JQ_CounterLabel: UILabel {
     
     //设置数值
@@ -69,4 +67,3 @@ public class JQ_CounterLabel: UILabel {
         }, completion: nil)
     }
 }
-#endif
