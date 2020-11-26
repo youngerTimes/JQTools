@@ -78,4 +78,22 @@ extension UIButton{
         let tinImage = image?.qmui_image(withTintColor: color)
         setImage(tinImage, for: .normal)
     }
+
+    /// 设置GIF动态图
+    /// - Parameters:
+    ///   - name: 动态名称
+    ///   - duration: 持续时间
+    public func jq_gif(name:String,duration:TimeInterval = 0.1){
+        let gifImageUrl = Bundle.main.url(forResource: name, withExtension: nil)
+
+        let gifSource = CGImageSourceCreateWithURL( gifImageUrl! as CFURL, nil)
+        let gifcount = CGImageSourceGetCount(gifSource!)
+        var images = [UIImage]()
+        for i in 0..<gifcount{
+            let imageRef = CGImageSourceCreateImageAtIndex(gifSource!, i, nil)
+            let image = UIImage(cgImage: imageRef!)
+            images.append(image)
+        }
+        setImage(UIImage.animatedImage(with: images, duration: duration), for: .normal)
+    }
 }
