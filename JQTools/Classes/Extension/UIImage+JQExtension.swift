@@ -12,6 +12,7 @@ import UIKit
 import QuartzCore
 import CoreGraphics
 import Accelerate
+import Photos
 
 //水印位置枚举
 public enum WaterMarkCorner{
@@ -22,6 +23,35 @@ public enum WaterMarkCorner{
 }
 
 public extension UIImage{
+
+    /// PHAsset转UIImage
+    @objc static func JQ_PHAssetToImage(asset:PHAsset) -> UIImage{
+         var image = UIImage()
+
+         // 新建一个默认类型的图像管理器imageManager
+         let imageManager = PHImageManager.default()
+
+         // 新建一个PHImageRequestOptions对象
+         let imageRequestOption = PHImageRequestOptions()
+
+         // PHImageRequestOptions是否有效
+         imageRequestOption.isSynchronous = true
+
+         // 缩略图的压缩模式设置为无
+         imageRequestOption.resizeMode = .none
+
+         // 缩略图的质量为高质量，不管加载时间花多少
+         imageRequestOption.deliveryMode = .highQualityFormat
+
+         // 按照PHImageRequestOptions指定的规则取出图片
+         imageManager.requestImage(for: asset, targetSize: CGSize.init(width: 1080, height: 1920), contentMode: .aspectFill, options: imageRequestOption, resultHandler: {
+             (result, _) -> Void in
+             image = result!
+         })
+         return image
+    }
+
+
 
     // MARK: -- Class func
     ///生成群聊图标
@@ -71,6 +101,7 @@ public extension UIImage{
     ///   - name: 数据名称
     ///   - atResoure: 资源路径
     /// - Returns: 返回图片
+    @available(*,deprecated,message: "废弃")
     static func JQ_Bundle(_ name:String, resoure atResoure:String = "Icon")->UIImage?{
         let a = Bundle(for: JQTool.self).path(forResource: atResoure, ofType: "bundle")
         let jqToolBundle = Bundle(path: a!)

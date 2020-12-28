@@ -29,7 +29,7 @@ open class JQ_BaseVC: UIViewController{
 
     open override func viewDidLoad() {
         super.viewDidLoad()
-
+        view.backgroundColor = UIColor.white
         //初次进入,判断当前风格
         if #available(iOS 13.0, *) {
             if UITraitCollection.current.userInterfaceStyle == .dark {

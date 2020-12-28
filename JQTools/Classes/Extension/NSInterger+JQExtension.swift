@@ -21,9 +21,19 @@ extension Int {
         if self > 0 && self < 1000{
             return String(format: "%ld", self)
         }else if self >= 1000 && self < 10000 {
-            return String(format: "%.2lfK", CGFloat(self/1000))
+            if String(format: "%.2lfK", CGFloat(Double(self)/1000.0)).contains(".00") {
+                return String(format: "%.lfK", CGFloat(Double(self)/1000.0))
+            }else{
+                return String(format: "%.2lfK", CGFloat(Double(self)/1000.0))
+            }
+        }else if self >= 10000{
+            if String(format: "%.2lfW", CGFloat(Double(self)/10000.0)).contains(".00") {
+                return String(format: "%.lfW", CGFloat(Double(self)/10000.0))
+            }else{
+                return String(format: "%.2lfW", CGFloat(Double(self)/10000.0))
+            }
         }else{
-            return String(format: "%.2lfW", CGFloat(self/10000))
+            return "0"
         }
     }
 }

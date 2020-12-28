@@ -172,7 +172,7 @@ public class JQ_URLProtocol: URLProtocol , URLSessionDataDelegate, URLSessionTas
 //        let entity = NSEntityDescription.entity(forEntityName: "CachedURLResponse",
 //                                                in: context)
 //        fetchRequest.entity = entity
-//        
+//
 //        //设置查询条件
 //        let predicate = NSPredicate(format:"url == %@", self.request.url!.absoluteString)
 //        fetchRequest.predicate = predicate

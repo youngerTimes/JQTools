@@ -7,7 +7,6 @@
 
 import UIKit
 
-#if canImport(TZImagePickerController)
 import TZImagePickerController
 
 
@@ -174,7 +173,7 @@ public class JQ_ImagePickerTool: NSObject{
     /// - Parameters:
     ///   - clouse: 回调
     ///   - max: 最大的选择数量
-    public func multiImage(_ clouse:JQ_ImagePickerMutiClouse,max:NSInteger){
+    public func multiImage(_ clouse:JQ_ImagePickerMutiClouse,max:NSInteger,selectAsstes:NSMutableArray? = nil){
         self.chooseMethodType = .muti
         self.mutiClouse = clouse
         let p = TZImagePickerController(maxImagesCount: max, columnNumber: 4, delegate: self)
@@ -184,6 +183,11 @@ public class JQ_ImagePickerTool: NSObject{
         p!.sortAscendingByModificationDate = true
         p!.allowPickingVideo = false
         p!.allowCrop = false
+
+        if selectAsstes != nil {
+            p!.selectedAssets = selectAsstes
+        }
+
         JQ_currentViewController().present(p!, animated: true, completion: nil)
     }
 }
@@ -286,4 +290,3 @@ extension JQ_ImagePickerTool:UIImagePickerControllerDelegate{
 //}
 
 extension JQ_ImagePickerTool:UINavigationControllerDelegate{}
-#endif

@@ -44,19 +44,17 @@ public class JQ_CommonScanQRCodeVC: UIViewController,AVCaptureMetadataOutputObje
         super.viewDidLoad()
         
         if borderView == nil {
-            let image = UIImage(named: "ty_qrcode_bg", in: Bundle(for:type(of: self)), compatibleWith: .none)
-            borderView = UIImageView(image: image)
+            borderView = UIImageView(image: Bundle.JQ_Bundle(icon: "ty_qrcode_bg"))
         }
         
         if scanLineView == nil {
-            let image = UIImage(named: "ty_qrcode_line", in: Bundle(for:type(of: self)), compatibleWith: .none)
-            scanLineView = UIImageView(image: image)
+            scanLineView = UIImageView(image: Bundle.JQ_Bundle(icon: "ty_qrcode_line"))
         }
         
         if closeBtn == nil &&  modalPresentationStyle == .fullScreen && self.presentationController != nil {
             closeBtn = UIButton(type: .custom)
             closeBtn!.addTarget(self, action: #selector(closeView), for: .touchUpInside)
-            let image = UIImage(named: "close_btn", in: Bundle(for:type(of: self)), compatibleWith: .none)
+            let image = Bundle.JQ_Bundle(icon: "close_btn")
             closeBtn!.setImage(image, for: .normal)
             view.addSubview(closeBtn!)
             closeBtn!.snp.makeConstraints { (make) in

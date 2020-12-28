@@ -39,7 +39,10 @@ public extension UIView{
     
     var jq_cornerRadius:CGFloat{
         get{return self.layer.cornerRadius}
-        set(value){self.layer.cornerRadius = value}
+        set(value){
+            self.layer.masksToBounds = true
+            self.layer.cornerRadius = value
+        }
     }
     
     var jq_masksToBounds:Bool{

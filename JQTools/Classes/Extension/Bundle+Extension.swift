@@ -7,46 +7,55 @@
 
 import Foundation
 
-//        var a = Bundle(for: JQTool.self).path(forResource: "Icon", ofType: "bundle")
-//        let jqToolBundle = Bundle(path: a!)
-//        let image = UIImage(named: "ty_qrcode_bg", in: jqToolBundle, compatibleWith: .none)
-//        print(image)
-//
-//
-//        let mainBundle  = Bundle(for: JQTool.self)
-//        let path = mainBundle.path(forResource: "JQToolsRes", ofType: "bundle")
-//        let jqToolsBundle = Bundle(path: path!)
-//        let filePath = jqToolsBundle?.path(forResource: "citysCode", ofType: "txt")
-//
-//        do {
-//            let content = try String(contentsOfFile: filePath!)
-//            print(content)
-//        } catch  {
-//
-//        }
+/*
+ //根目录下的资源
+ let mainBundle  = Bundle(for: JQTool.self)
+ let path = mainBundle.path(forResource: "JQToolsRes", ofType: "bundle")
+ let jqToolsBundle = Bundle(path: path!)
+ let filePath = jqToolsBundle?.path(forResource: "citysCode", ofType: "txt")
 
+ do {
+ let content = try String(contentsOfFile: filePath!)
+ print(content)
+ } catch  {
 
-//        let a = Bundle(for: JQTool.self)
-//        let image = UIImage(named: "ty_qrcode_line", in: a, compatibleWith: .none)
-//        let imageView = UIImageView(image: image)
-//        view.addSubview(imageView)
-//        imageView.snp.makeConstraints { (make) in
-//            make.edges.equalToSuperview()
-//        }
+ }
 
-extension Bundle{
-    /// 加载JQTools中 JQTools中的数据目录下的数据
+ //Media.xcassets下的资源
+ _ = UIImage(named: "ty_qrcode_bg", in: jqToolsBundle, compatibleWith: .none)
+
+ //获取目录下 XXXX.bundle资源
+ let a = jqToolsBundle?.path(forResource: "Icon", ofType: "bundle")
+ let bundle1 = Bundle(path: a!)
+ let b = UIImage(named: "addImg", in: bundle1, compatibleWith: .none)
+ */
+
+public extension Bundle{
+    static var jqBundle:Bundle?{
+        get{
+            let mainBundle  = Bundle(for: JQTool.self)
+            let path = mainBundle.path(forResource: "JQToolsRes", ofType: "bundle")
+            let jqToolsBundle = Bundle(path: path!)
+            return jqToolsBundle
+        }
+    }
+
+    /// 加载JQTools中 JQTools中的数据根目录下的数据
     static func JQ_Bundle(resource:String,type:String)->String?{
-        let mainBundle  = Bundle(for: JQTool.self)
-        let path = mainBundle.path(forResource: "JQToolsRes", ofType: "bundle")
-        let jqToolsBundle = Bundle(path: path!)
-        let filePath = jqToolsBundle?.path(forResource: resource, ofType: type)
+        let filePath = jqBundle?.path(forResource: resource, ofType: type)
         do {
             let content = try String(contentsOfFile: filePath!)
             return content
         } catch  {
             return nil
         }
+    }
+
+    /// 加载Media.xcassets中的文件
+    /// - Parameter icon: 图片名称
+    /// - Returns: 返回图片
+    static func JQ_Bundle(icon:String)->UIImage?{
+        return UIImage(named: icon, in: jqBundle, compatibleWith: .none)
     }
 
     /// 加载JQTools 中XXX.bundle
@@ -56,10 +65,11 @@ extension Bundle{
     ///   - type: 数据后缀
     /// - Returns: 返回Bundle
     static func JQ_Bundle(bundleName:String,resource:String,type:String)->Bundle?{
-        let a = Bundle(for: JQTool.self).path(forResource: bundleName, ofType: "bundle")
+        let a = jqBundle?.path(forResource: bundleName, ofType: "bundle")
         if a != nil {
             return Bundle(path: a!)
+        }else{
+            return nil
         }
-        return nil
     }
 }

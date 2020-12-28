@@ -58,7 +58,9 @@
 }
 
 -(void)changeImage{
-    _selectBlock(_showImageView);
+    if (_selectBlock != nil) {
+        _selectBlock(_showImageView);
+    }
 }
 
 -(void)imageViewAddGRType:(KGestureRecognizerType)gRType byImageView:(UIImageView *)imageView{

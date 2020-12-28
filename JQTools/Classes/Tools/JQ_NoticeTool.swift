@@ -78,7 +78,8 @@ public class JQ_NoticeTool:NSObject {
                     message.append("允许")
                     if showInner {UNUserNotificationCenter.current().delegate = weakSelf.notificationHandler}
                 case .provisional:break
-                @unknown default:break
+                default:
+                    break
             }
             
             message.append("\n声音：")

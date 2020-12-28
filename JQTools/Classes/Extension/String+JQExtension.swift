@@ -533,6 +533,17 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
         return a.replacingMatches(in: self, with: "")
     }
 
+    //转译成字符值引用（NCR）
+    func jq_toEncoded() -> String {
+        var result:String = "";
+        for scalar in self.utf16 {
+            //将十进制转成十六进制，不足4位前面补0
+            let tem = String().appendingFormat("%04x",scalar)
+            result += "&#x\(tem);";
+        }
+        return result
+    }
+
 
     /// 精准身份证号码判断
     func jq_idCard()->Bool{
