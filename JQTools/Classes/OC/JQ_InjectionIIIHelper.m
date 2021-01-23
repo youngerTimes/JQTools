@@ -30,6 +30,7 @@ void injected (id self, SEL _cmd) {
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
         //更改bundlePath
         [[NSBundle bundleWithPath:@"/Applications/InjectionIII.app/Contents/Resources/iOSInjection.bundle"] load];
+        [[NSBundle bundleWithPath:@"/Applications/InjectionIII.app/Contents/Resources/iOSSwiftUISupport.bundle"] load];
         [[NSNotificationCenter defaultCenter] removeObserver:observer];
     }];
     

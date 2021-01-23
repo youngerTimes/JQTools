@@ -48,4 +48,19 @@ public extension UILabel{
         mutableAttributeString.addAttributes(attributes as [NSAttributedString.Key : Any], range: NSRange(location: 0, length: text!.count))
         attributedText = mutableAttributeString
     }
+
+    /// 给文本添加阴影效果
+    /// - Parameters:
+    ///   - radius: 阴影半径
+    ///   - size: 大小
+    ///   - shadowColor: 阴影颜色
+    func jq_fontShadow(radius:CGFloat = 1.0,size:CGSize = CGSize(width: 1, height: 1),shadowColor:UIColor){
+        let attribute = NSMutableAttributedString(string: self.text ?? "")
+        let shadow  = NSShadow()
+        shadow.shadowBlurRadius = radius
+        shadow.shadowOffset = size
+        shadow.shadowColor = UIColor.black
+        attribute.addAttribute(.shadow, value: shadow, range: NSRange(location: 0, length: self.text?.count ?? 0))
+        attributedText = attribute
+    }
 }

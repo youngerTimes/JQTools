@@ -46,14 +46,14 @@ public class JQ_MenuView: UIView {
             tableView!.snp.makeConstraints { (make) in
                 make.right.equalToSuperview().offset(-5 * JQ_RateW)
                 make.top.equalToSuperview().offset(JQ_NavBarHeight)
-                make.width.equalTo(115 * JQ_RateW)
+                make.width.equalTo(tapView!.jq_width)
                 make.height.equalTo(0)
             }
         }else{
             tableView!.snp.makeConstraints { (make) in
                 make.centerX.equalTo(tapView!)
                 make.top.equalTo(tapView!.snp.bottom).offset(5 * JQ_RateW)
-                make.width.equalTo(115 * JQ_RateW)
+                make.width.equalTo(tapView!.jq_width)
                 make.height.equalTo(0)
             }
         }
@@ -64,14 +64,14 @@ public class JQ_MenuView: UIView {
                 self.tableView!.snp.remakeConstraints { (make) in
                     make.right.equalToSuperview().offset(-5 * JQ_RateW)
                     make.top.equalToSuperview().offset(JQ_NavBarHeight)
-                    make.width.equalTo(115 * JQ_RateW)
+                    make.width.equalTo(tapView!.jq_width)
                     make.height.equalTo(CGFloat(46 * items.count) * JQ_RateW)
                 }
             }else{
                 self.tableView!.snp.remakeConstraints { (make) in
                     make.centerX.equalTo(tapView!)
                     make.top.equalTo(tapView!.snp.bottom).offset(5 * JQ_RateW)
-                    make.width.equalTo(115 * JQ_RateW)
+                    make.width.equalTo(tapView!.jq_width)
                     make.height.equalTo(CGFloat(46 * items.count) * JQ_RateW)
                 }
             }
@@ -100,14 +100,14 @@ public class JQ_MenuView: UIView {
             tableView!.snp.makeConstraints { (make) in
                 make.right.equalToSuperview().offset(-5 * JQ_RateW)
                 make.top.equalToSuperview().offset(JQ_NavBarHeight)
-                make.width.equalTo(115 * JQ_RateW)
+                make.width.equalTo(tapView!.jq_width)
                 make.height.equalTo(0)
             }
         }else{
             tableView!.snp.makeConstraints { (make) in
                 make.centerX.equalTo(tapView!)
                 make.top.equalTo(tapView!.snp.bottom).offset(5 * JQ_RateW)
-                make.width.equalTo(115 * JQ_RateW)
+                make.width.equalTo(tapView!.jq_width)
                 make.height.equalTo(0)
             }
         }
@@ -118,14 +118,14 @@ public class JQ_MenuView: UIView {
                 self.tableView!.snp.remakeConstraints { (make) in
                     make.right.equalToSuperview().offset(-5 * JQ_RateW)
                     make.top.equalToSuperview().offset(JQ_NavBarHeight)
-                    make.width.equalTo(115 * JQ_RateW)
+                    make.width.equalTo(tapView!.jq_width)
                     make.height.equalTo(CGFloat(46 * items.count) * JQ_RateW)
                 }
             }else{
                 self.tableView!.snp.remakeConstraints { (make) in
                     make.centerX.equalTo(tapView!)
                     make.top.equalTo(tapView!.snp.bottom).offset(5 * JQ_RateW)
-                    make.width.equalTo(115 * JQ_RateW)
+                    make.width.equalTo(tapView!.jq_width)
                     make.height.equalTo(CGFloat(46 * items.count) * JQ_RateW)
                 }
             }
@@ -146,14 +146,14 @@ public class JQ_MenuView: UIView {
                 self.tableView!.snp.remakeConstraints { (make) in
                     make.right.equalToSuperview().offset(-5 * JQ_RateW)
                     make.top.equalToSuperview().offset(JQ_NavBarHeight)
-                    make.width.equalTo(115 * JQ_RateW)
+                    make.width.equalTo(self.tapView!.jq_width)
                     make.height.equalTo(0)
                 }
             }else{
                 self.tableView!.snp.remakeConstraints { (make) in
                     make.centerX.equalTo(self.tapView!)
                     make.top.equalTo(self.tapView!.snp.bottom).offset(5 * JQ_RateW)
-                    make.width.equalTo(115 * JQ_RateW)
+                    make.width.equalTo(self.tapView!.jq_width)
                     make.height.equalTo(0)
                 }
             }
@@ -185,6 +185,10 @@ extension JQ_MenuView:UITableViewDelegate{
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         menuClouse?(indexPath.row,items[indexPath.row])
         hiddenView()
+    }
+
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 46 * JQ_RateW
     }
 }
 

@@ -20,6 +20,14 @@ extension Array{
         let randomIndex = Int(arc4random_uniform(UInt32(count)))
         return self[randomIndex]
     }
+
+
+    /// 将数组转化为字符串
+    public var jq_toJson:String{
+        let data = try? JSONSerialization.data(withJSONObject: self, options: [])
+        let result = String(data: data!, encoding: String.Encoding.utf8)
+        return (result! as NSString).replacingOccurrences(of: "\\", with: "")
+    }
     
     /// 从数组中从返回指定个数的元素
     ///

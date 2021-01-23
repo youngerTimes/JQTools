@@ -40,6 +40,7 @@ TODO: Add long description of the pod here.
      'JQToolsRes' => ['JQTools/Assets/*']
    }
 
+#   s.vendored_frameworks = ['JQTools/Classes/Framework/TestFramework.framework'] # 添加私有的Framework
 #   s.public_header_files = 'JQTools/Classes/OC/Header.h'
    
    s.frameworks = 'UIKit'

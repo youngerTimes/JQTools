@@ -220,7 +220,7 @@ public extension String{
         }
         return (0,0)
     }
-    
+
     subscript(start:Int, length:Int) -> String
         {
         get{
