@@ -14,6 +14,7 @@ extension UIButton{
     }
     
     /// 按钮设置图片方向
+    @available(*,deprecated,message: "废弃")
     public func jq_buttonType(_ type:ButtonOriginType,padding:CGFloat){
         if type == .ImgDefault{
             self.imageEdgeInsets = UIEdgeInsets(top: 0, left: -0.5 * padding, bottom: 0, right: 0.5 * padding)
@@ -49,8 +50,11 @@ extension UIButton{
     }
     
     /// 开启定时器
-    public func jq_openCountDown(){
-        var time = 59 //倒计时时间
+    /// - Parameters:
+    ///   - t: 倒计时时间 默认59秒
+    ///   - defultTitle: 默认标题
+    public func jq_openCountDown(_ t:Int = 59,defultTitle:String = "获取验证码"){
+        var time = t //倒计时时间
         let queue = DispatchQueue.global()
         let timer = DispatchSource.makeTimerSource(flags: [], queue: queue)
         timer.schedule(wallDeadline: DispatchWallTime.now(), repeating: .seconds(1));
@@ -58,7 +62,7 @@ extension UIButton{
             if time <= 0 {
                 timer.cancel()
                 DispatchQueue.main.async(execute: {
-                    self.setTitle("获取验证码", for: .normal)
+                    self.setTitle(defultTitle, for: .normal)
                     self.isUserInteractionEnabled = true
                 });
             }else {

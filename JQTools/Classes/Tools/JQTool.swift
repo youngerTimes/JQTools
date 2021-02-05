@@ -13,6 +13,7 @@ import RxCocoa
 import MJRefresh
 import LocalAuthentication
 import StoreKit
+import ObjectMapper
 
 public enum RefreshStatus {
     case none
@@ -254,26 +255,26 @@ public class JQTool{
      var blockRotation = Bool()
 
      func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-             if blockRotation {
-                 return .landscapeLeft
-             }
-             return .portrait
+     if blockRotation {
+     return .landscapeLeft
+     }
+     return .portrait
      }
 
      override func viewWillAppear(_ animated: Bool) {
-         super.viewWillAppear(animated)
-         appDelegate.blockRotation = true
-      }
+     super.viewWillAppear(animated)
+     appDelegate.blockRotation = true
+     }
 
      override func viewWillDisappear(_ animated: Bool) {
-         super.viewWillDisappear(animated)
-         appDelegate.blockRotation = false
+     super.viewWillDisappear(animated)
+     appDelegate.blockRotation = false
 
-         //判断退出时是否是横屏
-         if UIApplication.shared.statusBarOrientation.isLandscape {
-             //是横屏让变回竖屏
-             setNewOrientation(fullScreen: false)
-         }
+     //判断退出时是否是横屏
+     if UIApplication.shared.statusBarOrientation.isLandscape {
+     //是横屏让变回竖屏
+     setNewOrientation(fullScreen: false)
+     }
      }
      */
     public static func setNewOrientation(fullScreen: Bool) {
@@ -523,6 +524,138 @@ public class JQTool{
                              _ closure: @escaping () -> Void) {
         let dispatchQueue = qosClass != nil ? DispatchQueue.global(qos: qosClass!) : .main
         dispatchQueue.asyncAfter(deadline: DispatchTime.now() + delayTime, execute: closure)
+    }
+
+    /// 检查APP Store 的版本信息
+    /// - Parameters:
+    ///   - appid: APP Store 的appid
+    ///   - clouse: 返回数据，是否有更新
+    public static func checkVersion(appid:String,_ clouse:((Bool,VersionResultModel?)->Void)? = nil){
+        if appid.isEmpty {fatalError("请填写appid")}
+        if let url = URL(string: "https://itunes.apple.com/cn/lookup?id=\(appid)"){
+            let shareSession = URLSession.shared
+            let request = URLRequest(url: url)
+            let task = shareSession.dataTask(with: request) { (data, response, error) in
+                if error == nil && data != nil{
+                    do{
+                        let dictionary = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! Dictionary<String, Any>
+                        let versionModel = VersionModel(JSON: dictionary)
+                        if currentVersion() != versionModel?.results.last?.version{
+                            clouse?(true,versionModel?.results.last!)
+                        }else{
+                            clouse?(false,nil)
+                        }
+                    }catch{
+                        clouse?(false,nil)
+                    }
+                }
+            }
+            task.resume()
+        }
+    }
+}
+
+public class VersionModel:JQModel{
+    public var resultCount = 1
+    public var results = [VersionResultModel]()
+
+    public override func mapping(map: Map) {
+        resultCount <- map["resultCount"]
+        results <- map["results"]
+    }
+}
+
+public class VersionResultModel:JQModel{
+    public var ipadScreenshotUrls = [String]()
+    public var appletvScreenshotUrls = [String]()
+    public var artworkUrl60 = ""
+    public var artworkUrl512 = ""
+    public var artworkUrl100 = ""
+    public var artistViewUrl = ""
+    public var screenshotUrls = [String]()
+    public var isGameCenterEnabled = false
+    public var supportedDevices = [String]()
+    public var advisories = [String]()
+    public var features = [String]()
+    public var kind = ""
+    public var trackCensoredName = ""
+    public var languageCodesISO2A = [String]()
+    public var fileSizeBytes = ""
+    public var sellerUrl = ""
+    public var contentAdvisoryRating = ""
+    public var averageUserRatingForCurrentVersion = ""
+    public var userRatingCountForCurrentVersion = ""
+    public var averageUserRating = ""
+    public var trackViewUrl = ""
+    public var trackContentRating = ""
+    public var releaseDate = ""
+    public var genreIds = [String]()
+    public var formattedPrice = ""
+    public var primaryGenreName = ""
+    public var isVppDeviceBasedLicensingEnabled = false
+    public var minimumOsVersion = ""
+    public var sellerName = ""
+    public var currentVersionReleaseDate = ""
+    public var releaseNotes = ""
+    public var primaryGenreId = 0
+    public var currency = ""
+    public var trackId = 0
+    public var trackName = ""
+    public var description = ""
+    public var artistId = 0
+    public var artistName = ""
+    public var genres = [String]()
+    public var price = 0
+    public var bundleId = ""
+    public var version = ""
+    public var wrapperType = ""
+    public var userRatingCount = 0
+
+    public override func mapping(map: Map) {
+        advisories <- map["advisories"]
+        appletvScreenshotUrls <- map["appletvScreenshotUrls"]
+        artistId <- map["artistId"]
+        artistName <- map["artistName"]
+        artistViewUrl <- map["artistViewUrl"]
+        artworkUrl100 <- map["artworkUrl100"]
+        artworkUrl512 <- map["artworkUrl512"]
+        artworkUrl60 <- map["artworkUrl60"]
+        averageUserRating <- map["averageUserRating"]
+        averageUserRatingForCurrentVersion <- map["averageUserRatingForCurrentVersion"]
+        bundleId <- map["bundleId"]
+        contentAdvisoryRating <- map["contentAdvisoryRating"]
+        currency <- map["currency"]
+        currentVersionReleaseDate <- map["currentVersionReleaseDate"]
+        description <- map["description"]
+        features <- map["features"]
+        fileSizeBytes <- map["fileSizeBytes"]
+        formattedPrice <- map["formattedPrice"]
+        genreIds <- map["genreIds"]
+        genres <- map["genres"]
+        ipadScreenshotUrls <- map["ipadScreenshotUrls"]
+        isGameCenterEnabled <- map["isGameCenterEnabled"]
+        isVppDeviceBasedLicensingEnabled <- map["isVppDeviceBasedLicensingEnabled"]
+        kind <- map["kind"]
+        languageCodesISO2A <- map["languageCodesISO2A"]
+        minimumOsVersion <- map["minimumOsVersion"]
+        price <- map["price"]
+        primaryGenreId <- map["primaryGenreId"]
+        primaryGenreName <- map["primaryGenreName"]
+        releaseDate <- map["releaseDate"]
+        releaseNotes <- map["releaseNotes"]
+        screenshotUrls <- map["screenshotUrls"]
+        sellerName <- map["sellerName"]
+        sellerUrl <- map["sellerUrl"]
+        supportedDevices <- map["supportedDevices"]
+        trackCensoredName <- map["trackCensoredName"]
+        trackContentRating <- map["trackContentRating"]
+        trackId <- map["trackId"]
+        trackName <- map["trackName"]
+        trackViewUrl <- map["trackViewUrl"]
+        userRatingCount <- map["userRatingCount"]
+        userRatingCountForCurrentVersion <- map["userRatingCountForCurrentVersion"]
+        version <- map["version"]
+        wrapperType <- map["wrapperType"]
     }
 }
 

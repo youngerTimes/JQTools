@@ -47,7 +47,7 @@ public extension UITextView{
           self.attributedText = attrString
       }
 
-    /// 转换特殊符号标签字段
+    /// 转换特殊符号标签字段并输出富文本
     func jq_resolveHashTags(){
         let nsText:NSString = self.text! as NSString
         // 使用默认设置的字体样式

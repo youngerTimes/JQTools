@@ -7,30 +7,40 @@
 
 import Foundation
 
-extension Double{
-
+public extension Double{
+    
+    /// 角度转换：弧度转角度
+    var jq_degrees:Double{
+        get{return self * (180.0 / .pi)}
+    }
+    
+    /// 角度转换：角度转弧度
+    var jq_radians:Double{
+        get{return self / 180.0 * .pi}
+    }
+    
     /// 四舍五入
     /// - Parameter places: 小数位 位数
-    public func jq_roundTo(places: Int) -> Double {
+    func jq_roundTo(places: Int) -> Double {
         let divisor = pow(10.0, Double(places))
         return (self * divisor).rounded() / divisor
     }
-
-
+    
+    
     /// 截断
     /// - Parameter places: 截断小数位 位数
-    public func jq_truncate(places: Int) -> Double {
+    func jq_truncate(places: Int) -> Double {
         let divisor = pow(10.0, Double(places))
         return Double(Int(self * divisor)) / divisor
     }
-
     
-    public func jq_mm()->String{return "\(self/1)mm"}
-    public func jq_cm()-> String{return "\(self/10)cm"}
-    public func jq_dm()->String{return "\(self/100)dm"}
-    public func jq_m()->String{return "\(self/1000)m"}
-    public func jq_km()->String{return "\(self/(1000*1000))km"}
-    public func jq_unit()->String{
+    
+    func jq_mm()->String{return "\(self/1)mm"}
+    func jq_cm()-> String{return "\(self/10)cm"}
+    func jq_dm()->String{return "\(self/100)dm"}
+    func jq_m()->String{return "\(self/1000)m"}
+    func jq_km()->String{return "\(self/(1000*1000))km"}
+    func jq_unit()->String{
         if self > 0 && self < 1000{
             if String(format: "%.2lf", self).contains(".00"){
                 return String(format: "%ld", Int(self))
@@ -55,35 +65,45 @@ extension Double{
     }
     
     @available(*,deprecated,message: "废弃")
-    public var jq_ratioW:CGFloat{
+    var jq_ratioW:CGFloat{
         return CGFloat(self) * JQ_RateW
     }
 }
 
-extension CGFloat{
-
+public extension CGFloat{
+    
+    /// 角度转换：弧度转角度
+    var jq_degrees:CGFloat{
+        get{return self * (180.0 / .pi)}
+    }
+    
+    /// 角度转换：角度转弧度
+    var jq_radians:CGFloat{
+        get{return self / 180.0 * .pi}
+    }
+    
     /// 截断
     /// - Parameter places: 截断小数位 位数
-    public func jq_truncate(places: Int) -> CGFloat {
+    func jq_truncate(places: Int) -> CGFloat {
         let divisor = pow(10.0, CGFloat(places))
         return CGFloat(Int(self * divisor)) / CGFloat(divisor)
     }
-
+    
     /// 四舍五入
     /// - Parameter places: 小数位 位数
-    public func jq_roundTo(places: Int) -> CGFloat {
+    func jq_roundTo(places: Int) -> CGFloat {
         let divisor = pow(10.0, CGFloat(places))
         return CGFloat((self * divisor).rounded() / divisor)
     }
     
-    public func jq_mm()->String{return "\(self/1)mm"}
-    public func jq_cm()-> String{return "\(self/10)cm"}
-    public func jq_dm()->String{return "\(self/100)dm"}
-    public func jq_m()->String{return "\(self/1000)m"}
-    public func jq_km()->String{return "\(self/(1000*1000))km"}
+    func jq_mm()->String{return "\(self/1)mm"}
+    func jq_cm()-> String{return "\(self/10)cm"}
+    func jq_dm()->String{return "\(self/100)dm"}
+    func jq_m()->String{return "\(self/1000)m"}
+    func jq_km()->String{return "\(self/(1000*1000))km"}
     
     @available(*,deprecated,message: "废弃")
-    public var jq_ratioW:CGFloat{
+    var jq_ratioW:CGFloat{
         return self * JQ_RateW
     }
 }

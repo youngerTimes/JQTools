@@ -46,7 +46,7 @@ extension Array{
                 sampleElements.append(jq_sample!)
             }
         }
-            //返回的元素不可以重复的情况
+        //返回的元素不可以重复的情况
         else{
             //先复制一个新数组
             var copy = self.map { $0 }

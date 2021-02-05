@@ -37,7 +37,7 @@ public class JQ_FileTool: NSObject {
             case .document:
                 finalUrl = documentUrl!.absoluteString
             case .lib:
-                finalUrl = documentUrl!.absoluteString
+                finalUrl = libraryUrl!.absoluteString
         }
         
         finalUrl.append(contentsOf: url)
@@ -52,6 +52,28 @@ public class JQ_FileTool: NSObject {
             }
         } catch _ {
             return nil
+        }
+    }
+
+    func createDirectory(_ name:String,type:JQ_FileType){
+        var finalUrl:String = ""
+        switch type {
+            case .cache:finalUrl = cacheUrl!.absoluteString.appending("/\(name)")
+            case .document:finalUrl = documentUrl!.absoluteString.appending("/\(name)")
+            case .lib:finalUrl = libraryUrl!.absoluteString.appending("/\(name)")
+        }
+
+        let exist = manager.fileExists(atPath: finalUrl)
+
+        if !exist{
+            do{
+                //创建指定位置上的文件夹
+                try manager.createDirectory(atPath: finalUrl, withIntermediateDirectories: true, attributes: nil)
+                print("Succes to create folder")
+            }
+            catch{
+                print("Error to create folder")
+            }
         }
     }
 }

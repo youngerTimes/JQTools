@@ -22,35 +22,57 @@ public enum WaterMarkCorner{
     case BottomRight
 }
 
+public enum GradientDirection {
+    case horizontal // 水平从左到右
+    case vertical // 垂直从上到下
+    case leftOblique // 左上到右下
+    case rightOblique // 右上到左下
+    case other(CGPoint, CGPoint)
+
+    public func point(size: CGSize) -> (CGPoint, CGPoint) {
+        switch self {
+            case .horizontal:
+                return (CGPoint.init(x: 0, y: 0), CGPoint.init(x: size.width, y: 0))
+            case .vertical:
+                return (CGPoint.init(x: 0, y: 0), CGPoint.init(x: 0, y: size.height))
+            case .leftOblique:
+                return (CGPoint.init(x: 0, y: 0), CGPoint.init(x: size.width, y: size.height))
+            case .rightOblique:
+                return (CGPoint.init(x: size.width, y: 0), CGPoint.init(x: 0, y: size.height))
+            case .other(let stat, let end):
+                return (stat, end)
+        }
+    }
+}
+
 public extension UIImage{
 
     /// PHAsset转UIImage
     @objc static func JQ_PHAssetToImage(asset:PHAsset) -> UIImage{
-         var image = UIImage()
+        var image = UIImage()
 
-         // 新建一个默认类型的图像管理器imageManager
-         let imageManager = PHImageManager.default()
+        // 新建一个默认类型的图像管理器imageManager
+        let imageManager = PHImageManager.default()
 
-         // 新建一个PHImageRequestOptions对象
-         let imageRequestOption = PHImageRequestOptions()
+        // 新建一个PHImageRequestOptions对象
+        let imageRequestOption = PHImageRequestOptions()
 
-         // PHImageRequestOptions是否有效
-         imageRequestOption.isSynchronous = true
+        // PHImageRequestOptions是否有效
+        imageRequestOption.isSynchronous = true
 
-         // 缩略图的压缩模式设置为无
-         imageRequestOption.resizeMode = .none
+        // 缩略图的压缩模式设置为无
+        imageRequestOption.resizeMode = .none
 
-         // 缩略图的质量为高质量，不管加载时间花多少
-         imageRequestOption.deliveryMode = .highQualityFormat
+        // 缩略图的质量为高质量，不管加载时间花多少
+        imageRequestOption.deliveryMode = .highQualityFormat
 
-         // 按照PHImageRequestOptions指定的规则取出图片
-         imageManager.requestImage(for: asset, targetSize: CGSize.init(width: 1080, height: 1920), contentMode: .aspectFill, options: imageRequestOption, resultHandler: {
-             (result, _) -> Void in
-             image = result!
-         })
-         return image
+        // 按照PHImageRequestOptions指定的规则取出图片
+        imageManager.requestImage(for: asset, targetSize: CGSize.init(width: 1080, height: 1920), contentMode: .aspectFill, options: imageRequestOption, resultHandler: {
+            (result, _) -> Void in
+            image = result!
+        })
+        return image
     }
-
 
 
     // MARK: -- Class func
@@ -94,7 +116,6 @@ public extension UIImage{
         UIGraphicsEndImageContext()
         return newImage!
     }
-
 
     /// 加载JQTools XXX.bundle中的数据
     /// - Parameters:
@@ -200,6 +221,16 @@ public extension UIImage{
         return UIImage(cgImage: cgImage!)
     }
 
+
+    /// 将图片转换为字符串
+    /// - Returns: 字符串类型
+    func jq_toString()->String{
+        let imgData = self.pngData()
+        return imgData?.base64EncodedString() ?? ""
+    }
+
+
+
     ///返回一个将白色背景变透明的UIImage
     func jq_imageByRemoveWhiteBg() -> UIImage? {
         let colorMasking: [CGFloat] = [222, 255, 222, 255, 222, 255]
@@ -251,6 +282,41 @@ public extension UIImage{
         let maskedImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return maskedImage
+    }
+
+    // MARK: 1.4、layer 转 image
+    /// layer 转 image
+    /// - Parameters:
+    ///   - layer: layer 对象
+    ///   - scale: 缩放比例
+    /// - Returns: 返回转化后的 image
+    static func jq_image(from layer: CALayer, scale: CGFloat = 0.0) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(layer.frame.size, layer.isOpaque, scale)
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        guard let ctx = UIGraphicsGetCurrentContext() else { return nil }
+        layer.render(in: ctx)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        return image
+    }
+
+    // MARK: 1.5、设置图片透明度
+    /// 设置图片透明度
+    /// alpha: 透明度
+    /// - Returns: newImage
+    func jq_imageByApplayingAlpha(_ alpha: CGFloat) -> UIImage {
+        UIGraphicsBeginImageContext(size)
+        let context = UIGraphicsGetCurrentContext()
+        let area = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        context?.scaleBy(x: 1, y: -1)
+        context?.translateBy(x: 0, y: -area.height)
+        context?.setBlendMode(.multiply)
+        context?.setAlpha(alpha)
+        context?.draw(self.cgImage!, in: area)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage ?? self
     }
     
     /// 添加水印方法:添加文字
@@ -400,6 +466,98 @@ public extension UIImage{
         UIGraphicsEndImageContext()
         return tintedImage
     }
+
+    // MARK: 2.1、生成指定尺寸的纯色图像
+    /// 生成指定尺寸的纯色图像
+    /// - Parameters:
+    ///   - color: 图片颜色
+    ///   - size: 图片尺寸
+    /// - Returns: 返回对应的图片
+    static func jq_image(color: UIColor, size: CGSize = CGSize(width: 1.0, height: 1.0)) -> UIImage? {
+        return jq_image(color: color, size: size, corners: .allCorners, radius: 0)
+    }
+
+    // MARK: 2.2、生成指定尺寸和圆角的纯色图像
+    /// 生成指定尺寸和圆角的纯色图像
+    /// - Parameters:
+    ///   - color: 图片颜色
+    ///   - size: 图片尺寸
+    ///   - corners: 剪切的方式
+    ///   - round: 圆角大小
+    /// - Returns: 返回对应的图片
+    static func jq_image(color: UIColor, size: CGSize, corners: UIRectCorner, radius: CGFloat) -> UIImage? {
+        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
+        let context = UIGraphicsGetCurrentContext()
+        if radius > 0 {
+            let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+            color.setFill()
+            path.fill()
+        } else {
+            context?.setFillColor(color.cgColor)
+            context?.fill(rect)
+        }
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img
+    }
+
+    // MARK: 2.3、生成渐变色的图片 ["#B0E0E6", "#00CED1", "#2E8B57"]
+    /// 生成渐变色的图片 ["#B0E0E6", "#00CED1", "#2E8B57"]
+    /// - Parameters:
+    ///   - hexsString: 十六进制字符数组
+    ///   - size: 图片大小
+    ///   - locations: locations 数组
+    ///   - direction: 渐变的方向
+    /// - Returns: 渐变的图片
+    static func gradient(_ hexsString: [String], size: CGSize = CGSize(width: 1, height: 1), locations:[CGFloat]? = nil, direction: GradientDirection = .horizontal) -> UIImage? {
+        return gradient(hexsString.map{ UIColor(hexStr: $0) }, size: size, locations: locations, direction: direction)
+    }
+
+    // MARK: 2.4、生成渐变色的图片 [UIColor, UIColor, UIColor]
+    /// 生成渐变色的图片 [UIColor, UIColor, UIColor]
+    /// - Parameters:
+    ///   - colors: UIColor 数组
+    ///   - size: 图片大小
+    ///   - locations: locations 数组
+    ///   - direction: 渐变的方向
+    /// - Returns: 渐变的图片
+    static func gradient(_ colors: [UIColor], size: CGSize = CGSize(width: 10, height: 10), locations:[CGFloat]? = nil, direction: GradientDirection = .horizontal) -> UIImage? {
+        return gradient(colors, size: size, radius: 0, locations: locations, direction: direction)
+    }
+
+    // MARK: 2.5、生成带圆角渐变色的图片 [UIColor, UIColor, UIColor]
+    /// 生成带圆角渐变色的图片 [UIColor, UIColor, UIColor]
+    /// - Parameters:
+    ///   - colors: UIColor 数组
+    ///   - size: 图片大小
+    ///   - radius: 圆角
+    ///   - locations: locations 数组
+    ///   - direction: 渐变的方向
+    /// - Returns: 带圆角的渐变的图片
+    static func gradient(_ colors: [UIColor],
+                         size: CGSize = CGSize(width: 10, height: 10),
+                         radius: CGFloat,
+                         locations:[CGFloat]? = nil,
+                         direction: GradientDirection = .horizontal) -> UIImage? {
+        if colors.count == 0 { return nil }
+        if colors.count == 1 {
+            return UIImage.jq_image(color: colors[0])
+        }
+        UIGraphicsBeginImageContext(size)
+        let context = UIGraphicsGetCurrentContext()
+        let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: size.width, height: size.height), cornerRadius: radius)
+        path.addClip()
+        context?.addPath(path.cgPath)
+        guard let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: colors.map{$0.cgColor} as CFArray, locations: locations?.map { CGFloat($0) }) else { return nil
+        }
+        let directionPoint = direction.point(size: size)
+        context?.drawLinearGradient(gradient, start: directionPoint.0, end: directionPoint.1, options: .drawsBeforeStartLocation)
+
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
+    }
     
     //重设颜色
     func jq_imageWithNewSize(size: CGSize) -> UIImage? {
@@ -421,6 +579,25 @@ public extension UIImage{
             guard let newImg = theImage else { return  nil}
             return newImg
         }
+    }
+
+    // MARK: 1.6、裁剪给定区域
+    /// 裁剪给定区域
+    /// - Parameter crop: 裁剪区域
+    /// - Returns: 剪裁后的图片
+    func jq_cropWithCropRect( _ crop: CGRect) -> UIImage? {
+        let cropRect = CGRect(x: crop.origin.x * self.scale, y: crop.origin.y * self.scale, width: crop.size.width * self.scale, height: crop.size.height *  self.scale)
+        if cropRect.size.width <= 0 || cropRect.size.height <= 0 {
+            return nil
+        }
+        var image:UIImage?
+        autoreleasepool{
+            let imageRef: CGImage?  = self.cgImage!.cropping(to: cropRect)
+            if let imageRef = imageRef {
+                image = UIImage(cgImage: imageRef)
+            }
+        }
+        return image
     }
     
     ///将图片裁剪成指定比例（多余部分自动删除）
@@ -556,10 +733,10 @@ public extension UIImage {
         let colors = gradientColors.map {(color: UIColor) -> AnyObject? in return color.cgColor as AnyObject? } as NSArray
         let gradient: CGGradient
         if locations.count > 0 {
-          let cgLocations = locations.map { CGFloat($0) }
-          gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: cgLocations)!
+            let cgLocations = locations.map { CGFloat($0) }
+            gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: cgLocations)!
         } else {
-          gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: nil)!
+            gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: nil)!
         }
         context!.drawLinearGradient(gradient, start: CGPoint(x: 0, y: 0), end: CGPoint(x: 0, y: size.height), options: CGGradientDrawingOptions(rawValue: 0))
         self.init(cgImage:(UIGraphicsGetImageFromCurrentImageContext()?.cgImage!)!)
@@ -577,30 +754,30 @@ public extension UIImage {
      */
     func apply(gradientColors: [UIColor], locations: [Float] = [], blendMode: CGBlendMode = CGBlendMode.normal) -> UIImage
     {
-      UIGraphicsBeginImageContextWithOptions(size, false, scale)
-      let context = UIGraphicsGetCurrentContext()
-      context?.translateBy(x: 0, y: size.height)
-      context?.scaleBy(x: 1.0, y: -1.0)
-      context?.setBlendMode(blendMode)
-      let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        let context = UIGraphicsGetCurrentContext()
+        context?.translateBy(x: 0, y: size.height)
+        context?.scaleBy(x: 1.0, y: -1.0)
+        context?.setBlendMode(blendMode)
+        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
 
-      context?.draw(self.cgImage!, in: rect)
-      // Create gradient
-      let colorSpace = CGColorSpaceCreateDeviceRGB()
+        context?.draw(self.cgImage!, in: rect)
+        // Create gradient
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
         let colors = gradientColors.map {(color: UIColor) -> AnyObject? in return color.cgColor as AnyObject? } as NSArray
-      let gradient: CGGradient
-      if locations.count > 0 {
-        let cgLocations = locations.map { CGFloat($0) }
-        gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: cgLocations)!
-      } else {
-        gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: nil)!
-      }
-      // Apply gradient
-      context?.clip(to: rect, mask: self.cgImage!)
-      context?.drawLinearGradient(gradient, start: CGPoint(x: 0, y: 0), end: CGPoint(x: 0, y: size.height), options: CGGradientDrawingOptions(rawValue: 0))
-      let image = UIGraphicsGetImageFromCurrentImageContext()
-      UIGraphicsEndImageContext();
-      return image!;
+        let gradient: CGGradient
+        if locations.count > 0 {
+            let cgLocations = locations.map { CGFloat($0) }
+            gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: cgLocations)!
+        } else {
+            gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: nil)!
+        }
+        // Apply gradient
+        context?.clip(to: rect, mask: self.cgImage!)
+        context?.drawLinearGradient(gradient, start: CGPoint(x: 0, y: 0), end: CGPoint(x: 0, y: size.height), options: CGGradientDrawingOptions(rawValue: 0))
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext();
+        return image!;
     }
 
     // MARK: Image with Text
@@ -694,10 +871,10 @@ public extension UIImage {
     var hasAlpha: Bool {
         let alpha: CGImageAlphaInfo = self.cgImage!.alphaInfo
         switch alpha {
-        case .first, .last, .premultipliedFirst, .premultipliedLast:
-            return true
-        default:
-            return false
+            case .first, .last, .premultipliedFirst, .premultipliedLast:
+                return true
+            default:
+                return false
         }
     }
 
@@ -826,12 +1003,12 @@ public extension UIImage {
         var ratio: CGFloat!
 
         switch contentMode {
-        case .scaleToFill:
-            ratio = 1
-        case .scaleAspectFill:
-            ratio = max(horizontalRatio, verticalRatio)
-        case .scaleAspectFit:
-            ratio = min(horizontalRatio, verticalRatio)
+            case .scaleToFill:
+                ratio = 1
+            case .scaleAspectFill:
+                ratio = max(horizontalRatio, verticalRatio)
+            case .scaleAspectFit:
+                ratio = min(horizontalRatio, verticalRatio)
         }
 
         let rect = CGRect(x: 0, y: 0, width: size.width * ratio, height: size.height * ratio)
@@ -1062,8 +1239,8 @@ public extension UIImage {
         }
         let imageRect = CGRect(origin: CGPoint.zero, size: size)
         var effectImage = self
-        let hasBlur = blurRadius > CGFloat(FLT_EPSILON)
-        let hasSaturationChange = fabs(saturationDeltaFactor - 1.0) > CGFloat(FLT_EPSILON)
+        let hasBlur = blurRadius > CGFloat(Float.ulpOfOne)
+        let hasSaturationChange = abs(saturationDeltaFactor - 1.0) > CGFloat(Float.ulpOfOne)
         if (hasBlur || hasSaturationChange) {
 
             UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
@@ -1089,7 +1266,7 @@ public extension UIImage {
 
             if hasBlur {
                 let inputRadius = blurRadius * UIScreen.main.scale
-                let sqrtPi: CGFloat = CGFloat(sqrt(M_PI * 2.0))
+                let sqrtPi: CGFloat = CGFloat(sqrt(.pi * 2.0))
                 var radius = UInt32(floor(inputRadius * 3.0 * sqrtPi / 4.0 + 0.5))
                 if radius % 2 != 1 {
                     radius += 1 // force radius to be odd so that the three box-blur methodology works.
@@ -1217,5 +1394,304 @@ public extension UIImage {
             }).resume()
         }
         return placeholder
+    }
+}
+
+// MARK:- 三、图片的拉伸和缩放
+public extension UIImage {
+
+    // MARK: 3.1、获取固定大小的 image
+    /// 获取固定大小的image
+    /// - Parameter size: 图片尺寸
+    /// - Returns: 固定大小的 image
+    func solidTo(size: CGSize) -> UIImage? {
+        let w = size.width
+        let h = size.height
+        if self.size.height <= self.size.width {
+            if self.size.width >= w {
+                let scaleImage = fixOrientation().scaleTo(size: CGSize(width: w, height: w * self.size.height / self.size.width))
+                return scaleImage
+            } else {
+                return fixOrientation()
+            }
+        } else {
+            if self.size.height >= h {
+                let scaleImage = fixOrientation().scaleTo(size: CGSize(width: h * self.size.width / self.size.height, height: h))
+                return scaleImage
+            } else {
+                return fixOrientation()
+            }
+        }
+    }
+
+    // MARK: 3.2、按宽高比系数：等比缩放
+    /// 按宽高比系数：等比缩放
+    /// - Parameter scale: 要缩放的 宽高比 系数
+    /// - Returns: 等比缩放 后的图片
+    func scaleTo(scale: CGFloat) -> UIImage? {
+        let w = self.size.width
+        let h = self.size.height
+        let scaledW = w * scale
+        let scaledH = h * scale
+        UIGraphicsBeginImageContext(size)
+        self.draw(in: CGRect(x: 0, y: 0, width: scaledW, height: scaledH))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage;
+    }
+
+    // MARK: 3.3、按指定尺寸等比缩放
+    /// 按指定尺寸等比缩放
+    /// - Parameter size: 要缩放的尺寸
+    /// - Returns: 缩放后的图片
+    func scaleTo(size: CGSize) -> UIImage? {
+        if self.cgImage == nil { return nil }
+        var w = CGFloat(self.cgImage!.width)
+        var h = CGFloat(self.cgImage!.height)
+        let verticalRadio = size.height / h
+        let horizontalRadio = size.width / w
+        var radio: CGFloat = 1
+        if verticalRadio > 1 && horizontalRadio > 1 {
+            radio = verticalRadio > horizontalRadio ? horizontalRadio : verticalRadio
+        } else {
+            radio = verticalRadio < horizontalRadio ? verticalRadio : horizontalRadio
+        }
+        w = w * radio;
+        h = h * radio;
+        let xPos = (size.width - w) / 2;
+        let yPos = (size.height - h) / 2;
+        UIGraphicsBeginImageContext(size);
+        draw(in: CGRect(x: xPos, y: yPos, width: w, height: h))
+        let scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return scaledImage;
+    }
+
+    // MARK: 3.4、图片中间 1*1 拉伸——如气泡一般
+    /// 图片中间1*1拉伸——如气泡一般
+    /// - Returns: 拉伸后的图片
+    func strechAsBubble() -> UIImage {
+        let top = self.size.height * 0.5;
+        let left = self.size.width * 0.5;
+        let bottom = self.size.height * 0.5;
+        let right = self.size.width * 0.5;
+        let edgeInsets = UIEdgeInsets(top: top, left: left, bottom: bottom, right: right);
+        // 拉伸
+        return self.resizableImage(withCapInsets: edgeInsets, resizingMode: .stretch)
+    }
+
+    // MARK: 3.5、调整图像方向 避免图像有旋转
+    /// 调整图像方向 避免图像有旋转
+    /// - Returns: 返正常的图片
+    func fixOrientation() -> UIImage {
+        if imageOrientation == .up {
+            return self
+        }
+        var transform: CGAffineTransform = CGAffineTransform.identity
+        switch imageOrientation {
+        case .down, .downMirrored:
+            transform = transform.translatedBy(x: size.width, y: size.height)
+            transform = transform.rotated(by: .pi)
+        case .left, .leftMirrored:
+            transform = transform.translatedBy(x: size.width, y: 0)
+            transform = transform.rotated(by: .pi / 2)
+        case .right, .rightMirrored:
+            transform = transform.translatedBy(x: 0, y: size.height)
+            transform = transform.rotated(by: -.pi / 2)
+        default:
+            break
+        }
+        switch imageOrientation {
+        case .upMirrored, .downMirrored:
+            transform.translatedBy(x: size.width, y: 0)
+            transform.scaledBy(x: -1, y: 1)
+        case .leftMirrored, .rightMirrored:
+            transform.translatedBy(x: size.height, y: 0)
+            transform.scaledBy(x: -1, y: 1)
+        default:
+            break
+        }
+        let ctx: CGContext = CGContext(data: nil, width: Int(size.width), height: Int(size.height), bitsPerComponent: (self.cgImage?.bitsPerComponent)!, bytesPerRow: 0, space: (self.cgImage?.colorSpace)!, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+        ctx.concatenate(transform)
+        switch imageOrientation {
+        case .left, .leftMirrored, .right, .rightMirrored:
+            ctx.draw(self.cgImage!, in: CGRect(x: 0, y: 0, width: size.height, height: size.width))
+        default:
+            ctx.draw(self.cgImage!, in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        }
+        let cgImage: CGImage = ctx.makeImage()!
+        return UIImage(cgImage: cgImage)
+    }
+}
+
+// MARK:- 四、UIImage 压缩相关
+public extension UIImage {
+
+    // MARK: 4.1、压缩图片
+    /// 压缩图片
+    /// - Parameter mode: 压缩模式
+    /// - Returns: 压缩后Data
+    func compress(mode: CompressionMode = .medium) -> Data? {
+        return resizeIO(resizeSize: mode.resize(size))?.compressDataSize(maxSize: mode.maxDataSize)
+    }
+
+    // MARK: 4.2、异步图片压缩
+    /// 异步图片压缩
+    /// - Parameters:
+    ///   - mode: 压缩模式
+    ///   - queue: 压缩队列
+    ///   - complete: 完成回调(压缩后Data, 调整后分辨率)
+    func asyncCompress(mode: CompressionMode = .medium, queue: DispatchQueue = DispatchQueue.global(), complete:@escaping (Data?, CGSize) -> Void) {
+        queue.async {
+            let data = self.resizeIO(resizeSize: mode.resize(self.size))?.compressDataSize(maxSize: mode.maxDataSize)
+            DispatchQueue.main.async {
+                complete(data, mode.resize(self.size))
+            }
+       }
+    }
+
+    // MARK: 4.3、压缩图片质量
+    /// 压缩图片质量
+    /// - Parameter maxSize: 最大数据大小
+    /// - Returns: 压缩后数据
+    func compressDataSize(maxSize: Int = 1024 * 1024 * 2) -> Data? {
+        let maxSize = maxSize
+        var quality: CGFloat = 0.8
+        var data = self.jpegData(compressionQuality: quality)
+        var dataCount = data?.count ?? 0
+
+        while (data?.count ?? 0) > maxSize {
+            if quality <= 0.6 {
+                break
+            }
+            quality  = quality - 0.05
+            data = self.jpegData(compressionQuality: quality)
+            if (data?.count ?? 0) <= dataCount {
+                break
+            }
+            dataCount = data?.count ?? 0
+        }
+        return data
+    }
+
+    // MARK: 4.4、ImageIO 方式调整图片大小 性能很好
+    /// ImageIO 方式调整图片大小 性能很好
+    /// - Parameter resizeSize: 图片调整Size
+    /// - Returns: 调整后图片
+    func resizeIO(resizeSize: CGSize) -> UIImage? {
+        if size == resizeSize {
+            return self
+        }
+        guard let imageData = pngData() else { return nil }
+        guard let imageSource = CGImageSourceCreateWithData(imageData as CFData, nil) else { return nil }
+
+        let maxPixelSize = max(size.width, size.height)
+        let options = [kCGImageSourceCreateThumbnailWithTransform: true,
+                   kCGImageSourceCreateThumbnailFromImageIfAbsent: true,
+                   kCGImageSourceThumbnailMaxPixelSize: maxPixelSize]  as CFDictionary
+
+        let resizedImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options).flatMap{
+            UIImage(cgImage: $0)
+        }
+
+        return resizedImage
+    }
+
+    // MARK: 4.5、CoreGraphics 方式调整图片大小 性能很好
+    /// CoreGraphics 方式调整图片大小 性能很好
+    /// - Parameter resizeSize: 图片调整Size
+    /// - Returns: 调整后图片
+    func resizeCG(resizeSize: CGSize) -> UIImage? {
+        if size == resizeSize {
+            return self
+        }
+        guard  let cgImage = self.cgImage else { return nil }
+        guard  let colorSpace = cgImage.colorSpace else { return nil }
+        guard let context = CGContext(data: nil,
+                                  width: Int(resizeSize.width),
+                                  height: Int(resizeSize.height),
+                                  bitsPerComponent: cgImage.bitsPerComponent,
+                                  bytesPerRow: cgImage.bytesPerRow,
+                                  space: colorSpace,
+                                  bitmapInfo: cgImage.bitmapInfo.rawValue) else { return nil }
+        context.interpolationQuality = .high
+        context.draw(cgImage, in: CGRect(origin: .zero, size: resizeSize))
+        let resizedImage = context.makeImage().flatMap {
+            UIImage(cgImage: $0)
+        }
+        return resizedImage
+    }
+}
+
+// MARK: 压缩模式
+public enum CompressionMode {
+    /// 分辨率规则
+    private static let resolutionRule: (min: CGFloat, max: CGFloat, low: CGFloat, default: CGFloat, high: CGFloat) = (10, 4096, 512, 1024, 2048)
+    /// 数据大小规则
+    private static let  dataSizeRule: (min: Int, max: Int, low: Int, default: Int, high: Int) = (1024 * 10, 1024 * 1024 * 20, 1024 * 512, 1024 * 1024 * 2, 1024 * 1024 * 10)
+    // 低质量
+    case low
+    // 中等质量 默认
+    case medium
+    // 高质量
+    case high
+    // 自定义(最大分辨率, 最大输出数据大小)
+    case other(CGFloat, Int)
+
+    fileprivate var maxDataSize: Int {
+        switch self {
+        case .low:
+            return CompressionMode.dataSizeRule.low
+        case .medium:
+            return CompressionMode.dataSizeRule.default
+        case .high:
+            return CompressionMode.dataSizeRule.high
+        case .other(_, let dataSize):
+            if dataSize < CompressionMode.dataSizeRule.min {
+                return CompressionMode.dataSizeRule.default
+            }
+            if dataSize > CompressionMode.dataSizeRule.max {
+                return CompressionMode.dataSizeRule.max
+            }
+            return dataSize
+        }
+    }
+
+    fileprivate func resize(_ size: CGSize) -> CGSize {
+        if size.width < CompressionMode.resolutionRule.min || size.height < CompressionMode.resolutionRule.min {
+            return size
+        }
+        let maxResolution = maxSize
+        let aspectRatio = max(size.width, size.height) / maxResolution
+        if aspectRatio <= 1.0 {
+            return size
+        } else {
+            let resizeWidth = size.width / aspectRatio
+            let resizeHeighth = size.height / aspectRatio
+            if resizeHeighth < CompressionMode.resolutionRule.min || resizeWidth < CompressionMode.resolutionRule.min {
+                return size
+            } else {
+                return CGSize.init(width: resizeWidth, height: resizeHeighth)
+            }
+        }
+    }
+
+    fileprivate var maxSize: CGFloat {
+        switch self {
+        case .low:
+            return CompressionMode.resolutionRule.low
+        case .medium:
+            return CompressionMode.resolutionRule.default
+        case .high:
+            return CompressionMode.resolutionRule.high
+        case .other(let size, _):
+            if size < CompressionMode.resolutionRule.min {
+                return CompressionMode.resolutionRule.default
+            }
+            if size > CompressionMode.resolutionRule.max {
+                return CompressionMode.resolutionRule.max
+            }
+            return size
+        }
     }
 }

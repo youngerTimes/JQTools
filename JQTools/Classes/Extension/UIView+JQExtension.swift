@@ -287,7 +287,7 @@ public extension UIView{
                 print(dict)
             }
             return jsonArr
-        } catch let error as Error {
+        } catch let error {
             print("读取本地数据出现错误!%@",error)
             return []
         }
