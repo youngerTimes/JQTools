@@ -17,12 +17,12 @@ public class JQ_RollNumberLabel: UIView {
     var format:String = ",###.##"
     var rawText = ""
     var items = [String]()
-    var font = UIFont.systemFont(ofSize: 18)
-    var textColor = UIColor.black
+    public var font = UIFont.systemFont(ofSize: 18)
+    public var textColor = UIColor.black
     var digalScrollView = [UIScrollView]()
     var totalScrollView = [UIScrollView]()
     
-    var valueNumber:NSNumber = NSNumber(floatLiteral: 0){
+    public var valueNumber:NSNumber = NSNumber(floatLiteral: 0){
         didSet{
             if self.valueNumber.stringValue.contains(".") {
                 rawText =  financeType ? valueNumber.doubleValue.jq_fuCoin(financeStyle, format: format) : "\(defaultNumber!.doubleValue)"
@@ -39,7 +39,7 @@ public class JQ_RollNumberLabel: UIView {
     ///   - financeType: 是否是金融类型（如果为false，以下的值无需设置）
     ///   - financeStyle: 【金融】类型数值类型
     ///   - format: 【金融】格式
-    convenience init(_ defaultNumber:NSNumber = NSNumber(value: 0),financeType:Bool = false,financeStyle:NumberFormatter.Style = .decimal,format:String = ",###.##") {
+    public convenience init(_ defaultNumber:NSNumber = NSNumber(value: 0),financeType:Bool = false,financeStyle:NumberFormatter.Style = .decimal,format:String = ",###.##") {
         self.init()
         self.defaultNumber = defaultNumber
         self.financeType = financeType

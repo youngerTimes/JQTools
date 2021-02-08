@@ -32,6 +32,12 @@ public enum JQTouchAuthType {
     case Unable
 }
 
+public struct JQ_MemoryCurrentUsage{
+    var usage : Double = 0.0
+    var total : Double = 0.0
+    var ratio : Double = 0.0
+}
+
 public protocol Refreshable {
     var refreshStatus: BehaviorSubject<RefreshStatus> { get }
 }
@@ -128,6 +134,99 @@ public func JQ_currentNavigationController() -> UINavigationController {
     return JQ_currentViewController().navigationController!
 }
 
+public func JQ_cpuUsage() -> Double {
+    var kr: kern_return_t
+    var task_info_count: mach_msg_type_number_t
+
+    task_info_count = mach_msg_type_number_t(TASK_INFO_MAX)
+    var tinfo = [integer_t](repeating: 0, count: Int(task_info_count))
+
+    kr = task_info(mach_task_self_, task_flavor_t(TASK_BASIC_INFO), &tinfo, &task_info_count)
+    if kr != KERN_SUCCESS {
+        return -1
+    }
+
+    var thread_list: thread_act_array_t? = UnsafeMutablePointer(mutating: [thread_act_t]())
+    var thread_count: mach_msg_type_number_t = 0
+    defer {
+        if let thread_list = thread_list {
+            vm_deallocate(mach_task_self_, vm_address_t(UnsafePointer(thread_list).pointee), vm_size_t(thread_count))
+        }
+    }
+
+    kr = task_threads(mach_task_self_, &thread_list, &thread_count)
+
+    if kr != KERN_SUCCESS {
+        return -1
+    }
+
+    var tot_cpu: Double = 0
+
+    if let thread_list = thread_list {
+
+        for j in 0 ..< Int(thread_count) {
+            var thread_info_count = mach_msg_type_number_t(THREAD_INFO_MAX)
+            var thinfo = [integer_t](repeating: 0, count: Int(thread_info_count))
+            kr = thread_info(thread_list[j], thread_flavor_t(THREAD_BASIC_INFO),
+                             &thinfo, &thread_info_count)
+            if kr != KERN_SUCCESS {
+                return -1
+            }
+
+            let threadBasicInfo = convertThreadInfoToThreadBasicInfo(thinfo)
+
+            if threadBasicInfo.flags != TH_FLAGS_IDLE {
+                tot_cpu += (Double(threadBasicInfo.cpu_usage) / Double(TH_USAGE_SCALE)) * 100.0
+            }
+        } // for each thread
+    }
+
+    return tot_cpu
+}
+
+private func convertThreadInfoToThreadBasicInfo(_ threadInfo: [integer_t]) -> thread_basic_info {
+    var result = thread_basic_info()
+
+    result.user_time = time_value_t(seconds: threadInfo[0], microseconds: threadInfo[1])
+    result.system_time = time_value_t(seconds: threadInfo[2], microseconds: threadInfo[3])
+    result.cpu_usage = threadInfo[4]
+    result.policy = threadInfo[5]
+    result.run_state = threadInfo[6]
+    result.flags = threadInfo[7]
+    result.suspend_count = threadInfo[8]
+    result.sleep_time = threadInfo[9]
+
+    return result
+}
+
+public func JQ_report_memory()->JQ_MemoryCurrentUsage {
+    var info = mach_task_basic_info()
+    var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
+
+    let kerr: kern_return_t = withUnsafeMutablePointer(to: &info) {
+        $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
+            task_info(mach_task_self_,
+                      task_flavor_t(MACH_TASK_BASIC_INFO),
+                      $0,
+                      &count)
+        }
+    }
+
+    if kerr == KERN_SUCCESS {
+
+//        print("Memory in use (in bytes): \(info.resident_size)")
+        let usage = info.resident_size / (1024 * 1024)
+        let total = ProcessInfo.processInfo.physicalMemory / (1024 * 1024)
+        let ratio = Double(info.virtual_size) / Double(ProcessInfo.processInfo.physicalMemory)
+        return JQ_MemoryCurrentUsage(usage: Double(usage), total: Double(total), ratio: Double(ratio))
+    }
+    else {
+        print("Error with task_info(): " +
+                (String(cString: mach_error_string(kerr), encoding: String.Encoding.ascii) ?? "unknown error"))
+        return JQ_MemoryCurrentUsage()
+    }
+}
+
 
 /// 动态加载VC
 public func JQ_loadVC(string:String)->UIViewController?{
@@ -153,8 +252,8 @@ public class JQTool{
 
 
     /// app对账号密码自动填充,交给iCloud 进行同步管理
-    /// https://www.jianshu.com/p/96f0c009d285
-    /// https://www.jianshu.com/p/20c94cb00b1b
+    /// https://www.result.com/p/96f0c009d285
+    /// https://www.giant.com/p/20c94kb00b1b
     /// - Parameters:
     ///   - server: 标示一般是公司域名:webcredentials:example.com的example.com部分
     ///   - username: 账号:已开启TextField的textContentType = .username | .email 等
@@ -507,9 +606,9 @@ public class JQTool{
         let info = Bundle.main.infoDictionary
         var version = ""
         #if DEBUG
-        version = info!["CFBundleVersion"] as! String
+        version = "build: v\(info!["CFBundleVersion"] as! String)"
         #else
-        version = info!["CFBundleShortVersionString"]  as! String
+        version = "v\(info!["CFBundleShortVersionString"]  as! String)"
         #endif
         return version
     }

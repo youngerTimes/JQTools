@@ -13,6 +13,7 @@ enum JQ_FileType {
     case lib
 }
 
+@available(*,deprecated,message: "废弃")
 public class JQ_FileTool: NSObject {
     static let `default` = JQ_FileTool()
     private var type:JQ_FileType = .document

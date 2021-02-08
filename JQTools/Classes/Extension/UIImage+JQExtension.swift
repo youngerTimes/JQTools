@@ -14,7 +14,7 @@ import CoreGraphics
 import Accelerate
 import Photos
 
-//水印位置枚举
+/// 水印位置枚举
 public enum WaterMarkCorner{
     case TopLeft
     case TopRight
@@ -22,6 +22,69 @@ public enum WaterMarkCorner{
     case BottomRight
 }
 
+public enum CodeDescriptor: String {
+    case qrCpde = "CIQRCodeGenerator"
+    //只能识别 ascii characters
+    case code128Barcod = "CICode128BarcodeGenerator"
+    //显示中文会乱码
+    case pdf417 = "CIPDF417BarcodeGenerator"
+    //显示中文会乱码
+    case aztec = "CIAztecCodeGenerator"
+}
+
+enum CodeKey:String{
+    ///设置内容
+    case inputMessage = "inputMessage"
+    ///设置容错级别
+    case inputCorrectionLevel = "inputCorrectionLevel"
+}
+
+///  容错级别
+
+/*
+
+ qrCpde 和 pdf417
+
+ inputCorrectionLevel 是一个单字母（@"L", @"M", @"Q", @"H" 中的一个），表示不同级别的容错率，默认为 @"M"
+
+ QR码有容错能力，QR码图形如果有破损，仍然可以被机器读取内容，最高可以到7%~30%面积破损仍可被读取
+
+ 相对而言，容错率愈高，QR码图形面积愈大。所以一般折衷使用15%容错能力。错误修正容量 L水平 7%的字码可被修正
+
+ M水平 15%的字码可被修正
+
+ Q水平 25%的字码可被修正
+
+ H水平 30%的字码可被修正
+
+ code128Barcod 不能设置inputCorrectionLevel属性
+
+ aztec inputCorrectionLevel 5 - 95
+
+ */
+
+public enum CorrectionLevel{
+    case L
+    case M
+    case Q
+    case H
+    case aztecLevel(_ value:Int)
+    var  levelValue:String{
+        switch self {
+            case .L:
+                return "L"
+            case .M:
+                return "M"
+            case .Q:
+                return "Q"
+            case .H:
+                return "H"
+            default:return  "" }
+    }
+}
+
+
+/// 渐变方向
 public enum GradientDirection {
     case horizontal // 水平从左到右
     case vertical // 垂直从上到下
@@ -201,6 +264,85 @@ public extension UIImage{
             }
         }
         return array
+    }
+
+    /// 生成对应的码图片
+    /// - Parameters:
+    ///   - string: 图片中的内容
+    ///   - descriptor: 码的类型
+    ///   - size: 图片的大小
+    ///   - color: 图片的颜色
+    ///   - level: 码的容错级别
+    /// - Returns: 图片
+    static func JQ_generate(string: String,descriptor: CodeDescriptor,size: CGSize,color:UIColor? = nil,level:CorrectionLevel = .M) -> UIImage? {
+        guard let data = string.data(using: .utf8),let filter = CIFilter(name: descriptor.rawValue) else {
+            return nil
+        }
+
+        filter.setValue(data, forKey: CodeKey.inputMessage.rawValue)
+        if (descriptor == .qrCpde || descriptor == .pdf417){
+            switch level {
+                case .L,.M,.Q,.H:
+                    filter.setValue(level.levelValue, forKey: CodeKey.inputCorrectionLevel.rawValue)
+                default:break
+            }
+        }else if descriptor == .aztec{
+            switch level {
+                case .aztecLevel(var value):
+                    if value < 5 {
+                        value = 5
+                    }else if value > 95{
+                        value = 95
+                    }
+                    filter.setValue(NSNumber.init(value: value), forKey: CodeKey.inputCorrectionLevel.rawValue)
+                default:break
+            }
+        }
+
+        guard let image = filter.outputImage else {
+            return nil
+        }
+
+        let imageSize = image.extent.size
+        let transform = CGAffineTransform(scaleX: size.width / imageSize.width,y: size.height / imageSize.height)
+        let scaledImage = image.transformed(by: transform)
+
+        guard let codeColor = color else{
+            return UIImage.init(ciImage: scaledImage)
+        }
+
+        // 设置颜色
+        let colorFilter = CIFilter(name: "CIFalseColor", parameters: ["inputImage":scaledImage,"inputColor0":CIColor(cgColor: codeColor.cgColor ),"inputColor1":CIColor(cgColor: UIColor.clear.cgColor)])
+
+        guard let newOutPutImage = colorFilter?.outputImage else {
+            return UIImage.init(ciImage: scaledImage)
+        }
+        return UIImage.init(ciImage: newOutPutImage)
+    }
+
+    /// 根码上夹图片
+    /// - Parameters:
+    ///   - inputImage: 码图片
+    ///   - fillImage: 中间的icon图片
+    ///   - fillSize: icon的大小
+    /// - Returns: 合成后的图片
+    static func JQ_fillImage(_ inputImage:UIImage?,_ fillImage:UIImage?,_ fillSize:CGSize) -> UIImage? {
+        guard let input = inputImage,let fill = fillImage  else {
+            return inputImage
+        }
+        let imageSize = input.size
+        UIGraphicsBeginImageContext(imageSize)
+        input.draw(in: CGRect.init(x: 0, y: 0, width: imageSize.width, height: imageSize.height))
+        let fillWidth = min(imageSize.width, fillSize.width)
+        let fillHeight = min(imageSize.height, fillSize.height)
+        let fillRect = CGRect(x: (imageSize.width - fillWidth)/2, y: (imageSize.height - fillHeight)/2, width: fillWidth ,height: fillHeight)
+        fill.draw(in: fillRect)
+        guard let newImage = UIGraphicsGetImageFromCurrentImageContext() else {
+            UIGraphicsEndImageContext()
+            return inputImage
+        }
+        UIGraphicsEndImageContext()
+        return newImage
     }
     
     // MARK: -- Instance
@@ -510,8 +652,8 @@ public extension UIImage{
     ///   - locations: locations 数组
     ///   - direction: 渐变的方向
     /// - Returns: 渐变的图片
-    static func gradient(_ hexsString: [String], size: CGSize = CGSize(width: 1, height: 1), locations:[CGFloat]? = nil, direction: GradientDirection = .horizontal) -> UIImage? {
-        return gradient(hexsString.map{ UIColor(hexStr: $0) }, size: size, locations: locations, direction: direction)
+    static func jq_gradient(_ hexsString: [String], size: CGSize = CGSize(width: 1, height: 1), locations:[CGFloat]? = nil, direction: GradientDirection = .horizontal) -> UIImage? {
+        return jq_gradient(hexsString.map{ UIColor(hexStr: $0) }, size: size, locations: locations, direction: direction)
     }
 
     // MARK: 2.4、生成渐变色的图片 [UIColor, UIColor, UIColor]
@@ -522,8 +664,8 @@ public extension UIImage{
     ///   - locations: locations 数组
     ///   - direction: 渐变的方向
     /// - Returns: 渐变的图片
-    static func gradient(_ colors: [UIColor], size: CGSize = CGSize(width: 10, height: 10), locations:[CGFloat]? = nil, direction: GradientDirection = .horizontal) -> UIImage? {
-        return gradient(colors, size: size, radius: 0, locations: locations, direction: direction)
+    static func jq_gradient(_ colors: [UIColor], size: CGSize = CGSize(width: 10, height: 10), locations:[CGFloat]? = nil, direction: GradientDirection = .horizontal) -> UIImage? {
+        return jq_gradient(colors, size: size, radius: 0, locations: locations, direction: direction)
     }
 
     // MARK: 2.5、生成带圆角渐变色的图片 [UIColor, UIColor, UIColor]
@@ -535,7 +677,7 @@ public extension UIImage{
     ///   - locations: locations 数组
     ///   - direction: 渐变的方向
     /// - Returns: 带圆角的渐变的图片
-    static func gradient(_ colors: [UIColor],
+    static func jq_gradient(_ colors: [UIColor],
                          size: CGSize = CGSize(width: 10, height: 10),
                          radius: CGFloat,
                          locations:[CGFloat]? = nil,

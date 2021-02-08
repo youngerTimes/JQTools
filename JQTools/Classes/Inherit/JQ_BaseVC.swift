@@ -23,7 +23,7 @@ public protocol JQ_ColorAppearanceProtocol:NSObject{
 
 /// 基础控件
 
-open class JQ_BaseVC: UIViewController{
+open class JQ_BaseVC: JQ_ListenVC{
 
     private(set) public var currentStyle:JQ_AppearanceStyle = .none
 

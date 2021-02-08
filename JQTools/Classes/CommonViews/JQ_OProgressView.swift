@@ -8,7 +8,7 @@
 import UIKit
 
 ///进度条
-class JQ_OProgressView: UIView {
+public class JQ_OProgressView: UIView {
 
     //进度槽
     private let trackLayer = CAShapeLayer()
@@ -45,7 +45,7 @@ class JQ_OProgressView: UIView {
     ///   - lineWidth: 线宽
     ///   - trackColor: 底色颜色
     ///   - progressColor: 进度条颜色
-    convenience init(lineWidth:CGFloat,trackColor:UIColor,progressColor:UIColor){
+    public convenience init(lineWidth:CGFloat,trackColor:UIColor,progressColor:UIColor){
         self.init(frame:CGRect.zero)
         self.lineWidth = lineWidth
         self.trackColor = trackColor
@@ -53,7 +53,7 @@ class JQ_OProgressView: UIView {
         layoutIfNeeded()
     }
     
-    override func draw(_ rect: CGRect) {
+    public override func draw(_ rect: CGRect) {
         //获取整个进度条圆圈路径
         
         if path.isEmpty{
@@ -83,12 +83,12 @@ class JQ_OProgressView: UIView {
     }
     
     //设置进度（可以设置是否播放动画）
-    func setProgress(_ pro: Int,animated anim: Bool) {
+    public func setProgress(_ pro: Int,animated anim: Bool) {
         setProgress(pro, animated: anim, withDuration: 0.55)
     }
     
     //设置进度（可以设置是否播放动画，以及动画时间）
-    func setProgress(_ pro: Int,animated anim: Bool, withDuration duration: Double) {
+    public func setProgress(_ pro: Int,animated anim: Bool, withDuration duration: Double) {
         progress = pro
         //进度条动画
         CATransaction.begin()
