@@ -48,7 +48,8 @@ public extension UITextView{
       }
 
     /// 转换特殊符号标签字段并输出富文本
-    func jq_resolveHashTags(){
+    /// 可以响应文本框链接点击
+    func jq_resolveHashTags(_ chars:String = "@#"){
         let nsText:NSString = self.text! as NSString
         // 使用默认设置的字体样式
         let attrs = [NSAttributedString.Key.font : self.font!]
@@ -58,7 +59,7 @@ public extension UITextView{
         //用来记录遍历字符串的索引位置
         var bookmark = 0
         //用于拆分的特殊符号
-        let charactersSet = CharacterSet(charactersIn: "@#")
+        let charactersSet = CharacterSet(charactersIn: chars)
 
         //先将字符串按空格和分隔符拆分
         let sentences:[String] = self.text.components(

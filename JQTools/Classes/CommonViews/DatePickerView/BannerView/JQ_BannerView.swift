@@ -82,8 +82,7 @@ public class JQ_BannerView: UIView,UICollectionViewDataSource,UICollectionViewDe
         }
         
         pageControl = JQ_BannerPageControl()
-        pageControl?.numberOfPages = 5
-//        pageControl?.currentPage = 0
+        pageControl?.currentPage = 0
         addSubview(pageControl!)
         pageControl!.snp.makeConstraints({ (make) in
             make.centerX.equalToSuperview()

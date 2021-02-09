@@ -166,6 +166,7 @@ public class JQ_AnisTools:NSObject{
         basic.duration = duration
         basic.repeatCount = repeatCount
         basic.isRemovedOnCompletion = false
+        basic.autoreverses = true
         basic.fillMode = .forwards
         basic.keyPath = JQ_AnisTools.BasicAni_Scale
         return basic
@@ -183,6 +184,7 @@ public class JQ_AnisTools:NSObject{
         basic.duration = duration
         basic.repeatCount = repeatCount
         basic.isRemovedOnCompletion = false
+        basic.autoreverses = true
         basic.fillMode = .forwards
         basic.keyPath = JQ_AnisTools.BasicAni_Size
         return basic
@@ -201,6 +203,7 @@ public class JQ_AnisTools:NSObject{
         basic.duration = duration
         basic.repeatCount = repeatCount
         basic.isRemovedOnCompletion = false
+        basic.autoreverses = true
         basic.fillMode = .forwards
         basic.autoreverses = false
         basic.keyPath = JQ_AnisTools.BasicAni_Position
@@ -217,6 +220,7 @@ public class JQ_AnisTools:NSObject{
         keyAni.values = [1.0,0.4,1.0]
         keyAni.duration = duration
         keyAni.repeatCount = repeatCount
+        keyAni.autoreverses = true
         keyAni.keyPath = BasicAni_Alpha
         return keyAni
     }
