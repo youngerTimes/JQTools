@@ -112,6 +112,28 @@ public extension NSLayoutConstraint {
     }
 }
 
+///关联Associate封装
+///```extension Kingfisher where Base: Image {
+///     fileprivate(set) var images: [Image]? {
+///         get {
+///             return objc_getAssociatedObject(base, &imagesKey) as? [Image]
+///         }
+///         set {
+///             objc_setAssociatedObject(base, &imagesKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+///         }
+///     }
+///}
+///```
+///
+public func jq_getAssociatedObject<T>(_ object: Any, _ key: UnsafeRawPointer) -> T? {
+    return objc_getAssociatedObject(object, key) as? T
+}
+
+public func jq_setRetainedAssociatedObject<T>(_ object: Any, _ key: UnsafeRawPointer, _ value: T) {
+    objc_setAssociatedObject(object, key, value, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+}
+
+
 /// 异形屏的安全距离
 @available(*,deprecated,message: "废弃:使用UIDevice的扩展;同名")
 public var jq_safeEdges:UIEdgeInsets{

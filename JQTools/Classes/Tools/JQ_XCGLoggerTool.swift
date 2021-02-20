@@ -7,7 +7,7 @@
 
 import UIKit
 
-#if canImport(XCGLogger)
+#if canImport(XCGLogger) && !os(watchOS)
 import XCGLogger
 
 //https://github.com/DaveWoodCom/XCGLogger

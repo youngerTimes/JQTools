@@ -15,14 +15,19 @@ open class JQ_ListenVC: UIViewController {
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         print("--->消失:\(self.jq_identity)")
+        DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+            NotificationCenter.default.post(name: MonitorUnReleaseNoti, object: nil)
+        }
     }
 
     deinit {
         print("--->销毁:\(self.jq_identity)")
+        montiorTool.currentVC.remove(self.jq_identity)
     }
     open override func viewDidLoad() {
         super.viewDidLoad()
         print("--->出现:\(self.jq_identity)")
+        montiorTool.currentVC.insert(self.jq_identity)
 
     }
 }

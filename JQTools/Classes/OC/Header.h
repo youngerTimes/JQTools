@@ -14,6 +14,7 @@
 #import "KeyChainStore.h"
 #import "ZoomImageView.h"
 #import "NSObject+StoreValue.h"
+#import "NSObject+NetworkStream.h"
 #import "UIBarButtonItem+Util.h"
 #import "UITabBar+Badge.h"
 #import "UIImage+Util.h"

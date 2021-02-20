@@ -13,7 +13,11 @@ private enum MonitorAdsorbEnum:Int{
 }
 
 /// 监视器
+public var MonitorUnReleaseNoti = Notification.Name("MonitorUnReleaseNoti")
+
 public class JQ_MonitorTool:NSObject{
+
+    public var currentVC = Set<String>()
 
     private lazy var monitorView:JQ_MonitorView = {
         let monitorV = JQ_MonitorView.jq_loadToolNibView()
@@ -26,6 +30,18 @@ public class JQ_MonitorTool:NSObject{
 
     public static let `default`:JQ_MonitorTool = {
         let center = JQ_MonitorTool()
+        NotificationCenter.default.rx.notification(MonitorUnReleaseNoti).subscribe { (_) in
+            center.monitorView.unInitNumL.text = "\(center.currentVC.count)"
+            if center.currentVC.count > 0{
+                center.monitorView.unInitNumL.textColor = UIColor.red
+            }else{
+                center.monitorView.unInitNumL.textColor = UIColor(hexStr: "#545554")
+            }
+            print("未释放：\(center.currentVC)")
+            if center.needAssert{
+                assert(center.currentVC.count == 0, "未释放：\(center.currentVC)")
+            }
+        }.disposed(by: JQ_disposeBag)
         return center
     }()
 
@@ -43,10 +59,19 @@ public class JQ_MonitorTool:NSObject{
     private var count: UInt = 0
     private var lastTime: TimeInterval = 0
 
-    private var timer:Timer?
+    private var fpsTimer:Timer?
+    private var streamTimer:Timer?
+
+    private var initMemory:Double = 0
+    private var needAssert = false
 
     //开始
-    public func start(){
+
+    /// 开始监控
+    /// - Parameter needAssert: 是否需要强制断言，如果出现未释放的控制器，强制断言将中断APP
+    public func start(_ needAssert:Bool = false){
+        self.needAssert = needAssert
+
         //加载小球
         if let window = UIApplication.shared.keyWindow{
             window.addSubview(monitorView)
@@ -56,14 +81,22 @@ public class JQ_MonitorTool:NSObject{
             tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
             monitorView.addGestureRecognizer(tapGesture!)
 
+            initMemory = JQ_report_memory().usage
+
             unowned let weakSelf = self
-            timer = Timer(timeInterval: 1.0, repeats: true) { (timer) in
+            fpsTimer = Timer(timeInterval: 1.0, repeats: true) { (timer) in
                 autoreleasepool{
                     weakSelf.monitorView.CPUPercentL.text = String(format: "%.1lf",JQ_cpuUsage()) + "%"
-                    weakSelf.monitorView.memoryPercentL.text =  String(format: "%.1lf",JQ_report_memory().usage) + "M"
+                    weakSelf.monitorView.memoryPercentL.text =  String(format: "%.1lf",JQ_report_memory().usage - weakSelf.initMemory) + "M"
+
+                    let i = NSObject.convertStringWithbyte(Int(NSObject.getNetWorkIBytesPerSecond()))
+                    let o = NSObject.convertStringWithbyte(Int(NSObject.getNetWorkOBytesPerSecond()))
+
+                    weakSelf.monitorView.upStreamPercentL.text = o
+                    weakSelf.monitorView.downStreamPercentL.text = i
                 }
             }
-            RunLoop.current.add(timer!, forMode: .common)
+            RunLoop.current.add(fpsTimer!, forMode: .common)
 
             link = CADisplayLink(target: self, selector: #selector(tick(_:)))
             ///main runloop 添加到
@@ -73,11 +106,13 @@ public class JQ_MonitorTool:NSObject{
 
     public func stop(){
         link?.invalidate()
-        timer?.invalidate()
+        fpsTimer?.invalidate()
     }
 
     ///滴答滴答
     @objc fileprivate func tick(_ link: CADisplayLink) {
+
+        //FPS
         if lastTime == 0 {
             lastTime = link.timestamp
             return
