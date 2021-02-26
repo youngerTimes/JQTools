@@ -574,6 +574,27 @@ public extension UIImage{
         }
         return nil
     }
+
+
+    /// 等比缩放
+    /// - Parameter scaleSize: 缩放率：0-∞
+    /// - Returns: 返回图片
+    func jq_scaleImage(scaleSize:CGFloat)->UIImage {
+        let reSize = CGSize(width: self.size.width * abs(scaleSize), height: self.size.height * abs(scaleSize))
+        return jq_reSizeImage(reSize: reSize)
+    }
+
+    /// 根据图片大小进行重设图片
+    /// - Parameter reSize: 图片大小
+    /// - Returns: 返回图片
+    private func jq_reSizeImage(reSize:CGSize)->UIImage {
+        //UIGraphicsBeginImageContext(reSize);
+        UIGraphicsBeginImageContextWithOptions(reSize,false,UIScreen.main.scale);
+        self.draw(in: CGRect(x: 0, y: 0, width: reSize.width, height: reSize.height))
+        let reSizeImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return reSizeImage;
+    }
     
     
     /// 更改图片颜色
@@ -699,6 +720,31 @@ public extension UIImage{
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
+    }
+
+    /// 创建条形码
+    ///
+    /// - Parameters:
+    ///   - messgae: 信息
+    ///   - width: 宽度
+    ///   - height: 高度
+    /// - Returns: 条形码
+    func jq_generateBarCode(messgae:NSString,width:CGFloat,height:CGFloat) -> UIImage {
+        var returnImage:UIImage?
+        if (messgae.length > 0 && width > 0 && height > 0){
+            let inputData:NSData? = messgae.data(using: String.Encoding.utf8.rawValue)! as NSData
+            // CICode128BarcodeGenerator
+            let filter = CIFilter.init(name: "CICode128BarcodeGenerator")!
+            filter.setValue(inputData, forKey: "inputMessage")
+            var ciImage = filter.outputImage!
+            let scaleX = width/ciImage.extent.size.width
+            let scaleY = height/ciImage.extent.size.height
+            ciImage = ciImage.transformed(by: CGAffineTransform.init(scaleX: scaleX, y: scaleY))
+            returnImage = UIImage.init(ciImage: ciImage)
+        }else {
+            returnImage = nil
+        }
+        return returnImage ?? UIImage()
     }
     
     //重设颜色

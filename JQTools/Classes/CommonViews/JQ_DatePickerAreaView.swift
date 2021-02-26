@@ -7,7 +7,6 @@
 
 import UIKit
 
-#if canImport(RxSwift) && canImport(RxCocoa)
 
 public class JQ_DatePickerAreaView: UIView,JQNibView{
     
@@ -181,4 +180,3 @@ extension JQ_DatePickerAreaView:UIPickerViewDataSource{
     }
     
 }
-#endif

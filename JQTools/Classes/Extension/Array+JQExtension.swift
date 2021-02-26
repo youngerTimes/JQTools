@@ -6,24 +6,36 @@
 //
 
 import Foundation
-extension Array{
+public extension Array{
     
     ///unicode编码问题
-    public var jq_unicodeDescription:String{
+    var jq_unicodeDescription:String{
         return self.description.jq_stringByReplaceUnicode
     }
     
     /// 从数组中返回一个随机元素
-    public var jq_sample: Element? {
+    var jq_sample: Element? {
         //如果数组为空，则返回nil
         guard count > 0 else { return nil }
         let randomIndex = Int(arc4random_uniform(UInt32(count)))
         return self[randomIndex]
     }
 
+    /// 数组去重
+    func jq_filterDuplicates<E: Equatable>(_ filter: (Element) -> E) -> [Element] {
+        var result = [Element]()
+        for value in self {
+            let key = filter(value)
+            if !result.map({filter($0)}).contains(key) {
+                result.append(value)
+            }
+        }
+        return result
+    }
+
 
     /// 将数组转化为字符串
-    public var jq_toJson:String{
+    var jq_toJson:String{
         let data = try? JSONSerialization.data(withJSONObject: self, options: [])
         let result = String(data: data!, encoding: String.Encoding.utf8)
         return (result! as NSString).replacingOccurrences(of: "\\", with: "")
@@ -34,7 +46,7 @@ extension Array{
     /// - Parameters:
     ///   - size: 希望返回的元素个数
     ///   - noRepeat: 返回的元素是否不可以重复（默认为false，可以重复）
-    public func jq_sample(size: Int, noRepeat: Bool = false) -> [Element]? {
+    func jq_sample(size: Int, noRepeat: Bool = false) -> [Element]? {
         //如果数组为空，则返回nil
         guard !isEmpty else { return nil }
         
