@@ -12,6 +12,7 @@ public extension UIView{
         case horizontal  //水平抖动
         case vertical  //垂直抖动
     }
+    // MARK: -- Property
     
     var jq_identity:String{
         get{return "\(type(of: self))"}
@@ -79,7 +80,8 @@ public extension UIView{
     var jq_bottom: CGFloat {
         get {return frame.maxY}
     }
-    
+
+    // MARK: -- Function
     
     //返回该view所在VC
     func jq_firstViewController() -> UIViewController? {
@@ -141,6 +143,7 @@ public extension UIView{
         maskLayer.frame = self.bounds
         maskLayer.path = maskPath.cgPath
         maskLayer.masksToBounds = false
+        maskLayer.shouldRasterize = true
         self.layer.mask = maskLayer
     }
     ///切部分圆角(Xib)
@@ -149,6 +152,7 @@ public extension UIView{
         let maskLayer = CAShapeLayer()
         maskLayer.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         maskLayer.path = maskPath.cgPath
+        maskLayer.shouldRasterize = true
         self.layer.mask = maskLayer
     }
     
@@ -201,7 +205,6 @@ public extension UIView{
     
     //【截图】UIView->UIImage
     @discardableResult
-    @available(*,deprecated,message: "废弃")
     func jq_captureToImage(_ saveToAlbum:Bool = false) -> UIImage {
         var imageRet = UIImage()
         UIGraphicsBeginImageContextWithOptions(self.frame.size, true, UIScreen.main.scale)
@@ -307,7 +310,8 @@ public extension UIView{
         self.layer.shouldRasterize = true
         self.layer.rasterizationScale = UIScreen.main.scale
     }
-    
+
+    // MARK: -- static Function
     /// 添加阴影（父视图）
     static func jq_addRoundedOrShadow(frame: CGRect,radius:CGFloat, shadowOpacity:CGFloat, shadowColor:UIColor) -> CALayer {
         let subLayer = CALayer()

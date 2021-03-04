@@ -7,7 +7,7 @@
 
 import Foundation
 public extension Array{
-    
+
     ///unicode编码问题
     var jq_unicodeDescription:String{
         return self.description.jq_stringByReplaceUnicode
@@ -74,5 +74,53 @@ public extension Array{
         }
         
         return sampleElements
+    }
+}
+
+/// 安全操作
+public extension Array {
+    /// 安全脚标：防止越界
+    subscript(jq_safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+
+
+    /// 安全-插入
+    /// - Parameters:
+    ///   - element: 插入元素
+    ///   - index: 脚标
+    /// - Returns: 返回插入的状态
+    @discardableResult
+    @inlinable mutating func safe_JQ_Insert(_ element:Element,at index:Int) ->Bool{
+        if index >= count {
+            print("警告：数组越界")
+            return false
+        }else{
+            insert(element, at: index)
+            return true
+        }
+    }
+
+    /// 安全-插入
+    /// - Parameters:
+    ///   - newElements: 插入的 Collection
+    ///   - i: 脚标
+    @inlinable mutating func safe_JQ_Insert<S>(contentsOf newElements: S, at i: Int) where S : Collection, Self.Element == S.Element {
+        if i >= count {
+            print("警告：数组越界")
+        }else{
+            insert(contentsOf: newElements, at: i)
+        }
+    }
+
+
+    /// 安全-移除
+    /// - Parameter i: 脚标
+    @inlinable mutating func safe_JQ_Remove(at i:Int){
+        if i >= count {
+            print("警告：数组越界")
+        }else{
+            remove(at: i)
+        }
     }
 }
