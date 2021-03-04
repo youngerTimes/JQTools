@@ -506,6 +506,21 @@ public extension FileManager {
         return jq_covertUInt64ToString(with: fileSize)
     }
 
+    /// 是否是文件夹
+    /// - Parameter path: 路径
+    /// - Returns: 返回判断状态
+    static func jq_isDirectory(path:String)->Bool{
+        do {
+            let attribute = try jq_fileManager.attributesOfItem(atPath: path)
+            if let type = attribute[.type] as? FileAttributeType,type == .typeDirectory {
+                return true
+            }
+            return false
+        } catch {
+            return false
+        }
+    }
+
     // MARK: 2.21、获取(文件夹/文件)属性集合
     ///  获取(文件夹/文件)属性集合
     /// - Parameter path: (文件夹/文件)路径

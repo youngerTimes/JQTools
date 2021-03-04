@@ -7,7 +7,6 @@
 //
 
 import UIKit
-//#import <QuickLook/QuickLook.h>
 import QuickLook
 
 public class JQ_OpenFile: NSObject,QLPreviewControllerDelegate,QLPreviewControllerDataSource{
@@ -19,9 +18,9 @@ public class JQ_OpenFile: NSObject,QLPreviewControllerDelegate,QLPreviewControll
         return datePathStr! as NSURL
     }
     
-    var datePathStr:URL!
+    public var datePathStr:URL!
     
-     func show(){
+     public func show(){
         let myQlPreVC = QLPreviewController()
         myQlPreVC.delegate = self
         myQlPreVC.dataSource = self
