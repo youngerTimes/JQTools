@@ -6,56 +6,56 @@
 //
 
 import Foundation
-extension CALayer{
-    public var jq_identity:String{
-          get{return "\(type(of: self))"}
-      }
-      
-      public var jq_x:CGFloat{
-          get{return self.frame.origin.x}
-          set(value){self.frame.origin.x = value}
-      }
-      
-      public var jq_y:CGFloat{
-          get{return self.frame.origin.y}
-          set(value){self.frame.origin.y = value}
-      }
-      
-      public var jq_height:CGFloat{
-          get{return self.frame.size.height}
-          set(value){self.frame.size.height = value}
-      }
-      
-      public var jq_width:CGFloat{
-          get{return self.frame.size.width}
-          set(value){self.frame.size.width = value}
-      }
-      
-      public var jq_cornerRadius:CGFloat{
-          get{return self.cornerRadius}
-          set(value){self.cornerRadius = value}
-      }
-      
-      public var jq_masksToBounds:Bool{
-          get{return self.masksToBounds}
-          set(value){self.masksToBounds = value}
-      }
-      
-      public var jq_borderWidth:CGFloat{
-          get{return self.borderWidth}
-          set(value){self.borderWidth = value}
-      }
-      
-      public var jq_borderCololr:CGColor?{
-          get{return self.borderColor}
-          set(value){self.borderColor = value}
-      }
-      
-      /// size
-      public var size: CGSize {
-          get {return frame.size}
-          set {frame.size = newValue}
-      }
+public extension CALayer{
+    var jq_identity:String{
+        get{return "\(type(of: self))"}
+    }
+
+    var jq_x:CGFloat{
+        get{return self.frame.origin.x}
+        set(value){self.frame.origin.x = value}
+    }
+
+    var jq_y:CGFloat{
+        get{return self.frame.origin.y}
+        set(value){self.frame.origin.y = value}
+    }
+
+    var jq_height:CGFloat{
+        get{return self.frame.size.height}
+        set(value){self.frame.size.height = value}
+    }
+
+    var jq_width:CGFloat{
+        get{return self.frame.size.width}
+        set(value){self.frame.size.width = value}
+    }
+
+    var jq_cornerRadius:CGFloat{
+        get{return self.cornerRadius}
+        set(value){self.cornerRadius = value}
+    }
+
+    var jq_masksToBounds:Bool{
+        get{return self.masksToBounds}
+        set(value){self.masksToBounds = value}
+    }
+
+    var jq_borderWidth:CGFloat{
+        get{return self.borderWidth}
+        set(value){self.borderWidth = value}
+    }
+
+    var jq_borderCololr:CGColor?{
+        get{return self.borderColor}
+        set(value){self.borderColor = value}
+    }
+
+    /// size
+    var size: CGSize {
+        get {return frame.size}
+        set {frame.size = newValue}
+    }
 }
 
 // MARK:- 二、有关 CABasicAnimation 动画的扩展
@@ -75,11 +75,11 @@ public extension CALayer {
     ///   - removedOnCompletion: 运动后的位置保持不变（layer的最后位置是toValue）
     ///   - option: 动画的时间节奏控制 方式
     func jq_animationMovePoint(to endPoint: CGPoint,
-                            duration: TimeInterval,
-                            delay: TimeInterval = 0,
-                            repeatNumber: Float = 1,
-                            removedOnCompletion: Bool = false,
-                            option: CAMediaTimingFunctionName = .default) {
+                               duration: TimeInterval,
+                               delay: TimeInterval = 0,
+                               repeatNumber: Float = 1,
+                               removedOnCompletion: Bool = false,
+                               option: CAMediaTimingFunctionName = .default) {
         jq_baseBasicAnimation(keyPath: "position", startValue: position, endValue: endPoint, duration: duration, delay: delay, repeatNumber: repeatNumber, removedOnCompletion: removedOnCompletion, option: option)
     }
 
@@ -91,11 +91,11 @@ public extension CALayer {
     ///   - removedOnCompletion: 运动后的位置保持不变（layer的最后位置是toValue）
     ///   - option: 动画的时间节奏控制 方式
     func jq_animationMoveX(moveValue: Any?,
-                        duration: TimeInterval = 2.0,
-                        delay: TimeInterval = 0,
-                        repeatNumber: Float = 1,
-                        removedOnCompletion: Bool = false,
-                        option: CAMediaTimingFunctionName = .default) {
+                           duration: TimeInterval = 2.0,
+                           delay: TimeInterval = 0,
+                           repeatNumber: Float = 1,
+                           removedOnCompletion: Bool = false,
+                           option: CAMediaTimingFunctionName = .default) {
         jq_baseBasicAnimation(keyPath: "transform.translation.x", startValue: position, endValue: moveValue, duration: duration, delay: delay, repeatNumber: repeatNumber, removedOnCompletion: removedOnCompletion, option: option)
     }
 
@@ -107,11 +107,11 @@ public extension CALayer {
     ///   - removedOnCompletion: 运动后的位置保持不变（layer的最后位置是toValue）
     ///   - option: 动画的时间节奏控制 方式
     func jq_animationMoveY(moveValue: Any?,
-                        duration: TimeInterval = 2.0,
-                        delay: TimeInterval = 0,
-                        repeatNumber: Float = 1,
-                        removedOnCompletion: Bool = false,
-                        option: CAMediaTimingFunctionName = .default) {
+                           duration: TimeInterval = 2.0,
+                           delay: TimeInterval = 0,
+                           repeatNumber: Float = 1,
+                           removedOnCompletion: Bool = false,
+                           option: CAMediaTimingFunctionName = .default) {
         jq_baseBasicAnimation(keyPath: "transform.translation.y", startValue: position, endValue: moveValue, duration: duration, delay: delay, repeatNumber: repeatNumber, removedOnCompletion: removedOnCompletion, option: option)
     }
 
@@ -123,11 +123,11 @@ public extension CALayer {
     ///   - removedOnCompletion: 运动后的位置保持不变（layer的最后位置是toValue）
     ///   - option: 动画的时间节奏控制 方式
     func jq_animationCornerRadius(cornerRadius: Any?,
-                               duration: TimeInterval = 2.0,
-                               delay: TimeInterval = 0,
-                               repeatNumber: Float = 1,
-                               removedOnCompletion: Bool = false,
-                               option: CAMediaTimingFunctionName = .default) {
+                                  duration: TimeInterval = 2.0,
+                                  delay: TimeInterval = 0,
+                                  repeatNumber: Float = 1,
+                                  removedOnCompletion: Bool = false,
+                                  option: CAMediaTimingFunctionName = .default) {
         jq_baseBasicAnimation(keyPath: "cornerRadius", startValue: position, endValue: cornerRadius, duration: duration, delay: delay, repeatNumber: repeatNumber, removedOnCompletion: removedOnCompletion, option: option)
     }
 
@@ -139,11 +139,11 @@ public extension CALayer {
     ///   - removedOnCompletion: 运动后的位置保持不变（layer的最后位置是toValue）
     ///   - option: 动画的时间节奏控制 方式
     func jq_animationScale(scaleValue: Any?,
-                        duration: TimeInterval = 2.0,
-                        delay: TimeInterval = 0,
-                        repeatNumber: Float = 1,
-                        removedOnCompletion: Bool = true,
-                        option: CAMediaTimingFunctionName = .default) {
+                           duration: TimeInterval = 2.0,
+                           delay: TimeInterval = 0,
+                           repeatNumber: Float = 1,
+                           removedOnCompletion: Bool = true,
+                           option: CAMediaTimingFunctionName = .default) {
         jq_baseBasicAnimation(keyPath: "transform.scale", startValue: 1, endValue: scaleValue, duration: duration, delay: delay, repeatNumber: repeatNumber, removedOnCompletion: removedOnCompletion, option: option)
     }
 
@@ -155,11 +155,11 @@ public extension CALayer {
     ///   - removedOnCompletion: 运动后的位置保持不变（layer的最后位置是toValue）
     ///   - option: 动画的时间节奏控制 方式
     func jq_animationRotation(rotation: Any?,
-                           duration: TimeInterval = 2.0,
-                           delay: TimeInterval = 0,
-                           repeatNumber: Float = 1,
-                           removedOnCompletion: Bool = true,
-                           option: CAMediaTimingFunctionName = .default) {
+                              duration: TimeInterval = 2.0,
+                              delay: TimeInterval = 0,
+                              repeatNumber: Float = 1,
+                              removedOnCompletion: Bool = true,
+                              option: CAMediaTimingFunctionName = .default) {
         jq_baseBasicAnimation(keyPath: "transform.rotation", startValue: nil, endValue: rotation, duration: duration, delay: delay, repeatNumber: repeatNumber, removedOnCompletion: removedOnCompletion, option: option)
     }
 
@@ -173,13 +173,13 @@ public extension CALayer {
     ///   - removedOnCompletion: 运动后的位置保持不变（layer的最后位置是toValue）
     ///   - option: 动画的时间节奏控制 方式
     func jq_baseBasicAnimation(keyPath: String,
-                            startValue: Any?,
-                            endValue: Any?,
-                            duration: TimeInterval = 2.0,
-                            delay: TimeInterval = 0,
-                            repeatNumber: Float = 1,
-                            removedOnCompletion: Bool = false,
-                            option: CAMediaTimingFunctionName = .default) {
+                               startValue: Any?,
+                               endValue: Any?,
+                               duration: TimeInterval = 2.0,
+                               delay: TimeInterval = 0,
+                               repeatNumber: Float = 1,
+                               removedOnCompletion: Bool = false,
+                               option: CAMediaTimingFunctionName = .default) {
         let translatonAnimation: CABasicAnimation = CABasicAnimation()
         // 几秒后执行
         translatonAnimation.beginTime = CACurrentMediaTime() + delay
@@ -222,12 +222,12 @@ public extension CALayer {
     ///   - removedOnCompletion: 运动后的位置保持不变（layer的最后位置是toValue）
     ///   - option: 动画的时间节奏控制 方式
     func jq_addKeyframeAnimationPosition(values: [Any],
-                                      keyTimes: [NSNumber]?,
-                                      duration: TimeInterval = 2.0,
-                                      delay: TimeInterval = 0,
-                                      repeatNumber: Float = 1,
-                                      removedOnCompletion: Bool = false,
-                                      option: CAMediaTimingFunctionName = .default) {
+                                         keyTimes: [NSNumber]?,
+                                         duration: TimeInterval = 2.0,
+                                         delay: TimeInterval = 0,
+                                         repeatNumber: Float = 1,
+                                         removedOnCompletion: Bool = false,
+                                         option: CAMediaTimingFunctionName = .default) {
         jq_baseKeyframeAnimation(keyPath: "position", values: values, keyTimes: keyTimes, duration: duration, delay: delay, repeatNumber: repeatNumber, path: nil, removedOnCompletion: removedOnCompletion, option: option)
     }
 
@@ -241,12 +241,12 @@ public extension CALayer {
     ///   - removedOnCompletion: 运动后的位置保持不变（layer的最后位置是toValue）
     ///   - option: 动画的时间节奏控制 方式
     func jq_addKeyframeAnimationRotation(values: [Any] = [CGFloat(-5).jq_degrees, CGFloat(5).jq_degrees, CGFloat(-5).jq_degrees],
-                                      keyTimes: [NSNumber]?,
-                                      duration: TimeInterval = 1.0,
-                                      delay: TimeInterval = 0,
-                                      repeatNumber: Float = 1,
-                                      removedOnCompletion: Bool = true,
-                                      option: CAMediaTimingFunctionName = .default) {
+                                         keyTimes: [NSNumber]?,
+                                         duration: TimeInterval = 1.0,
+                                         delay: TimeInterval = 0,
+                                         repeatNumber: Float = 1,
+                                         removedOnCompletion: Bool = true,
+                                         option: CAMediaTimingFunctionName = .default) {
         jq_baseKeyframeAnimation(keyPath: "transform.rotation", values: values, keyTimes: keyTimes, duration: duration, delay: delay, repeatNumber: repeatNumber, path: nil, removedOnCompletion: removedOnCompletion, option: option)
     }
 
@@ -259,11 +259,11 @@ public extension CALayer {
     ///   - removedOnCompletion: 运动后的位置保持不变（layer的最后位置是toValue）
     ///   - option: 动画的时间节奏控制 方式
     func jq_addKeyframeAnimationPositionBezierPath(path: CGPath?,
-                                                duration: TimeInterval = 2.0,
-                                                delay: TimeInterval = 0,
-                                                repeatNumber: Float = 1,
-                                                removedOnCompletion: Bool = false,
-                                                option: CAMediaTimingFunctionName = .default) {
+                                                   duration: TimeInterval = 2.0,
+                                                   delay: TimeInterval = 0,
+                                                   repeatNumber: Float = 1,
+                                                   removedOnCompletion: Bool = false,
+                                                   option: CAMediaTimingFunctionName = .default) {
         jq_baseKeyframeAnimation(keyPath: "position", values: nil, keyTimes: nil, duration: duration,  delay: delay, repeatNumber: repeatNumber, path: path, removedOnCompletion: removedOnCompletion, option: option)
     }
 
@@ -278,14 +278,14 @@ public extension CALayer {
     ///   - removedOnCompletion: 运动后的位置保持不变（layer的最后位置是toValue）
     ///   - option: 动画的时间节奏控制 方式
     func jq_baseKeyframeAnimation(keyPath: String,
-                               values: [Any]?,
-                               keyTimes: [NSNumber]?,
-                               duration: TimeInterval = 2.0,
-                               delay: TimeInterval = 0,
-                               repeatNumber: Float = 1,
-                               path: CGPath?,
-                               removedOnCompletion: Bool = false,
-                               option: CAMediaTimingFunctionName = .default) {
+                                  values: [Any]?,
+                                  keyTimes: [NSNumber]?,
+                                  duration: TimeInterval = 2.0,
+                                  delay: TimeInterval = 0,
+                                  repeatNumber: Float = 1,
+                                  path: CGPath?,
+                                  removedOnCompletion: Bool = false,
+                                  option: CAMediaTimingFunctionName = .default) {
         let keyframeAnimation = CAKeyframeAnimation(keyPath: keyPath)
         keyframeAnimation.duration = duration
         // 几秒后执行
@@ -326,9 +326,9 @@ public extension CALayer {
     ///   - subtype: 过渡动画的方向
     ///   - duration: 动画的时间
     func jq_addTransition(type: CATransitionType,
-                       subtype: CATransitionSubtype?,
-                       duration: CFTimeInterval = 2.0,
-                       delay: TimeInterval = 0) {
+                          subtype: CATransitionSubtype?,
+                          duration: CFTimeInterval = 2.0,
+                          delay: TimeInterval = 0) {
         let transition = CATransition()
         // 几秒后执行
         transition.beginTime = CACurrentMediaTime() + delay
@@ -339,7 +339,7 @@ public extension CALayer {
          push: 推出
          reveal: 揭开
          还有一些私有动画类型，效果很炫酷，不过不推荐使用。
-     　　私有动画类型的值有："cube"、"suckEffect"、"oglFlip"、 "rippleEffect"、"pageCurl"、"pageUnCurl"等等
+         　　　　私有动画类型的值有："cube"、"suckEffect"、"oglFlip"、 "rippleEffect"、"pageCurl"、"pageUnCurl"等等
          */
         transition.type = type
         /**
@@ -374,14 +374,14 @@ public extension CALayer {
     ///   - removedOnCompletion: 运动后的位置保持不变（layer的最后位置是toValue）
     ///   - option: 动画的时间节奏控制 方式
     func jq_addSpringAnimationBounds(toValue: Any?,
-                                  delay: TimeInterval = 0,
-                                  mass: CGFloat = 10.0,
-                                  stiffness: CGFloat = 5000,
-                                  damping: CGFloat = 100.0,
-                                  initialVelocity: CGFloat = 5,
-                                  repeatNumber: Float = 1,
-                                  removedOnCompletion: Bool = false,
-                                  option: CAMediaTimingFunctionName = .default) {
+                                     delay: TimeInterval = 0,
+                                     mass: CGFloat = 10.0,
+                                     stiffness: CGFloat = 5000,
+                                     damping: CGFloat = 100.0,
+                                     initialVelocity: CGFloat = 5,
+                                     repeatNumber: Float = 1,
+                                     removedOnCompletion: Bool = false,
+                                     option: CAMediaTimingFunctionName = .default) {
         jq_baseSpringAnimation(path: "bounds", toValue: toValue, mass: mass, stiffness: stiffness, damping: damping, initialVelocity: initialVelocity, repeatNumber: repeatNumber, removedOnCompletion: removedOnCompletion, option: option)
     }
 
@@ -397,15 +397,15 @@ public extension CALayer {
     ///   - removedOnCompletion: 运动后的位置保持不变（layer的最后位置是toValue）
     ///   - option: 动画的时间节奏控制 方式
     func jq_baseSpringAnimation(path: String?,
-                             toValue: Any?,
-                             delay: TimeInterval = 0,
-                             mass: CGFloat = 10.0,
-                             stiffness: CGFloat = 5000,
-                             damping: CGFloat = 100.0,
-                             initialVelocity: CGFloat = 5,
-                             repeatNumber: Float = 1,
-                             removedOnCompletion: Bool = false,
-                             option: CAMediaTimingFunctionName = .default) {
+                                toValue: Any?,
+                                delay: TimeInterval = 0,
+                                mass: CGFloat = 10.0,
+                                stiffness: CGFloat = 5000,
+                                damping: CGFloat = 100.0,
+                                initialVelocity: CGFloat = 5,
+                                repeatNumber: Float = 1,
+                                removedOnCompletion: Bool = false,
+                                option: CAMediaTimingFunctionName = .default) {
         let springAnimation = CASpringAnimation(keyPath: path)
         // 几秒后执行
         springAnimation.beginTime = CACurrentMediaTime() + delay
@@ -443,11 +443,11 @@ public extension CALayer {
     ///   - removedOnCompletion: 运动后的位置保持不变（layer的最后位置是toValue）
     ///   - option: 动画的时间节奏控制 方式
     func jq_baseAnimationGroup(animations: [CAAnimation]?,
-                            duration: TimeInterval = 2.0,
-                            delay: TimeInterval = 0,
-                            repeatNumber: Float = 1,
-                            removedOnCompletion: Bool = false,
-                            option: CAMediaTimingFunctionName = .default) {
+                               duration: TimeInterval = 2.0,
+                               delay: TimeInterval = 0,
+                               repeatNumber: Float = 1,
+                               removedOnCompletion: Bool = false,
+                               option: CAMediaTimingFunctionName = .default) {
         let animationGroup = CAAnimationGroup()
         // 几秒后执行
         animationGroup.beginTime = CACurrentMediaTime() + delay

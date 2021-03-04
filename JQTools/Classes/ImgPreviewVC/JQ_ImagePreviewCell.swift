@@ -82,7 +82,7 @@ public class JQ_ImagePreviewCell: UICollectionViewCell {
     //图片单击事件响应
     @objc func tapSingleDid(_ ges:UITapGestureRecognizer){
         //显示或隐藏导航栏
-        if let nav = self.jq_firstViewController()?.navigationController{
+        if let nav = self.jq_firstVC()?.navigationController{
             nav.setNavigationBarHidden(!nav.isNavigationBarHidden, animated: true)
         }
     }
@@ -90,7 +90,7 @@ public class JQ_ImagePreviewCell: UICollectionViewCell {
     //图片双击事件响应
     @objc func tapDoubleDid(_ ges:UITapGestureRecognizer){
         //隐藏导航栏
-        if let nav = self.jq_firstViewController()?.navigationController{
+        if let nav = self.jq_firstVC()?.navigationController{
             nav.setNavigationBarHidden(true, animated: true)
         }
         //缩放视图（带有动画效果）

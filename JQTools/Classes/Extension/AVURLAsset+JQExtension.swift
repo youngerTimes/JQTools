@@ -6,9 +6,9 @@
 //
 import AVKit
 
-extension AVURLAsset{
+public extension AVURLAsset{
     ///获取视频截图(网络)
-    public func jq_GetVedioPicture(_ image: ((_ vedioImage:UIImage)->Void)?) {
+    func jq_GetVedioPicture(_ image: ((_ vedioImage:UIImage)->Void)?) {
         DispatchQueue.global().async {
             //生成视频截图
             let generator = AVAssetImageGenerator(asset: self)

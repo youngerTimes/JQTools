@@ -5,10 +5,7 @@
 //  Created by 无故事王国 on 2020/8/21.
 //
 
-import Foundation
 import MobileCoreServices
-
-
 public extension URL{
     
     ///根据后缀获取对应的Mime-Type

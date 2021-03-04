@@ -6,7 +6,7 @@
 //
 
 import Foundation
-extension Int {
+public extension Int {
     ///分转元
     func jq_centsToElement() -> String {
         return String(format: "%.2f",CGFloat(self) / 100)
@@ -17,7 +17,7 @@ extension Int {
     }
     
     ///单位转换
-    public func jq_unit()->String{
+    func jq_unit()->String{
         if self > 0 && self < 1000{
             return String(format: "%ld", self)
         }else if self >= 1000 && self < 10000 {
@@ -38,7 +38,7 @@ extension Int {
     }
 
     /// 转换为中文展示
-    public var jq_cn: String {
+    var jq_cn: String {
         get {
             if self == 0 {
                 return "零"
@@ -82,7 +82,7 @@ extension Int {
 
 
     /// 转换为中文展示-金融货币单位
-    public var jq_cnCoin: String {
+    var jq_cnCoin: String {
         get {
             if self == 0 {
                 return "零"

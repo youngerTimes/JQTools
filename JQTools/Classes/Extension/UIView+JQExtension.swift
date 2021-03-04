@@ -84,7 +84,7 @@ public extension UIView{
     // MARK: -- Function
     
     //返回该view所在VC
-    func jq_firstViewController() -> UIViewController? {
+    func jq_firstVC() -> UIViewController? {
         for view in sequence(first: self.superview, next: { $0?.superview }) {
             if let responder = view?.next {
                 if responder.isKind(of: UIViewController.self){

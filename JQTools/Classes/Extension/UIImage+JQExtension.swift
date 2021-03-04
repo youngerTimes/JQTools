@@ -630,6 +630,85 @@ public extension UIImage{
         return tintedImage
     }
 
+    /// 根码上夹图片
+    /// - Parameters:
+    ///   - inputImage: 码图片
+    ///   - fillImage: 中间的icon图片
+    ///   - fillSize: icon的大小
+    /// - Returns: 合成后的图片
+    static func jq_fillImage(_ inputImage:UIImage?,_ fillImage:UIImage?,_ fillSize:CGSize) -> UIImage? {
+        guard let input = inputImage,let fill = fillImage  else {
+            return inputImage
+        }
+        let imageSize = input.size
+        UIGraphicsBeginImageContext(imageSize)
+        input.draw(in: CGRect.init(x: 0, y: 0, width: imageSize.width, height: imageSize.height))
+        let fillWidth = min(imageSize.width, fillSize.width)
+        let fillHeight = min(imageSize.height, fillSize.height)
+        let fillRect = CGRect(x: (imageSize.width - fillWidth)/2, y: (imageSize.height - fillHeight)/2, width: fillWidth ,height: fillHeight)
+        fill.draw(in: fillRect)
+        guard let newImage = UIGraphicsGetImageFromCurrentImageContext() else {
+            UIGraphicsEndImageContext()
+            return inputImage
+        }
+        UIGraphicsEndImageContext()
+        return newImage
+    }
+
+    /// 生成对应的码图片
+    /// - Parameters:
+    ///   - string: 图片中的内容
+    ///   - descriptor: 码的类型
+    ///   - size: 图片的大小
+    ///   - color: 图片的颜色
+    ///   - level: 码的容错级别
+    /// - Returns: 图片
+    static func jq_generate(string: String,descriptor: CodeDescriptor,size: CGSize,color:UIColor? = nil,level:CorrectionLevel = .M) -> UIImage? {
+        guard let data = string.data(using: .utf8),let filter = CIFilter(name: descriptor.rawValue) else {
+            return nil
+        }
+
+        filter.setValue(data, forKey: CodeKey.inputMessage.rawValue)
+        if (descriptor == .qrCpde || descriptor == .pdf417){
+            switch level {
+                case .L,.M,.Q,.H:
+                    filter.setValue(level.levelValue, forKey: CodeKey.inputCorrectionLevel.rawValue)
+                default:break
+            }
+        }else if descriptor == .aztec{
+            switch level {
+                case .aztecLevel(var value):
+                    if value < 5 {
+                        value = 5
+                    }else if value > 95{
+                        value = 95
+                    }
+                    filter.setValue(NSNumber.init(value: value), forKey: CodeKey.inputCorrectionLevel.rawValue)
+                default:break
+            }
+        }
+
+        guard let image = filter.outputImage else {
+            return nil
+        }
+
+        let imageSize = image.extent.size
+        let transform = CGAffineTransform(scaleX: size.width / imageSize.width,y: size.height / imageSize.height)
+        let scaledImage = image.transformed(by: transform)
+
+        guard let codeColor = color else{
+            return UIImage.init(ciImage: scaledImage)
+        }
+
+        // 设置颜色
+        let colorFilter = CIFilter(name: "CIFalseColor", parameters: ["inputImage":scaledImage,"inputColor0":CIColor(cgColor: codeColor.cgColor ),"inputColor1":CIColor(cgColor: UIColor.clear.cgColor)])
+
+        guard let newOutPutImage = colorFilter?.outputImage else {
+            return UIImage.init(ciImage: scaledImage)
+        }
+        return UIImage.init(ciImage: newOutPutImage)
+    }
+
     // MARK: 2.1、生成指定尺寸的纯色图像
     /// 生成指定尺寸的纯色图像
     /// - Parameters:

@@ -55,11 +55,11 @@ public func JQ_SetUpLogger(_ path:String = "log.txt",showIdentifier:Bool = false
 
     systemDestination.showLogIdentifier = showIdentifier
     systemDestination.showFunctionName = showFunctionName
-    systemDestination.showThreadName = true
-    systemDestination.showLevel = true
-    systemDestination.showFileName = true
-    systemDestination.showLineNumber = true
-    systemDestination.showDate = true
+    systemDestination.showThreadName = showThreadName
+    systemDestination.showLevel = showLevel
+    systemDestination.showFileName = showFileName
+    systemDestination.showLineNumber = showLineNumber
+    systemDestination.showDate = showDate
 
     //logger对象中添加控制台输出
     log.add(destination: systemDestination)
@@ -94,13 +94,13 @@ public func JQ_SetUpLogger(_ path:String = "log.txt",showIdentifier:Bool = false
     #else
     fileDestination.outputLevel = .severe
     #endif
-    fileDestination.showLogIdentifier = true
-    fileDestination.showFunctionName = true
-    fileDestination.showThreadName = true
-    fileDestination.showLevel = true
-    fileDestination.showFileName = true
-    fileDestination.showLineNumber = true
-    fileDestination.showDate = true
+    fileDestination.showLogIdentifier = showIdentifier
+    fileDestination.showFunctionName = showFunctionName
+    fileDestination.showThreadName = showThreadName
+    fileDestination.showLevel = showLevel
+    fileDestination.showFileName = showFileName
+    fileDestination.showLineNumber = showLineNumber
+    fileDestination.showDate = showDate
 
     //文件输出在后台处理
     fileDestination.logQueue = XCGLogger.logQueue

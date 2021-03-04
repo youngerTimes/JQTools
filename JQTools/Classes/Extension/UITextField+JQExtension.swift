@@ -5,10 +5,10 @@
 //  Created by 无故事王国 on 2020/6/17.
 //
 
-extension UITextField{
+public extension UITextField{
     
-    //MARK:-设置占位文字的颜色
-   public var jq_placeholderColor:UIColor {
+    /// 设置占位文字的颜色
+    var jq_placeholderColor:UIColor {
         get{
             let ivar = class_getInstanceVariable(UITextField.self, "_placeholderLabel")
             let placeHolderL = object_getIvar(self, ivar!) as! UILabel
@@ -21,8 +21,8 @@ extension UITextField{
         }
     }
     
-    //MARK:-设置占位文字的字体
-   public var jq_placeholderFont:UIFont{
+    /// 设置占位文字的字体
+    var jq_placeholderFont:UIFont{
         get{
             let ivar = class_getInstanceVariable(UITextField.self, "_placeholderLabel")
             let placeHolderL = object_getIvar(self, ivar!) as! UILabel
@@ -39,7 +39,7 @@ extension UITextField{
     /// - Parameter text: 限制只能输入的字符，如：限制0-3  text:"0123"
     /// - Parameter limitLen: 限制长度
     /// - Returns: 返回限制：回传给 shouldChangeCharactersInRange 的return
-    public func jq_validateInput(_ limitInput:String,limitLen:Int? = 0)->Bool{
+    func jq_validateInput(_ limitInput:String,limitLen:Int? = 0)->Bool{
 
         var res = false
         let set = CharacterSet(charactersIn: limitInput)
