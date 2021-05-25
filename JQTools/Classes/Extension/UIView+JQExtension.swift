@@ -246,7 +246,7 @@ public extension UIView{
         image1.draw(in: rect)
         
         let rect2 = CGRect.init(x:0, y:image1.size.height, width:width, height:image2.size.height)
-        image1.draw(in: rect2)
+        image2.draw(in: rect2)
         
         let image:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         

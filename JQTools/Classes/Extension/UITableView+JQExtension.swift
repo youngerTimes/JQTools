@@ -7,10 +7,28 @@
 
 import Foundation
 
+public extension UITableView {
+    func jq_register(cellName: String, identifier: String){
+        register(NIB(name: cellName), forCellReuseIdentifier: identifier)
+    }
+
+    func jq_register(viewName: String, identifier: String) {
+        register(NIB(name: viewName), forHeaderFooterViewReuseIdentifier: identifier)
+    }
+    
+    func jq_register(headName: String, identifier: String) {
+        register(NIB(name: headName), forHeaderFooterViewReuseIdentifier: identifier)
+    }
+
+    private func NIB(name: String) -> UINib {
+        return UINib(nibName: name, bundle: nil)
+    }
+}
+
 public extension UITableView{
     /// 添加动画
     /// - Parameter type: 动画类型
-    func addAni(type:JQ_TableAniType){
+    func jq_addAni(type:JQ_TableAniType){
         DispatchQueue.main.async {
             self.reloadData()
             let cells = self.visibleCells

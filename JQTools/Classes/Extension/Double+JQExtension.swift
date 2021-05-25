@@ -8,6 +8,12 @@
 import Foundation
 
 public extension Double{
+
+    //小数位截取
+    func jq_truncate(places : Int)-> Double
+    {
+        return Double(Darwin.floor(pow(10.0, Double(places)) * self)/pow(10.0, Double(places)))
+    }
     
     /// 角度转换：弧度转角度
     var jq_degrees:Double{
@@ -27,12 +33,12 @@ public extension Double{
     }
     
     
-    /// 截断
-    /// - Parameter places: 截断小数位 位数
-    func jq_truncate(places: Int) -> Double {
-        let divisor = pow(10.0, Double(places))
-        return Double(Int(self * divisor)) / divisor
-    }
+//    /// 截断
+//    /// - Parameter places: 截断小数位 位数
+//    func jq_truncate(places: Int) -> Double {
+//        let divisor = pow(10.0, Double(places))
+//        return Double(Int(self * divisor)) / divisor
+//    }
     
     
     func jq_mm()->String{return "\(self/1)mm"}
@@ -71,6 +77,12 @@ public extension Double{
 }
 
 public extension CGFloat{
+
+    //小数位截取
+    func jq_truncate(places : Int)-> Double
+    {
+        return Double(Darwin.floor(pow(10.0, Double(places)) * Double(self))/pow(10.0, Double(places)))
+    }
     
     /// 角度转换：弧度转角度
     var jq_degrees:CGFloat{

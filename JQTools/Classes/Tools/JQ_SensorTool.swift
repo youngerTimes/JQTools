@@ -30,7 +30,7 @@ open class JQ_SensorTool: NSObject {
     ///==================================================================
     /// 计步器:用户步数、距离、速度等
     /// - Parameter clouse: 回调
-    public func motionStart(_ clouse:@escaping (CMPedometerData?)->Void){
+    public func motionStart(startBycomps:DateComponents? = nil,_ clouse:@escaping (CMPedometerData?)->Void){
         motionClouse = clouse
         guard CMPedometer.isStepCountingAvailable() else {
             self.motionClouse!(nil)
@@ -39,11 +39,19 @@ open class JQ_SensorTool: NSObject {
 
         //获取今日凌晨时间
         let cal = Calendar.current
-        var comps = cal.dateComponents([.year, .month, .day], from: Date())
-        comps.hour = 0
-        comps.minute = 0
-        comps.second = 0
-        let midnightOfToday = cal.date(from: comps)!
+        var comps:DateComponents?
+
+        //开始时间
+        if startBycomps != nil {
+           comps  = startBycomps
+        }else{
+            comps = cal.dateComponents([.year, .month, .day], from: Date())
+            comps!.hour = 0
+            comps!.minute = 0
+            comps!.second = 0
+        }
+
+        let midnightOfToday = cal.date(from: startBycomps!)!
         self.pedometer.startUpdates(from: midnightOfToday) { [self] (pedometerData, error) in
             guard error == nil else{
                 self.motionClouse!(nil)

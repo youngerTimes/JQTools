@@ -40,6 +40,17 @@ public extension Array{
         let result = String(data: data!, encoding: String.Encoding.utf8)
         return (result! as NSString).replacingOccurrences(of: "\\", with: "")
     }
+
+    /// 数组转json
+    func jq_toJson1() -> String {
+        if (!JSONSerialization.isValidJSONObject(self)) {
+            print("无法解析出JSONString")
+            return ""
+        }
+        let data : Data! = try? JSONSerialization.data(withJSONObject: self, options: []) as Data
+        let JSONString = NSString(data:data as Data,encoding: String.Encoding.utf8.rawValue)
+        return JSONString! as String
+    }
     
     /// 从数组中从返回指定个数的元素
     ///

@@ -340,6 +340,7 @@ public extension String{
     }
     
     ///配合 TextDelegate -> shouldChangeCharactersIn
+    @available(*,deprecated,message: "废弃:使用Textfield 扩展")
     func jq_filterDecimals(replacementString:String,range:NSRange,limit:NSInteger = 2)->Bool{
         let futureString: NSMutableString = NSMutableString(string: self)
         futureString.insert(replacementString, at: range.location)
