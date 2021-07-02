@@ -54,6 +54,7 @@ TODO: Add long description of the pod here.
    s.dependency 'RxDataSources'
    s.dependency 'SwiftyUserDefaults', '4.0.0-alpha.1'
    s.dependency 'TZImagePickerController'
+   s.dependency 'IQKeyboardManager'
    s.dependency 'MJRefresh'
    s.dependency 'EmptyDataSet-Swift'
 #   s.dependency 'SnapKitExtend'

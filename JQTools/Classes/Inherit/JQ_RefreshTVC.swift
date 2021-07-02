@@ -14,6 +14,7 @@ import UIKit
 open class JQ_RefreshTVC: JQ_BaseVC,Refreshable{
     public var page = 1 //当前页数
     public var totalPages = -1 //总页数
+    public var items = [Any]()
     private var scrollView:UIScrollView?
 
     public let refreshStatus = BehaviorSubject(value: RefreshStatus.others)

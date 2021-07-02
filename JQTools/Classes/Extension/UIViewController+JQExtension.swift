@@ -27,4 +27,23 @@ public extension UIViewController{
             v.removeFromSuperview()
         }
     }
+
+
+
+    /// 设置透明度
+    /// - Parameter isAlpha:
+    func ld_setNavigationAlpha(isAlpha:Bool){
+        if isAlpha {
+            navigationController?.navigationBar.isHidden = false
+            //设置导航栏背景透明
+            navigationController?.navigationBar.setBackgroundImage(UIImage(),for: .default)
+            navigationController?.navigationBar.shadowImage = UIImage()
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+        }else {
+            //重置导航栏背景
+            navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+            navigationController?.navigationBar.shadowImage = nil
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
+        }
+    }
 }

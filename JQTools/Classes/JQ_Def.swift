@@ -7,35 +7,6 @@
 
 import UIKit
 
-#if canImport(QMUIKit)
-import QMUIKit
-///显示错误弹框
-public func JQ_ShowError(errorStr:String) {
-    JQ_HideAllView()
-    QMUITips.showError(errorStr, in: JQ_KeyWindow, hideAfterDelay: 2.0)
-}
-///显示成功
-public func JQ_ShowSuccuss(succussStr:String) {
-    JQ_HideAllView()
-    QMUITips.showSucceed(succussStr, in: JQ_KeyWindow, hideAfterDelay: 2.0)
-}
-///普通显示
-public func JQ_ShowText(textStr:String) {
-    JQ_HideAllView()
-    QMUITips.show(withText: textStr, in: JQ_KeyWindow, hideAfterDelay: 2.0)
-}
-///loading
-public func JQ_ShowLoading(loadingStr:String) {
-    JQ_HideAllView()
-    QMUITips.showLoading(loadingStr, in: JQ_KeyWindow)
-}
-///隐藏所有活动的弹框
-public func JQ_HideAllView() {
-    QMUITips.hideAllToast(in: JQ_KeyWindow, animated: true)
-}
-#endif
-
-
 ///提示信息
 public func JQ_Log<T>(_ message:T,file:String = #file,funcName:String = #function,lineNum:Int = #line){
     #if DEBUG
@@ -51,27 +22,6 @@ public func JQ_WarningLog<T>(_ message:T,file:String = #file,funcName:String = #
     print("JQ_Warning: \(file):(\(lineNum))-\(funcName)\n\(message)");
     #endif
 }
-
-
-#if canImport(ObjectMapper)
-import ObjectMapper
-//使用时，需要继承于它
-open class JQModel: Mappable {
-    required public init?(map: Map) {}
-    open func mapping(map: Map) {}
-}
-#endif
-
-#if canImport(SwiftyUserDefaults)
-import SwiftyUserDefaults
-public let JQ_Defaults = SwiftyUserDefaults.Defaults
-#endif
-
-#if canImport(RxCocoa)
-import RxSwift
-import RxCocoa
-public var JQ_disposeBag = DisposeBag()
-#endif
 
 
 /// 屏幕宽度
@@ -162,3 +112,51 @@ public var jq_isDiffPhone: Bool  {
 public var jq_isIpone: Bool {
     get {return UIDevice.current.userInterfaceIdiom == .phone}
 }
+
+#if canImport(QMUIKit)
+import QMUIKit
+///显示错误弹框
+public func JQ_ShowError(errorStr:String) {
+    JQ_HideAllView()
+    QMUITips.showError(errorStr, in: JQ_KeyWindow, hideAfterDelay: 2.0)
+}
+///显示成功
+public func JQ_ShowSuccuss(succussStr:String) {
+    JQ_HideAllView()
+    QMUITips.showSucceed(succussStr, in: JQ_KeyWindow, hideAfterDelay: 2.0)
+}
+///普通显示
+public func JQ_ShowText(textStr:String) {
+    JQ_HideAllView()
+    QMUITips.show(withText: textStr, in: JQ_KeyWindow, hideAfterDelay: 2.0)
+}
+///loading
+public func JQ_ShowLoading(loadingStr:String) {
+    JQ_HideAllView()
+    QMUITips.showLoading(loadingStr, in: JQ_KeyWindow)
+}
+///隐藏所有活动的弹框
+public func JQ_HideAllView() {
+    QMUITips.hideAllToast(in: JQ_KeyWindow, animated: true)
+}
+#endif
+
+#if canImport(ObjectMapper)
+import ObjectMapper
+//使用时，需要继承于它
+open class JQModel: Mappable {
+    required public init?(map: Map) {}
+    open func mapping(map: Map) {}
+}
+#endif
+
+#if canImport(SwiftyUserDefaults)
+import SwiftyUserDefaults
+public let JQ_Defaults = SwiftyUserDefaults.Defaults
+#endif
+
+#if canImport(RxCocoa)
+import RxSwift
+import RxCocoa
+public var JQ_disposeBag = DisposeBag()
+#endif

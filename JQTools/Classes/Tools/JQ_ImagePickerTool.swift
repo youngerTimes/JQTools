@@ -116,13 +116,15 @@ public class JQ_ImagePickerTool: NSObject{
             }
 
             if type == .camera{
-                let p = UIImagePickerController()
-                p.delegate = self
-                p.modalPresentationStyle = .fullScreen
-                p.allowsEditing = needClip
-                p.sourceType = .camera
-                p.cameraDevice = .front
-                JQ_currentViewController().present(p, animated: true, completion: nil)
+                DispatchQueue.main.async {
+                    let p = UIImagePickerController()
+                    p.delegate = self
+                    p.modalPresentationStyle = .fullScreen
+                    p.allowsEditing = needClip
+                    p.sourceType = .camera
+                    p.cameraDevice = .front
+                    JQ_currentViewController().present(p, animated: true, completion: nil)
+                }
             }
         }
     }
@@ -155,7 +157,7 @@ public class JQ_ImagePickerTool: NSObject{
                 JQ_currentViewController().present(p!, animated: true, completion: nil)
             }
 
-            if type == .camera{
+            DispatchQueue.main.async {
                 let p = UIImagePickerController()
                 p.delegate = self
                 p.modalPresentationStyle = .fullScreen

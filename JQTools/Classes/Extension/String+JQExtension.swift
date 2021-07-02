@@ -374,6 +374,22 @@ public extension String{
 document.createElement('meta');script.name = 'viewport';script.content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\";document.getElementsByTagName('head')[0].appendChild(script);var style = document.createElement('style');style.type='text/css';style.innerHTML='body{width:100%;height:auto;margin:auto;background-color:#ffffff}img{max-width:100%}p{word-wrap: break-word;color: #222;list-style-position: inside;list-style-type: square;margin-top: 17px;font-size: 18px;line-height: 1.76;border: none;outline: none;display: block;margin-block-start: 1em;margin-block-end: 1em;margin-inline-start: 0px;margin-inline-end: 0px;} p img {margin-bottom: -9px}';document.body.appendChild(style);
 """
     }
+
+    /// 将HTML 转化为富文本格式
+    /// - Parameter lossy: 是否损耗转化
+    /// - Returns: 返回富文本
+    func jq_htmlToAttibute(lossy:Bool = false)->NSMutableAttributedString?{
+        if let data = self.data(using: .unicode, allowLossyConversion: lossy){
+            do {
+                let attribute  = try NSMutableAttributedString(data: data, options: [NSAttributedString.DocumentReadingOptionKey.documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
+                return attribute
+            } catch  {
+                return nil
+            }
+        }else{
+            return nil
+        }
+    }
     
     ///JsonString->字典
     func jq_dictionaryFromJsonString() -> Any? {

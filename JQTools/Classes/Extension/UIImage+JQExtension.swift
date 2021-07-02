@@ -347,6 +347,65 @@ public extension UIImage{
     
     // MARK: -- Instance
 
+    ///压缩图片，限制最大宽高
+    func jq_resizeImage(maxWidth: CGFloat = 1280,maxHeight: CGFloat = 720) -> UIImage{
+
+        //prepare constants
+        let width = self.size.width
+        let height = self.size.height
+        let scale = width/height
+
+        var sizeChange = CGSize()
+
+        if width <= maxWidth && height <= maxWidth{ //a，图片宽或者高均小于或等于1280时图片尺寸保持不变，不改变图片大小
+            return self
+        }else if width > maxWidth || height > maxWidth {//b,宽或者高大于1280，但是图片宽度高度比小于或等于2，则将图片宽或者高取大的等比压缩至1280
+
+            if scale <= 2 && scale >= 1 {
+                let changedWidth:CGFloat = maxWidth
+                let changedheight:CGFloat = changedWidth / scale
+                sizeChange = CGSize(width: changedWidth, height: changedheight)
+
+            }else if scale >= 0.5 && scale <= 1 {
+
+                let changedheight:CGFloat = maxWidth
+                let changedWidth:CGFloat = changedheight * scale
+                sizeChange = CGSize(width: changedWidth, height: changedheight)
+
+            }else if width > maxWidth && height > maxWidth {//宽以及高均大于1280，但是图片宽高比大于2时，则宽或者高取小的等比压缩至1280
+
+                if scale > 2 {//高的值比较小
+
+                    let changedheight:CGFloat = maxWidth
+                    let changedWidth:CGFloat = changedheight * scale
+                    sizeChange = CGSize(width: changedWidth, height: changedheight)
+
+                }else if scale < 0.5{//宽的值比较小
+
+                    let changedWidth:CGFloat = maxWidth
+                    let changedheight:CGFloat = changedWidth / scale
+                    sizeChange = CGSize(width: changedWidth, height: changedheight)
+
+                }
+            }else {//d, 宽或者高，只有一个大于1280，并且宽高比超过2，不改变图片大小
+                return self
+            }
+        }
+
+        UIGraphicsBeginImageContext(sizeChange)
+
+        //draw resized image on Context
+        self.draw(in: CGRect(x:0, y:0, width:sizeChange.width, height:sizeChange.height))
+
+        //create UIImage
+        let resizedImg = UIGraphicsGetImageFromCurrentImageContext()
+
+        UIGraphicsEndImageContext()
+
+        return resizedImg!
+
+    }
+
     /// 生成一张高斯模糊图
     func jq_blur(_ value:CGFloat)->UIImage{
         let context = CIContext(options: nil)
