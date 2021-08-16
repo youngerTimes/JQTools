@@ -11,7 +11,7 @@ import WebKit
 
 #if canImport(SnapKit)
 /// 网页
-public class JQ_CommonWebViewController: UIViewController {
+public class JQ_CommonWebViewController: JQ_BaseVC {
 
     private var webView:WKWebView?
     private(set) var url = ""

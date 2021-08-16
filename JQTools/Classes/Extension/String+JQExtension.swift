@@ -460,6 +460,17 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
         }
         return html
     }
+
+    /// 将HTML标签中<>去除
+    func jq_filterFromHTML_1()->String{
+        do {
+            let regularExpretion = try NSRegularExpression(pattern: "<[^>]*>|\n", options: .caseInsensitive)
+            let html = regularExpretion.stringByReplacingMatches(in: self, options: .reportProgress, range: NSRange(location: 0, length: self.count), withTemplate: "")
+            return html
+        } catch {
+            return ""
+        }
+    }
     
     ///减少内存(截取)
     func jq_substring(from index: Int) -> String {

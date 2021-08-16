@@ -313,6 +313,7 @@ public extension UIView{
     ///设置渐变色(Nib)
     @discardableResult
     func jq_gradientNibColor(colorArr:[CGColor],cornerRadius:CGFloat = 0) -> CAGradientLayer? {
+        self.jq_masksToBounds = true
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = CGRect(x: 0, y: 0, width: self.frame.width*JQ_RateW, height: self.frame.height*JQ_RateH)
         gradientLayer.colors = colorArr
@@ -356,6 +357,7 @@ public extension UIView{
         self.layer.shadowOffset = offset
         self.layer.shouldRasterize = true
         self.layer.rasterizationScale = UIScreen.main.scale
+        self.layer.masksToBounds = false
     }
 
     // MARK: -- static Function

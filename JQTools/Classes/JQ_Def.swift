@@ -75,6 +75,23 @@ public extension NSLayoutConstraint {
 ///}
 ///```
 ///
+
+public final class JQToolFisher<Base> {
+    public let base: Base
+    public init(_ base: Base) {self.base = base}
+}
+
+public protocol JQToolFisherCompatible {
+    associatedtype CompatibleType
+    var ld: CompatibleType { get }
+}
+
+public extension JQToolFisherCompatible {
+    var ld: JQToolFisher<Self> {
+        return JQToolFisher(self)
+    }
+}
+
 public func jq_getAssociatedObject<T>(_ object: Any, _ key: UnsafeRawPointer) -> T? {
     return objc_getAssociatedObject(object, key) as? T
 }

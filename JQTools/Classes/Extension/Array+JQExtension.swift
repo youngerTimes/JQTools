@@ -33,6 +33,19 @@ public extension Array{
         return result
     }
 
+    /// 将数组转换为字典形式
+    func jq_toDict(_ f:(Element)->String)->Dictionary<String,[Element]>{
+        var dict = Dictionary<String,[Element]>()
+        for item in self {
+            if dict[f(item)] == nil {
+                dict[f(item)] = [item]
+            }else{
+                dict[f(item)]!.append(item)
+            }
+        }
+        return dict
+    }
+
 
     /// 将数组转化为字符串
     var jq_toJson:String{

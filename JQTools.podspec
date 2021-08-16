@@ -57,6 +57,12 @@ TODO: Add long description of the pod here.
    s.dependency 'IQKeyboardManager'
    s.dependency 'MJRefresh'
    s.dependency 'EmptyDataSet-Swift'
+   s.dependency 'UserDefaultsStore'
+   s.dependency 'IQKeyboardManagerSwift'
+   s.dependency 'SDWebImage'
+   s.dependency 'SVProgressHUD'
+   s.dependency 'HandyJSON'
+   s.dependency 'VTMagic'
 #   s.dependency 'SnapKitExtend'
 #   s.dependency 'WMPageController', '~> 2.5.2' #选项卡
 #   s.dependency 'Then'
