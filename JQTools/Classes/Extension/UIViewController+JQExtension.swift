@@ -46,4 +46,9 @@ public extension UIViewController{
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
         }
     }
+
+    func jq_push(vc:UIViewController,animated:Bool = true){
+        JQ_currentNavigationController().pushViewController(vc, animated: animated)
+    }
+
 }

@@ -86,7 +86,7 @@ public extension JQNibView where Self : UIView{
     
     @discardableResult
     ///加载方式不同：用于非pod项目中，加载xib所使用
-    static func jq_loadNibView() -> Self {
+    public static func jq_loadNibView() -> Self {
         return Bundle.main.loadNibNamed(Mirror(reflecting: self).description.replacingOccurrences(of: "Mirror for", with: "").replacingOccurrences(of: ".Type", with: "").trimmingCharacters(in: CharacterSet.whitespaces), owner: nil, options: nil)?.first as! Self
     }
     
