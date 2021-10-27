@@ -7,8 +7,8 @@
 
 import UIKit
 
-public enum JQ_AppearanceStyle:Int{
-    case none = 0
+public enum JQ_AppearanceStyle:Int,Codable{
+    case auto = 0
     case light = 1
     case dark = 2
 }
@@ -25,7 +25,7 @@ public protocol JQ_ColorAppearanceProtocol:NSObject{
 
 open class JQ_BaseVC: JQ_ListenVC{
 
-    private(set) public var currentStyle:JQ_AppearanceStyle = .none
+    private(set) public var currentStyle:JQ_AppearanceStyle = .auto
     open var hh_popBlock:(() -> Void)?
     open var closeDarkStyle:Bool = true //是否关闭暗黑模式
     open var auotorotate:Bool = false
@@ -143,6 +143,7 @@ open class JQ_BaseVC: JQ_ListenVC{
         navigationController?.popViewController(animated: animated)
     }
 
+    //重载 外观变化
     open func colorAppearance(_ style: JQ_AppearanceStyle) {
 
     }

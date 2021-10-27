@@ -466,8 +466,11 @@ public class JQTool{
         let productVC = SKStoreProductViewController()
         productVC.delegate = delegate
         productVC.loadProduct(withParameters: [SKStoreProductParameterITunesItemIdentifier:appleId]) { (status, error) in
+            JQ_HideAllView()
             if error == nil{
                 JQ_currentViewController().present(productVC, animated: true, completion: nil)
+            }else{
+                JQ_ShowError(errorStr: error?.localizedDescription ?? "")
             }
             clouse(status,error)
         }
@@ -674,9 +677,9 @@ public class JQTool{
         let info = Bundle.main.infoDictionary
         var version = ""
         #if DEBUG
-        version = "build: v\(info!["CFBundleVersion"] as! String)"
+        version = "build: \(info!["CFBundleVersion"] as! String)"
         #else
-        version = "v\(info!["CFBundleShortVersionString"]  as! String)"
+        version = "\(info!["CFBundleShortVersionString"]  as! String)"
         #endif
         return version
     }

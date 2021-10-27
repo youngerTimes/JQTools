@@ -8,8 +8,12 @@
 import Foundation
 
 public extension UITableView {
-    func jq_register(cellName: String, identifier: String){
-        register(NIB(name: cellName), forCellReuseIdentifier: identifier)
+    func jq_register(cellName: String, identifier: String? = nil){
+        if identifier == nil{
+            register(NIB(name: cellName), forCellReuseIdentifier: "_\(cellName)")
+        }else{
+            register(NIB(name: cellName), forCellReuseIdentifier: identifier!)
+        }
     }
 
     func jq_register(viewName: String, identifier: String) {
