@@ -299,12 +299,12 @@ public extension UIView{
     }
     
     ///设置渐变色(Frame)
-    func jq_gradientColor(colorArr:[CGColor],cornerRadius:CGFloat = 0) {
+    func jq_gradientColor(colorArr:[CGColor],cornerRadius:CGFloat = 0,startPoint:CGPoint = CGPoint(x: 0, y: 1),endPoint:CGPoint = CGPoint(x: 1, y: 1),bounds:CGRect? = nil) {
         let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = self.bounds
+        gradientLayer.frame = bounds == nil ? self.bounds : bounds!
         gradientLayer.colors = colorArr
-        gradientLayer.startPoint = CGPoint(x: 0, y: 1)
-        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        gradientLayer.startPoint = startPoint
+        gradientLayer.endPoint = endPoint
         gradientLayer.cornerRadius = cornerRadius
         if cornerRadius > 0 {gradientLayer.masksToBounds = true}
         self.layer.insertSublayer(gradientLayer, at: 0)
@@ -346,6 +346,17 @@ public extension UIView{
     
     func jq_backgroundColorClear(){
         self.backgroundColor = UIColor.white.withAlphaComponent(0)
+    }
+
+    func jq_addCorners(corner:UIRectCorner,radius:Double){
+        // 圆角位置
+        //frame可以先计算完成  避免圆角拉伸
+        let rect = CGRect(x: 0, y: 0, width: jq_width, height: jq_height)
+        let path: UIBezierPath = UIBezierPath(roundedRect: rect, byRoundingCorners: corner, cornerRadii: CGSize(width: radius, height: radius))
+        let maskLayer: CAShapeLayer = CAShapeLayer()
+        maskLayer.frame = rect
+        maskLayer.path = path.cgPath
+        layer.mask = maskLayer
     }
     
     /// 圆角加阴影
@@ -400,7 +411,7 @@ public extension UIView{
     ///   - barBgColor: 圆环底色
     ///   - percent: 进度值 0 ~ 1.0
     ///   - duration: 动画执行，为0 则没有动画
-    func jq_addCircle(circleWeight: CGFloat, circleColor: UIColor,barBgColor:UIColor, percent:CGFloat,duration:CGFloat = 0){
+    func jq_addCircle(circleWeight: CGFloat, circleColor: UIColor,barBgColor:UIColor,radius:Double? = nil, percent:CGFloat,duration:CGFloat = 0){
         let X = self.bounds.midX
         let Y = self.bounds.midY
         let startAngle = CGFloat(-Double.pi/2)
@@ -409,14 +420,15 @@ public extension UIView{
         if percent > 1.0{
             fatalError("范围0～1.0")
         }
+
+        let rad = radius == nil ? jq_width/2 : radius!
         
-        
-        let barBgPath = UIBezierPath(arcCenter: CGPoint(x: X, y: Y), radius: jq_width/2,startAngle: startAngle, endAngle: endAngle,clockwise: true).cgPath
+        let barBgPath = UIBezierPath(arcCenter: CGPoint(x: X, y: Y), radius: rad,startAngle: startAngle, endAngle: endAngle,clockwise: true).cgPath
         
         self.addOval(lineWidth: circleWeight, path: barBgPath, strokeStart: 0, strokeEnd: 1,strokeColor: barBgColor, fillColor: UIColor.clear,shadowRadius: 0, shadowOpacity: 0, shadowOffsset: CGSize.zero)
         
         // 进度条圆弧
-        let barPath = UIBezierPath(arcCenter: CGPoint(x: X, y: Y), radius:jq_width/2,startAngle: startAngle, endAngle: endAngle,clockwise: true).cgPath
+        let barPath = UIBezierPath(arcCenter: CGPoint(x: X, y: Y), radius:rad,startAngle: startAngle, endAngle: endAngle,clockwise: true).cgPath
         
         let layer = self.addOval(lineWidth: circleWeight, path: barPath, strokeStart: 0, strokeEnd: percent,strokeColor: circleColor, fillColor: UIColor.clear,shadowRadius: 0, shadowOpacity: 0, shadowOffsset: CGSize.zero)
         if duration != 0 {

@@ -14,7 +14,6 @@ extension UIButton{
     }
     
     /// 按钮设置图片方向
-    @available(*,deprecated,message: "废弃")
     public func jq_buttonType(_ type:ButtonOriginType,padding:CGFloat){
         if type == .ImgDefault{
             self.imageEdgeInsets = UIEdgeInsets(top: 0, left: -0.5 * padding, bottom: 0, right: 0.5 * padding)
@@ -81,6 +80,18 @@ extension UIButton{
         let image = self.imageView?.image
         let tinImage = image?.qmui_image(withTintColor: color)
         setImage(tinImage, for: .normal)
+    }
+
+    @IBInspectable var xib_tincolor:UIColor{
+        get{
+            return self.xib_tincolor
+        }
+        set{
+            DispatchQueue.main.async {
+                self.xib_tincolor = newValue
+                self.qmui_setImageTintColor(newValue, for: .normal)
+            }
+        }
     }
 
     /// 设置GIF动态图

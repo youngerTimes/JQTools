@@ -17,7 +17,7 @@ var addressCharacterArr: [String]?
 var addressHotArr: [String]?
 var addressAllCityArray: [JQ_AddressModel]?
 
-class JQ_SelectCityVC: UIViewController {
+public class JQ_SelectCityVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchView: UIView!

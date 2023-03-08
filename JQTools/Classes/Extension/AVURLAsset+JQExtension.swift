@@ -7,6 +7,7 @@
 import AVKit
 
 public extension AVURLAsset{
+    @available(*,deprecated,message: "废弃:使用JQBase")
     ///获取视频截图(网络)
     func jq_GetVedioPicture(_ image: ((_ vedioImage:UIImage)->Void)?) {
         DispatchQueue.global().async {

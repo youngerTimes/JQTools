@@ -9,6 +9,12 @@ import Foundation
 import CommonCrypto
 
 public extension String{
+    var toDouble:Double{
+        return Double(self) ?? 0
+    }
+}
+
+public extension String{
     private static let random_str_characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
     enum JQSafeBase64Type {
@@ -459,6 +465,14 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
             html = htmlString.replacingOccurrences(of:"\(text)>", with: "")
         }
         return html
+    }
+
+    func jq_filterNum()->String{
+        let scanner = Scanner(string: self)
+        scanner.scanUpToCharacters(from: CharacterSet.decimalDigits, into: nil)
+        var number :Int = 0
+        scanner.scanInt(&number)
+        return "\(number)"
     }
 
     /// 将HTML标签中<>去除

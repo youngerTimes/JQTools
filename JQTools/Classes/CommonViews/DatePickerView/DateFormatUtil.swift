@@ -383,13 +383,16 @@ extension Date{
     }
     
     //    年月日转换
-    func formatDate(year:Int,month:Int,day:Int) -> Date?{
+    func formatDate(year:Int,month:Int,day:Int,hour:Int = 0,minute:Int = 0,second:Int = 0) -> Date?{
         let calendar = NSCalendar.current
         var components = DateComponents()
         components.timeZone = TimeZone.current
         components.year = year
         components.month = month
         components.day = day
+        components.hour = hour
+        components.minute = minute
+        components.second = second
         let date = calendar.date(from: components)
         return date
     }

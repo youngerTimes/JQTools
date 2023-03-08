@@ -5,6 +5,8 @@
 //  Created by 杨锴 on 2020/3/15.
 //
 
+import RxSwift
+
 public extension Date{
     enum JQDateType {
         case MS
@@ -186,15 +188,14 @@ public extension Date{
     }
     
     /// 计算两个时间段的间隔
-    static func jq_CalBySet(startDate:Date,endDate:Date)->(year:Int,month:Int,day:Int,hour:Int,minute:Int){
+    static func jq_CalBySet(startDate:Date,endDate:Date,set:Set<Calendar.Component>? = Set(arrayLiteral: Calendar.Component.day,Calendar.Component.year,Calendar.Component.month,Calendar.Component.hour,Calendar.Component.minute))->(year:Int,month:Int,day:Int,hour:Int,minute:Int,second:Int){
         //格式化成：秒归零
-        let formatStartDate = Date.jq_format(year: startDate.year, month: startDate.month, day: startDate.day,hour:startDate.hour,minute: startDate.minute)
-        let formatEndDate = Date.jq_format(year: endDate.year, month: endDate.month, day: endDate.day,hour:endDate.hour,minute: endDate.minute)
+        let formatStartDate = Date.jq_format(year: startDate.year, month: startDate.month, day: startDate.day,hour:startDate.hour,minute: startDate.minute,second:startDate.second)
+        let formatEndDate = Date.jq_format(year: endDate.year, month: endDate.month, day: endDate.day,hour:endDate.hour,minute: endDate.minute,second:endDate.second)
         
         let calendar = Calendar(identifier: .gregorian)
-        let set = Set(arrayLiteral: Calendar.Component.day,Calendar.Component.year,Calendar.Component.month,Calendar.Component.hour,Calendar.Component.minute)
-        let a = calendar.dateComponents(set, from: formatStartDate!, to: formatEndDate!)
-        return(year:a.year ?? 0,month:a.month ?? 0,day:a.day ?? 0,hour:a.hour ?? 0,minute:a.minute ?? 0)
+        let a = calendar.dateComponents(set!, from: formatStartDate!, to: formatEndDate!)
+        return(year:a.year ?? 0,month:a.month ?? 0,day:a.day ?? 0,hour:a.hour ?? 0,minute:a.minute ?? 0,a.second ?? 0)
     }
     
     /// 计算两个时间段的间隔
@@ -204,7 +205,7 @@ public extension Date{
         let formatStartDate = Date.jq_format(year: startDate.year, month: startDate.month, day: startDate.day,hour:0,minute: 0)
         let formatEndDate = Date.jq_format(year: endDate.year, month: endDate.month, day: endDate.day,hour:0,minute: 0)
         
-        let calendar = Calendar(identifier: .gregorian)
+        let calendar = Calendar.current
         let set = Set(arrayLiteral: Calendar.Component.day)
         let a = calendar.dateComponents(set, from: formatStartDate!, to: formatEndDate!)
         return a.day ?? 0
@@ -233,6 +234,21 @@ public extension Date{
         }
         return str
     }
+
+    static func jq_CalByEnum(startDate:Date,endDate:Date)->(year:Int,month:Int,day:Int,hour:Int,minute:Int){
+        let calendar = Calendar.current
+        let set = Set(arrayLiteral: Calendar.Component.day,Calendar.Component.year,Calendar.Component.month,Calendar.Component.hour,Calendar.Component.minute)
+        let a = calendar.dateComponents(set, from: startDate, to: endDate)
+        return (a.year ?? 0,a.month ?? 0,a.day ?? 0,a.hour ?? 0,a.minute ?? 0)
+    }
+
+    static func jq_CalByEnumDay(startDate:Date,endDate:Date)->(day:Int,hour:Int){
+        let calendar = Calendar.current
+        let set = Set(arrayLiteral: Calendar.Component.day,Calendar.Component.hour)
+        let a = calendar.dateComponents(set, from: startDate, to: endDate)
+        return (a.day ?? 0,a.hour ?? 0)
+    }
+
     
     ///时间戳转换字符串，yyyy-MM-dd
     static func jq_TheTimeStampConversionMinutes(_ time:TimeInterval, _ formatter:String) -> String {
@@ -328,10 +344,10 @@ public extension Date{
     }
     
     /// 给定年月日，得到Date的时间类型
-    static func jq_format(year:NSInteger,month:NSInteger,day:NSInteger,hour:NSInteger = 0,minute:NSInteger = 0)->Date?{
+    static func jq_format(year:NSInteger,month:NSInteger,day:NSInteger,hour:NSInteger = 0,minute:NSInteger = 0,second:NSInteger = 0)->Date?{
         let calendar = Calendar(identifier: .gregorian)
         
-        let dateComponents = DateComponents(calendar: calendar, timeZone: TimeZone.current, year: year, month: month, day: day, hour: hour, minute: minute, second: 0, nanosecond: 0)
+        let dateComponents = DateComponents(calendar: calendar, timeZone: TimeZone.current, year: year, month: month, day: day, hour: hour, minute: minute, second: second, nanosecond: 0)
         return dateComponents.date
         
     }
@@ -368,7 +384,7 @@ public extension Date{
         var dates = [Date]()
         let timeInterval = 24 * 3600
         for week in 1...7{
-            let date = date.jq_startOfWeek.addingTimeInterval(TimeInterval(week * timeInterval + 8 * 3600))
+            let date = date.jq_startOfWeek.addingTimeInterval(TimeInterval(week * timeInterval))
             dates.append(date)
         }
         return dates
@@ -411,12 +427,14 @@ public extension Date{
     
     ///获取上一个周
     var jq_lastWeekDate:Date{
-        return self.addingTimeInterval(-7 * 24 * 3600)
+        let temp = self.addingTimeInterval(TimeInterval(TimeZone.current.secondsFromGMT()))
+        return temp.addingTimeInterval(-7 * 24 * 3600)
     }
     
     ///获取下一个周
     var jq_nextWeekDate:Date{
-        return self.addingTimeInterval(7 * 24 * 3600)
+        let temp = self.addingTimeInterval(TimeInterval(TimeZone.current.secondsFromGMT()))
+        return temp.addingTimeInterval(7 * 24 * 3600)
     }
     
     //该时间所在周的最后一天日期（2017年12月23日 23:59:59）
@@ -447,6 +465,12 @@ public extension Date{
         let com = calendar.dateComponents([.year,.month,.day], from: self)
         let comNow = calendar.dateComponents([.year,.month,.day], from: Date())
         return com.year == comNow.year && com.month == comNow.month && com.day == comNow.day
+    }
+
+    mutating func jq_emptyTime()->Date?{
+        self.addTimeInterval(TimeInterval(TimeZone.current.secondsFromGMT()))
+        let date = self.formatDate(year: self.year, month: self.month, day: self.day)
+        return date
     }
 
     /// 是否是这个月
@@ -532,11 +556,18 @@ public extension Date{
         }
         return false
     }
+
+    mutating func jq_add(year:Int? = nil,month:Int? = nil,day:Int? = nil,hour:Int? = nil,minute:Int? = nil,second:Int? = nil)->Date?{
+        let calendar = Calendar(identifier: .gregorian)
+       return calendar.date(byAdding: DateComponents(calendar: calendar,year: year,month: month,day: day,hour: hour,minute: minute,second: second), to: self)
+
+
+    }
     
     /// 获取指定年份
     func jq_allYears(_ startYear:Int = 1900)->Array<Int>{
         var years = [Int]()
-        for i in startYear..<jq_nowDay() { years.append(i) }
+        for i in startYear..<jq_nowYear() { years.append(i) }
         return years
     }
     
@@ -558,7 +589,9 @@ public extension Date{
     /// 当前年
     func jq_nowYear()->NSInteger{
         let dateformatter = DateFormatter()
-        dateformatter.dateFormat = "YYYY"
+        dateformatter.timeZone = TimeZone.current
+        dateformatter.calendar = Calendar.current
+        dateformatter.dateFormat = "yyyy"
         let str = dateformatter.string(from: self)
         return NSInteger(str) ?? 0
     }
@@ -566,6 +599,8 @@ public extension Date{
     /// 当前月
     func jq_nowMonth()->NSInteger{
         let dateformatter = DateFormatter()
+        dateformatter.timeZone = TimeZone.current
+        dateformatter.calendar = Calendar.current
         dateformatter.dateFormat = "MM"
         let str = dateformatter.string(from: self)
         return NSInteger(str) ?? 0
@@ -574,6 +609,8 @@ public extension Date{
     /// 当前日
     func jq_nowDay()->NSInteger{
         let dateformatter = DateFormatter()
+        dateformatter.timeZone = TimeZone.current
+        dateformatter.calendar = Calendar.current
         dateformatter.dateFormat = "dd"
         let str = dateformatter.string(from: self)
         return NSInteger(str) ?? 0
@@ -582,6 +619,8 @@ public extension Date{
     /// 当前时
     func jq_nowHour()->NSInteger{
         let dateformatter = DateFormatter()
+        dateformatter.timeZone = TimeZone.current
+        dateformatter.calendar = Calendar.current
         dateformatter.dateFormat = "HH"
         let str = dateformatter.string(from: self)
         return NSInteger(str) ?? 0
@@ -674,6 +713,24 @@ public extension Date{
     func jq_formatInfo(_ formatter:String = "MM:DD")->String{
         return ""
     }
+
+    /// 获取今年的第几周
+    func jq_weekOfYear()->Int{
+        var calendar = Calendar.current
+        calendar.timeZone = TimeZone.current
+        calendar.firstWeekday = 2
+        let weekOfYear = calendar.component(.weekOfYear,from: self)
+        return weekOfYear
+    }
+
+
+    /// 获取今年的第几周
+    static func jq_weekOfYear()->Int{
+        var calendar = Calendar.current
+        calendar.firstWeekday = 2
+        let weekOfYear = calendar.component(.weekOfYear,from: Date.init(timeIntervalSinceNow: 0))
+        return weekOfYear
+    }
     
     ///时间戳格式格式化时间
     static func jq_format(_ time:TimeInterval,formatter:String)->String{
@@ -689,6 +746,31 @@ public extension Date{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = formatter
         return detaildate
+    }
+
+    /// 将秒转换为00:00格式，仅限于 24 * 3600 内
+    static func jq_formateToTime(_ time:Int)->String{
+        if time > 24 * 3600{return "00:00"}
+        var hours:Int = 0
+        var minutes:Int = 0
+        hours = time / 3600
+        minutes = time % 3600 / 60
+        return String(format: "%02ld:%02ld", hours,minutes)
+    }
+
+    /// 将秒转换为00:00格式，仅限于 24 * 3600 内
+    static func jq_formateToTime(_ time:Int)->(hour:Int,minute:Int){
+        if time > 24 * 3600{return (hour:0,minute:0)}
+        var hours:Int = 0
+        var minutes:Int = 0
+        hours = time / 3600
+        minutes = time % 3600 / 60
+        return (hour:hours,minute:minutes)
+    }
+
+    /// 判断两个时间是否相等，根据格式判断
+    static func jq_absEqual(date1:Date,date2:Date,format:String = "yyyy-MM-dd") -> Bool{
+        return date2.jq_format(format) == date1.jq_format(format)
     }
 }
 

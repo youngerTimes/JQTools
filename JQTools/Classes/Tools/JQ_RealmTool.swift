@@ -9,7 +9,6 @@
 import Foundation
 
 #if canImport(RealmSwift)
-import RealmSwift
 
 //https://www.hangge.com/blog/cache/detail_891.html
 /// RealmTool数据库

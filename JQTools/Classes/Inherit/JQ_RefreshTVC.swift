@@ -86,15 +86,15 @@ open class JQ_RefreshTVC: JQ_BaseVC,Refreshable{
         }
         weak var weakSelf = self
         if (footer) {
-            self.refreshStatusBind(to: self.scrollView!, {
+            self.refreshStatusBind(to: self.scrollView!, header: {
                 weakSelf!.jq_getData()
             }) {
                 weakSelf!.jq_getData(isHeader: false)
             }.disposed(by: JQ_disposeBag)
         }else {
-            self.refreshStatusBind(to: self.scrollView!, {
+            self.refreshStatusBind(to: self.scrollView!, header: {
                 weakSelf!.jq_getData()
-            }, nil).disposed(by: JQ_disposeBag)
+            }, footer: nil).disposed(by: JQ_disposeBag)
         }
         if #available(iOS 11.0, *) {
             scrollView.contentInsetAdjustmentBehavior = .never

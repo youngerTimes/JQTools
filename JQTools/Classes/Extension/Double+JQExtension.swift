@@ -69,6 +69,17 @@ public extension Double{
             return "0"
         }
     }
+
+    /// 进行格式化
+    var jq_formatFloat:String{
+        if fmodf(Float(self), 1) == 0 {
+            return String(format: "%.0f", self)
+        }else if fmodf(Float(self) * 10, 1) == 0{
+            return String(format: "%.1f", self)
+        }else{
+            return String(format: "%.2f", self)
+        }
+    }
     
     @available(*,deprecated,message: "废弃")
     var jq_ratioW:CGFloat{
@@ -77,6 +88,17 @@ public extension Double{
 }
 
 public extension CGFloat{
+
+    /// 进行格式化
+    var jq_formatFloat:String{
+        if fmodf(Float(self), 1) == 0 {
+            return String(format: "%.0f", self)
+        }else if fmodf(Float(self) * 10, 1) == 0{
+            return String(format: "%.1f", self)
+        }else{
+            return String(format: "%.2f", self)
+        }
+    }
 
     //小数位截取
     func jq_truncate(places : Int)-> Double

@@ -44,7 +44,7 @@ public protocol Refreshable {
 
 extension Refreshable {
     @discardableResult
-    public func refreshStatusBind(to scrollView: UIScrollView, _ header: (() -> Void)? = nil, _ footer: (() -> Void)? = nil) -> Disposable {
+    public func refreshStatusBind(to scrollView: UIScrollView,header: (() -> Void)? = nil, footer: (() -> Void)? = nil) -> Disposable {
         
         if header != nil {
             scrollView.mj_header = MJRefreshNormalHeader(refreshingBlock: header!)
@@ -55,23 +55,23 @@ extension Refreshable {
         return refreshStatus.subscribe(onNext: { (status) in
             switch status {
                 case .beingHeaderRefresh:
-                    scrollView.mj_footer!.resetNoMoreData()
-                    scrollView.mj_header!.beginRefreshing()
+                    scrollView.mj_footer?.resetNoMoreData()
+                    scrollView.mj_header?.beginRefreshing()
                     break
                 case .endHeaderRefresh:
                     scrollView.mj_header?.endRefreshing()
                     break
                 case .beingFooterRefresh:
-                    scrollView.mj_footer!.beginRefreshing()
+                    scrollView.mj_footer?.beginRefreshing()
                     break
                 case .endFooterRefresh:
-                    scrollView.mj_footer!.endRefreshing()
+                    scrollView.mj_footer?.endRefreshing()
                     break
                 case .noMoreData:
-                    scrollView.mj_footer!.endRefreshingWithNoMoreData()
+                    scrollView.mj_footer?.endRefreshingWithNoMoreData()
                     break
                 case .none:
-                    scrollView.mj_footer!.isHidden = true
+                    scrollView.mj_footer?.isHidden = true
                     break
                 case .others: break
             }
@@ -86,7 +86,7 @@ public extension JQNibView where Self : UIView{
     
     @discardableResult
     ///加载方式不同：用于非pod项目中，加载xib所使用
-    public static func jq_loadNibView() -> Self {
+    static func jq_loadNibView() -> Self {
         return Bundle.main.loadNibNamed(Mirror(reflecting: self).description.replacingOccurrences(of: "Mirror for", with: "").replacingOccurrences(of: ".Type", with: "").trimmingCharacters(in: CharacterSet.whitespaces), owner: nil, options: nil)?.first as! Self
     }
     

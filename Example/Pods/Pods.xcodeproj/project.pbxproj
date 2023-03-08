@@ -12,6 +12,7 @@
 		0ABA3F74887D0AC9C190EC5607FB58AB /* ConstraintMultiplierTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C12038B34951B9B002DAB0D5FE023DA /* ConstraintMultiplierTarget.swift */; };
 		102CFFE9B490DD470AF70EF7B50D5298 /* LayoutConstraintItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D1E72289667D4BA6D946E25320953 /* LayoutConstraintItem.swift */; };
 		11D57DA1800919AC9BC2CDDDB182D50B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14FE473E37EFB8571E729F9B375CE60E /* Foundation.framework */; };
+		1312C53128112DA4009F53EE /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1312C53028112DA4009F53EE /* ImagePickerView.swift */; };
 		138FF33326CA7BC40086F947 /* JQCircleLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138FF26126CA7BC30086F947 /* JQCircleLayer.swift */; };
 		138FF33426CA7BC40086F947 /* JQAnnularlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138FF26226CA7BC30086F947 /* JQAnnularlayer.swift */; };
 		138FF33526CA7BC40086F947 /* JQTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138FF26426CA7BC30086F947 /* JQTimer.swift */; };
@@ -258,6 +259,7 @@
 /* Begin PBXFileReference section */
 		116DE6EBC4D197C7C3F2A49FE67CAAF8 /* JQTools.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = JQTools.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		11A1147B627018FA7C13744924C0515F /* Pods-JQTools_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-JQTools_Tests-frameworks.sh"; sourceTree = "<group>"; };
+		1312C53028112DA4009F53EE /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
 		138FF26126CA7BC30086F947 /* JQCircleLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQCircleLayer.swift; sourceTree = "<group>"; };
 		138FF26226CA7BC30086F947 /* JQAnnularlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQAnnularlayer.swift; sourceTree = "<group>"; };
 		138FF26426CA7BC30086F947 /* JQTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQTimer.swift; sourceTree = "<group>"; };
@@ -684,6 +686,7 @@
 				138FF2B226CA7BC30086F947 /* MontiorTool */,
 				138FF2B826CA7BC30086F947 /* JQ_VideoClipsCaptureTool.swift */,
 				138FF2B926CA7BC30086F947 /* JQ_UploadTool.swift */,
+				1312C53028112DA4009F53EE /* ImagePickerView.swift */,
 			);
 			name = Tools;
 			path = JQTools/Classes/Tools;
@@ -1496,6 +1499,7 @@
 				138FF3D226CA7BC40086F947 /* JQ_BannerCell.swift in Sources */,
 				138FF3E126CA7BC40086F947 /* JQ_BaseVC.swift in Sources */,
 				138FF33C26CA7BC40086F947 /* JQ_CommonTopImgVC.swift in Sources */,
+				1312C53128112DA4009F53EE /* ImagePickerView.swift in Sources */,
 				138FF38026CA7BC40086F947 /* JQ_VideoClipsCaptureTool.swift in Sources */,
 				138FF3CD26CA7BC40086F947 /* JQ_OProgressView.swift in Sources */,
 				138FF34D26CA7BC40086F947 /* UIButton+JQExtension.swift in Sources */,
