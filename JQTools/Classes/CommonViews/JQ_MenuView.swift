@@ -19,6 +19,7 @@ public class JQ_MenuView: UIView {
     private var menuClouse:((NSInteger,String)->Void)?
     private var tableWidth:Double = 0
     private var maxW:Double = 0
+    private var maxH:Double?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,11 +27,12 @@ public class JQ_MenuView: UIView {
         self.frame = CGRect(x: 0, y: 0, width: JQ_ScreenW, height: JQ_ScreenH)
     }
     
-    public func show(_ hander:UIViewController,tapView:UIView?,items:[String],tableWidth:Double = 0, clouse:@escaping (NSInteger,String)->Void){
+    public func show(_ hander:UIViewController,tapView:UIView?,items:[String],tableWidth:Double = 0,tableHei:Double? = nil, clouse:@escaping (NSInteger,String)->Void){
         handerVC = hander
         self.tapView = tapView
         self.items = items
         self.tableWidth = tableWidth
+        self.maxH = tableHei
         menuClouse = clouse
         let keyWindow  = UIApplication.shared.keyWindow
         keyWindow?.addSubview(self)
@@ -95,18 +97,25 @@ public class JQ_MenuView: UIView {
                     }else{
                         make.width.equalTo(tapView!.jq_width)
                     }
-                    make.height.equalTo(CGFloat(46 * items.count) * JQ_RateW)
+                    if weakSelf.maxH != nil{
+                        weakSelf.tableView!.isScrollEnabled = true
+                        let h = min(weakSelf.maxH!, Double(46 * items.count) * JQ_RateW)
+                        make.height.equalTo(h)
+                    }else{
+                        make.height.equalTo(CGFloat(46 * items.count) * JQ_RateW)
+                    }
                 }
             }
             self.layoutIfNeeded()
         }
     }
     
-    public func show(_ hander:UIView,tapView:UIView?,items:[String],menuWidth:Double? = nil, clouse:@escaping (NSInteger,String)->Void){
+    public func show(_ hander:UIView,tapView:UIView?,items:[String],menuWidth:Double? = nil,tableHei:Double? = nil,clouse:@escaping (NSInteger,String)->Void){
         topView = hander
         self.tapView = tapView
         self.items = items
         menuClouse = clouse
+        self.maxH  = tableHei
         let keyWindow  = UIApplication.shared.keyWindow
         keyWindow?.addSubview(self)
         
@@ -114,6 +123,7 @@ public class JQ_MenuView: UIView {
         tableView!.delegate = self
         tableView!.dataSource = self
         tableView!.separatorStyle = .none
+        tableView!.showsVerticalScrollIndicator = false
         tableView!.isScrollEnabled = false
         tableView!.register(MenuItemTCell.self, forCellReuseIdentifier: "_MenuItemTCell")
         tableView!.jq_cornerRadius = 8 * JQ_RateW
@@ -146,7 +156,8 @@ public class JQ_MenuView: UIView {
         
         UIView.animate(withDuration: 0.2) {
             if tapView == nil{
-                self.tableView!.snp.remakeConstraints { (make) in
+                self.tableView!.snp.remakeConstraints {[weak self] (make) in
+                    guard let weakSelf = self else { return }
                     make.right.equalToSuperview().offset(-5 * JQ_RateW)
                     make.top.equalToSuperview().offset(JQ_NavBarHeight)
                     if menuWidth != nil{
@@ -154,7 +165,14 @@ public class JQ_MenuView: UIView {
                     }else{
                         make.width.equalTo(tapView!.jq_width)
                     }
-                    make.height.equalTo(CGFloat(46 * items.count) * JQ_RateW)
+
+                    if weakSelf.maxH != nil{
+                        weakSelf.tableView!.isScrollEnabled = true
+                        let h = min(weakSelf.maxH!, Double(46 * items.count) * JQ_RateW)
+                        make.height.equalTo(h)
+                    }else{
+                        make.height.equalTo(CGFloat(46 * items.count) * JQ_RateW)
+                    }
                 }
             }else{
                 self.tableView!.snp.remakeConstraints { (make) in
@@ -220,7 +238,11 @@ public class JQ_MenuView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         tableView?.jq_shadow(shadowColor: UIColor(hexStr: "#00575E"), corner: 16, opacity: 0.1)
-        tableView?.jq_masksToBounds = false
+        tableView?.jq_masksToBounds = true
+        if maxH != nil{
+            tableView?.jq_borderColor = .gray
+            tableView?.jq_borderWidth = 1
+        }
     }
     
     
@@ -250,17 +272,17 @@ extension JQ_MenuView:UITableViewDataSource{
         cell.itemNameL?.text = items[indexPath.row]
         cell.contentView.backgroundColor = UIColor.clear
         cell.backgroundColor = UIColor.clear
-        cell.contentView.alpha = 0
+//        cell.contentView.alpha = 0
         
-        if indexPath.row == items.count - 1{
-            cell.lineView?.alpha = 0
-        }
-        
-        UIView.animate(withDuration: 0.1, delay: 0.05 + Double(indexPath.row)/25, options: .layoutSubviews, animations: {
-            cell.contentView.alpha = 1
-        }) { (complete) in
-            
-        }
+//        if indexPath.row == items.count - 1{
+//            cell.lineView?.alpha = 0
+//        }
+//
+//        UIView.animate(withDuration: 0.1, delay: 0.05 + Double(indexPath.row)/25, options: .layoutSubviews, animations: {
+//            cell.contentView.alpha = 1
+//        }) { (complete) in
+//
+//        }
         return cell
     }
 }

@@ -48,15 +48,29 @@ public class JQ_ImagePickerTool: NSObject{
         }
     }
 
+    @available(*,deprecated,message: "废弃")
     public static let `default`:JQ_ImagePickerTool = {
         let center = JQ_ImagePickerTool()
         return center
     }()
 
+    private static var _sharedInstance: JQ_ImagePickerTool?
+    public class func getSharedInstance() -> JQ_ImagePickerTool {
+           guard let instance = _sharedInstance else {
+               _sharedInstance = JQ_ImagePickerTool()
+               return _sharedInstance!
+           }
+           return instance
+       }
+
     public override init() {
         super.init()
     }
 
+        //销毁单例对象
+    public class func destroy() {
+        _sharedInstance = nil
+    }
     private func reset(){
         needClip = true
         clipSize = CGSize(width: 0, height: 0)
@@ -204,7 +218,7 @@ extension JQ_ImagePickerTool:TZImagePickerControllerDelegate{
             mutiClouse!(photos,assets)
         }
 
-        if chooseMethodType == .profile {
+        if chooseMethodType == .profile || chooseMethodType == .single {
             clouse!(photos.first!)
         }
         reset()

@@ -21,7 +21,9 @@ public enum RefreshStatus {
     case endHeaderRefresh
     case beingFooterRefresh
     case endFooterRefresh
+    case resetNoMoreData
     case noMoreData
+    case endAll
     case others
 }
 
@@ -73,6 +75,16 @@ extension Refreshable {
                 case .none:
                     scrollView.mj_footer?.isHidden = true
                     break
+                case .resetNoMoreData:
+                    scrollView.mj_footer?.resetNoMoreData()
+                case .endAll:
+                    if scrollView.mj_header?.isRefreshing ?? false{
+                        scrollView.mj_header?.endRefreshing()
+                        scrollView.mj_footer?.resetNoMoreData()
+                    }
+                    if scrollView.mj_footer?.isRefreshing ?? false{
+                        scrollView.mj_footer?.endRefreshing()
+                    }
                 case .others: break
             }
         })
@@ -828,4 +840,29 @@ public class VersionResultModel:JQModel{
         wrapperType <- map["wrapperType"]
     }
 }
+
+
+public final class JQBox<T> {
+        // 声明一个别名
+    public typealias Listener = (T) -> Void
+    public var listener: Listener?
+
+    public var value: T? {
+        didSet {
+            guard let v = value else { return }
+            listener?(v)
+        }
+    }
+
+    public init(_ value: T? = nil){
+        self.value = value
+    }
+
+    public func bind(listener: Listener?) {
+        self.listener = listener
+        guard let v = value else { return }
+        listener?(v)
+    }
+}
+
 

@@ -47,10 +47,24 @@ public class AttributedStringbuilder: NSObject {
     }
 
     @discardableResult
-    public func underLine() -> AttributedStringbuilder {
+    public func underLine(color:UIColor? = nil) -> AttributedStringbuilder {
         let range1 = NSRange(location: 0, length: mutableAttributedString.string.count)
         let number = NSNumber(value:NSUnderlineStyle.single.rawValue)
         mutableAttributedString.addAttribute(NSAttributedString.Key.underlineStyle, value: number, range: range1)
+        if color != nil{
+            mutableAttributedString.addAttribute(NSAttributedString.Key.underlineColor, value: color as Any, range: range1)
+        }
+        return self
+    }
+
+    @discardableResult
+    public func delLine(color:UIColor? = nil) -> AttributedStringbuilder {
+        let range1 = NSRange(location: 0, length: mutableAttributedString.string.count)
+        let number = NSNumber(value:1)
+        mutableAttributedString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: number, range: range1)
+        if color != nil{
+            mutableAttributedString.addAttribute(NSAttributedString.Key.underlineColor, value: color as Any, range: range1)
+        }
         return self
     }
 

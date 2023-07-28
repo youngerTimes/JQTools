@@ -97,6 +97,7 @@ public class JQ_BannerView: UIView,UICollectionViewDataSource,UICollectionViewDe
     }
     
     @objc func timerAction(_ timer:Timer){
+        guard items?.count != 0 else {return}
        let offset =  self.collectionView.contentOffset.x + avgOffset!
         currentPage = Int(offset/itemWidth)
         self.collectionView.setContentOffset(CGPoint(x: offset, y: 0), animated: true)

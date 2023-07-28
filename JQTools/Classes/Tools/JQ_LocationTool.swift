@@ -26,7 +26,7 @@ public enum JQ_MapNavigationType {
                 case .Amap:
                     return "高德地图"
                 case .GoogleMap:
-                    return "高德地图"
+                    return "Google地图"
                 case .qqMap:
                     return "QQ地图"
             }
@@ -40,7 +40,7 @@ public enum JQ_MapNavigationType {
                 case .Amap:
                     return "iosamap://"
                 case .GoogleMap:
-                    return "iosamap://"
+                    return "comgooglemaps://"
                 case .qqMap:
                     return "qqmap://"
             }
@@ -142,15 +142,21 @@ public class JQ_LocationTool:NSObject,CLLocationManagerDelegate{
 
     private var currentType = 0
 
+    public private(set) var currentLocation:CLLocation?
+
     public var locationClouse:JQLocationLocationClouse?
     public var headingClouse:JQLocationHeadingClouse?
     public var errorClouse:JQLocationErrorClouse?
 
-    public static let `default`:JQ_LocationTool = {
-        let center = JQ_LocationTool()
-        return center
-    }()
+    private static var _sharedInstance: JQ_LocationTool?
 
+    public class func instance() -> JQ_LocationTool {
+           guard let instance = _sharedInstance else {
+               _sharedInstance = JQ_LocationTool()
+               return _sharedInstance!
+           }
+           return instance
+       }
     private override init() {
         super.init()
     }
@@ -171,16 +177,18 @@ public class JQ_LocationTool:NSObject,CLLocationManagerDelegate{
             currentStatus = CLLocationManager.authorizationStatus()
         }
         switch currentStatus {
-            case .authorizedAlways,.authorizedWhenInUse:
-                if CLLocationManager.locationServicesEnabled() {
-                    manager.startUpdatingLocation()
-                }
+            case .authorizedAlways,.authorizedWhenInUse:break
+//                manager.startUpdatingLocation()
             case .restricted,.denied:
                 JQ_AuthorizesTool.default.openURL(.location)
             case .notDetermined:
                 manager.requestWhenInUseAuthorization()
             default:break
         }
+    }
+
+    public func geocoder(_ location:CLLocation,completeClouse:@escaping CLGeocodeCompletionHandler){
+        CLGeocoder().reverseGeocodeLocation(location, completionHandler: completeClouse)
     }
 
     public func stopLocation(){
@@ -191,6 +199,9 @@ public class JQ_LocationTool:NSObject,CLLocationManagerDelegate{
         manager.stopUpdatingHeading()
     }
 
+    public func destroy(){
+        JQ_LocationTool._sharedInstance = nil
+    }
 
     public func startHeading(_ headingClouse:@escaping JQLocationHeadingClouse,errorClouse:@escaping JQLocationErrorClouse){
         currentType = 1
@@ -217,6 +228,7 @@ public class JQ_LocationTool:NSObject,CLLocationManagerDelegate{
     }
 
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        currentLocation = nil
         errorClouse?(error)
     }
 
@@ -248,6 +260,9 @@ public class JQ_LocationTool:NSObject,CLLocationManagerDelegate{
     }
 
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        locationClouse?(locations.last!)
+        if let location = locations.filter({$0.coordinate.latitude > 0 && $0.coordinate.longitude > 0}).last{
+            currentLocation = location
+            locationClouse?(location)
+        }
     }
 }

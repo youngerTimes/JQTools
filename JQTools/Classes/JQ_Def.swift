@@ -58,7 +58,7 @@ public extension NSLayoutConstraint {
     /// 重写constant,适配比例
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.constant = self.constant * JQ_RateW
+        self.constant = self.constant
     }
 }
 

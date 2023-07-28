@@ -8,6 +8,7 @@
 
 import UIKit
 import WebKit
+import IQKeyboardManagerSwift
 
 #if canImport(SnapKit)
 /// 网页
@@ -16,6 +17,7 @@ public class JQ_CommonWebViewController: JQ_BaseVC {
     private var webView:WKWebView?
     private(set) var url = ""
     private(set) var htmlText = ""
+    private(set) var baseUrl:URL?
     private var progressView = UIProgressView()
     private let jsCode = """
     var meta = document.createElement('meta');"
@@ -31,9 +33,10 @@ public class JQ_CommonWebViewController: JQ_BaseVC {
         self.url = url
     }
     
-    public convenience init(htmlText:String) {
+    public convenience init(htmlText:String,baseURL:URL? = nil) {
         self.init()
         self.htmlText = htmlText.jq_wrapHtml()
+        self.baseUrl = baseURL
     }
     
     public override func viewDidLoad() {
@@ -57,8 +60,8 @@ public class JQ_CommonWebViewController: JQ_BaseVC {
         } else {
             self.automaticallyAdjustsScrollViewInsets = false
         }
-        
-        
+
+
         progressView.tintColor = tintColor
         view.addSubview(progressView)
         progressView.snp.makeConstraints { (make) in
@@ -71,7 +74,7 @@ public class JQ_CommonWebViewController: JQ_BaseVC {
             let urlRequest = URLRequest(url: URL(string: url)!)
             webView?.load(urlRequest)
         }else{
-            webView?.loadHTMLString(htmlText, baseURL: nil)
+            webView?.loadHTMLString(htmlText, baseURL: baseUrl)
         }
     }
     

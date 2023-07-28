@@ -56,7 +56,7 @@ public extension WKWebView{
                 for img in imgsUrl{
                     let imageView = UIImageView()
 //                    imageView.setImage(img, nil)
-                    imageView.jq_imageFromURL(img, placeholder: UIImage(named: "")!)
+                    imageView.jq_sdimage(url:img)
                     imgs.append(imageView)
                 }
                resultForImg(imgsUrl,imgs)

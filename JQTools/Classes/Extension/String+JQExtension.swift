@@ -280,10 +280,11 @@ public extension String{
     }
     
     /// 获取子字符串的NSRange
-    func jq_subRange(_ subText:String)->NSRange{
+    func jq_subRange(_ subText:String)->NSRange?{
         let range = self.range(of: subText)
         let from = range?.lowerBound.samePosition(in: utf16)
         let to = range?.upperBound.samePosition(in: utf16)
+        guard from != nil && to != nil else {return nil}
         return NSRange(location: utf16.distance(from: utf16.startIndex, to: from!),
                        length: utf16.distance(from: from!, to: to!))
     }
@@ -727,6 +728,29 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
         let isMatch:Bool = pred.evaluate(with: self)
         return isMatch;
     }
+
+    /// 判断是否是序列中文 比如： “1.中文”
+    var jq_sequenceChinese:Bool {
+        let pattern = #"^\d+\.\p{Han}+.{0,}"#
+        let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
+        let isMatch:Bool = pred.evaluate(with: self)
+        return isMatch;
+    }
+
+        /// 判断是否是序列中文 比如： “1.中文”
+    var jq_sequenceChinese1:Bool {
+        let pattern = #"\p{Han}+g"#
+        let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
+        let isMatch:Bool = pred.evaluate(with: self)
+        return isMatch;
+    }
+
+    var jq_doubleNumber:Bool{
+        let pattern = #"^(([0-9]+|0)\.([0-9]{1,2}))\s(([^0][0-9]+|0)\.([0-9]{1,3}))$"#
+        let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
+        let isMatch:Bool = pred.evaluate(with: self)
+        return isMatch;
+    }
     
     /// 判断是否是链接
     var jq_isURL:Bool {
@@ -765,5 +789,72 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
             print(error)
         }
         return returnStr.replacingOccurrences(of: "\\n", with: "\n")
+    }
+}
+
+public extension String{
+    enum CryptoAlgorithm {
+        case MD5, SHA1, SHA224, SHA256, SHA384, SHA512
+
+        var HMACAlgorithm: CCHmacAlgorithm {
+            var result: Int = 0
+            switch self {
+                case .MD5:      result = kCCHmacAlgMD5
+                case .SHA1:     result = kCCHmacAlgSHA1
+                case .SHA224:   result = kCCHmacAlgSHA224
+                case .SHA256:   result = kCCHmacAlgSHA256
+                case .SHA384:   result = kCCHmacAlgSHA384
+                case .SHA512:   result = kCCHmacAlgSHA512
+            }
+            return CCHmacAlgorithm(result)
+        }
+
+        var digestLength: Int {
+            var result: Int32 = 0
+            switch self {
+                case .MD5:      result = CC_MD5_DIGEST_LENGTH
+                case .SHA1:     result = CC_SHA1_DIGEST_LENGTH
+                case .SHA224:   result = CC_SHA224_DIGEST_LENGTH
+                case .SHA256:   result = CC_SHA256_DIGEST_LENGTH
+                case .SHA384:   result = CC_SHA384_DIGEST_LENGTH
+                case .SHA512:   result = CC_SHA512_DIGEST_LENGTH
+            }
+            return Int(result)
+        }
+    }
+
+    public func jq_hmacBase64(algorithm: CryptoAlgorithm, key: String) -> String {
+        let str = self.cString(using: String.Encoding.utf8)
+        let strLen = Int(self.lengthOfBytes(using: String.Encoding.utf8))
+        let digestLen = algorithm.digestLength
+        let result = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: digestLen)
+        let keyStr = key.cString(using: String.Encoding.utf8)
+        let keyLen = Int(key.lengthOfBytes(using: String.Encoding.utf8))
+        CCHmac(algorithm.HMACAlgorithm, keyStr!, keyLen, str!, strLen, result)
+        let hmacData:NSData = NSData(bytes: result, length: (Int(algorithm.digestLength)))
+        let hmacBase64 = hmacData.base64EncodedString(options: NSData.Base64EncodingOptions.lineLength76Characters)
+        result.deinitialize(count: digestLen)
+        return hmacBase64
+    }
+
+    public func jq_hmac(algorithm: CryptoAlgorithm, key: String) -> String {
+        let str = self.cString(using: String.Encoding.utf8)
+        let strLen = Int(self.lengthOfBytes(using: String.Encoding.utf8))
+        let digestLen = algorithm.digestLength
+        let result = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: digestLen)
+        let keyStr = key.cString(using: String.Encoding.utf8)
+        let keyLen = Int(key.lengthOfBytes(using: String.Encoding.utf8))
+        CCHmac(algorithm.HMACAlgorithm, keyStr!, keyLen, str!, strLen, result)
+        let digest = stringFromResult(result: result, length: digestLen)
+        result.deinitialize(count: digestLen)
+        return digest
+    }
+
+    private func stringFromResult(result: UnsafeMutablePointer<CUnsignedChar>, length: Int) -> String {
+        let hash = NSMutableString()
+        for i in 0..<length {
+            hash.appendFormat("%02x", result[i])
+        }
+        return String(hash)
     }
 }

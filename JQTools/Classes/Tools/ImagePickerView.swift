@@ -13,7 +13,7 @@ import Photos
 import PhotosUI
 import AssetsLibrary
 
-class ImagePickerView:NSObject{
+public class ImagePickerView:NSObject{
     private var clouse:(([UIImage])->Void)?
     private var clipSize:CGSize?
     private var clipRect:CGRect{
@@ -29,7 +29,7 @@ class ImagePickerView:NSObject{
     private static var _shareInstance:ImagePickerView?
     private weak var handerVC:UIViewController?
 
-    static func getShareInstance()->ImagePickerView{
+    public static func getShareInstance()->ImagePickerView{
         guard let instance = _shareInstance else {
             _shareInstance = ImagePickerView()
             return _shareInstance!
@@ -89,7 +89,7 @@ class ImagePickerView:NSObject{
 
 extension ImagePickerView:TZImagePickerControllerDelegate{
 
-    func imagePickerController(_ picker: TZImagePickerController!, didFinishPickingPhotos photos: [UIImage]!, sourceAssets assets: [Any]!, isSelectOriginalPhoto: Bool, infos: [[AnyHashable : Any]]!) {
+    public func imagePickerController(_ picker: TZImagePickerController!, didFinishPickingPhotos photos: [UIImage]!, sourceAssets assets: [Any]!, isSelectOriginalPhoto: Bool, infos: [[AnyHashable : Any]]!) {
         clouse?(photos)
         ImagePickerView.destory()
     }
@@ -97,7 +97,7 @@ extension ImagePickerView:TZImagePickerControllerDelegate{
 
 extension ImagePickerView:UIImagePickerControllerDelegate & UINavigationControllerDelegate {
 
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let originImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
 
         if clipSize != nil{

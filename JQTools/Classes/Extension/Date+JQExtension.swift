@@ -380,14 +380,46 @@ public extension Date{
     }
     
     ///根据时间获取一个周的时间表
-    static func jq_weekDates(_ date:Date)->[Date]{
-        var dates = [Date]()
-        let timeInterval = 24 * 3600
-        for week in 1...7{
-            let date = date.jq_startOfWeek.addingTimeInterval(TimeInterval(week * timeInterval))
-            dates.append(date)
-        }
-        return dates
+    static func jq_weekDates(_ date:Date)->[Date]?{
+            //当前时间
+                let currentDate = date
+                let calender = Calendar.current
+                var comp = calender.dateComponents([.year, .month, .day, .weekday], from: currentDate)
+
+                //当前时间是几号、周几
+                let currentDay = comp.day
+                let weeKDay = comp.weekday
+
+                //如果获取当前时间的日期和周几失败，返回nil
+                guard let day = currentDay, let week = weeKDay else {
+                    return nil
+                }
+
+                //由于1代表的是周日，因此计算出准确的周几
+                var currentWeekDay = 0
+                if week == 1 {
+                    currentWeekDay = 7
+                } else {
+                    currentWeekDay = week - 1
+                }
+
+                //1 ... 7表示周一到周日
+                //进行遍历和currentWeekDay进行比较，计算出之间的差值，即为当前日期和一周时间日期的差值，即可计算出一周时间内准备的日期
+                var dates: [Date] = []
+                for index in 1 ... 7 {
+                    let diff = index - currentWeekDay
+                    comp.day = day + diff
+                    let date = calender.date(from: comp)
+
+                    //由于上述方法返回的Date为可选类型，要进行判空处理
+                    if let _ = date {
+                        dates.append(date!)
+                    }
+                }
+
+                //返回时间数组
+                return dates
+
     }
 
     
@@ -411,18 +443,18 @@ public extension Date{
     ///获取上一周的时间表
     var jq_lastWeekDates:[Date]{
         let temp_lastDate = self.addingTimeInterval(-7 * 24 * 3600)
-        return Date.jq_weekDates(temp_lastDate)
+        return Date.jq_weekDates(temp_lastDate)!
     }
     
     ///获取上一周的时间表
     var jq_nextWeekDates:[Date]{
         let temp_nextDate = self.addingTimeInterval(7 * 24 * 3600)
-        return Date.jq_weekDates(temp_nextDate)
+        return Date.jq_weekDates(temp_nextDate)!
     }
     
     ///获取本周的时间表
     var jq_currentWeekDates:[Date]{
-        return Date.jq_weekDates(self)
+        return Date.jq_weekDates(self)!
     }
     
     ///获取上一个周
@@ -557,13 +589,19 @@ public extension Date{
         return false
     }
 
-    mutating func jq_add(year:Int? = nil,month:Int? = nil,day:Int? = nil,hour:Int? = nil,minute:Int? = nil,second:Int? = nil)->Date?{
+     func jq_add(year:Int? = nil,month:Int? = nil,day:Int? = nil,hour:Int? = nil,minute:Int? = nil,second:Int? = nil)->Date?{
         let calendar = Calendar(identifier: .gregorian)
        return calendar.date(byAdding: DateComponents(calendar: calendar,year: year,month: month,day: day,hour: hour,minute: minute,second: second), to: self)
 
 
     }
-    
+
+    func jq_clearTimes()->Date!{
+       let calendar = Calendar(identifier: .gregorian)
+        let dateComponents = DateComponents(calendar: calendar, timeZone: TimeZone.current, year: year, month: month, day: day, hour: hour, minute: 0, second: 0, nanosecond: 0)
+        return dateComponents.date
+   }
+
     /// 获取指定年份
     func jq_allYears(_ startYear:Int = 1900)->Array<Int>{
         var years = [Int]()
@@ -701,6 +739,33 @@ public extension Date{
         return (weekday,index)
     }
 
+    func jq_nowWeekDay(identifier:Calendar.Identifier)->(weekName:String,index:NSInteger){
+        var calendar = Calendar(identifier: identifier)
+        calendar.timeZone = TimeZone(identifier: "Asia/Shanghai")!
+        calendar.locale = Locale(identifier: "zh_CN")
+        let a = calendar.component(Calendar.Component.weekday, from: self)
+        var weekday = "未知"
+        switch a {
+            case 1:
+                weekday = "日"
+            case 2:
+                weekday = "一"
+            case 3:
+                weekday = "二"
+            case 4:
+                weekday = "三"
+            case 5:
+                weekday = "四"
+            case 6:
+                weekday = "五"
+            case 7:
+                weekday = "六"
+            default:break
+        }
+
+        return (weekday,a)
+    }
+
     /// date实例格式化时间
     func jq_format(_ formatter:String)->String{
         let dateFormatter = DateFormatter()
@@ -771,6 +836,12 @@ public extension Date{
     /// 判断两个时间是否相等，根据格式判断
     static func jq_absEqual(date1:Date,date2:Date,format:String = "yyyy-MM-dd") -> Bool{
         return date2.jq_format(format) == date1.jq_format(format)
+    }
+}
+
+public extension Date{
+    func copy()->Date{
+        return self
     }
 }
 

@@ -8,12 +8,12 @@
 import UIKit
 import RxSwift
 
-enum AlertSheetType {
+public enum AlertSheetType {
     case single
     case img
 }
 // MARK: -- 【需封装此类】
-class CommonAlertSheetView: UIView,JQNibView {
+public class CommonAlertSheetView: UIView,JQNibView {
 
     @IBOutlet weak var centerView: UIView!
     @IBOutlet weak var tableView: UITableView!
@@ -27,25 +27,25 @@ class CommonAlertSheetView: UIView,JQNibView {
     private var clouse:((Int,String)->Void)?
     private var disposeBag = DisposeBag()
 
-    override func awakeFromNib() {
+    public override func awakeFromNib() {
         super.awakeFromNib()
         cancelHeiCons.constant = UIDevice.jq_safeEdges.bottom + 56
-        tableView.jq_register(cellName: "CommonSheetTCell")
+        tableView.jq_registerTool(cellName: "CommonSheetTCell")
         tableView.delegate = self
         tableView.dataSource = self
         tableView.isScrollEnabled = false
         tableView.separatorStyle = .none
     }
 
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         centerView.jq_cornerPartWithNib(byRoundingCorners: [.topLeft,.topRight], radii: 12, size: centerView.jq_size)
     }
 
     @discardableResult
-    static func show(vc:UIViewController? = nil,type:AlertSheetType,titles:[String],imgs:[String]? = nil,clouse:@escaping (Int,String)->Void)->CommonAlertSheetView{
+    public static func show(vc:UIViewController? = nil,type:AlertSheetType,titles:[String],imgs:[String]? = nil,clouse:@escaping (Int,String)->Void)->CommonAlertSheetView{
         let window = UIApplication.shared.keyWindow
-        let sheetView = CommonAlertSheetView.jq_loadNibView()
+        let sheetView = CommonAlertSheetView.jq_loadToolNibView()
         sheetView.handlerVC = vc
         sheetView.titles = titles
         sheetView.imgs = imgs
@@ -63,9 +63,9 @@ class CommonAlertSheetView: UIView,JQNibView {
     }
 
     @discardableResult
-    static func showWithNoCancel(vc:UIViewController? = nil,type:AlertSheetType,titles:[String],imgs:[String]? = nil,clouse:@escaping (Int,String)->Void)->CommonAlertSheetView{
+    public static func showWithNoCancel(vc:UIViewController? = nil,type:AlertSheetType,titles:[String],imgs:[String]? = nil,clouse:@escaping (Int,String)->Void)->CommonAlertSheetView{
         let window = UIApplication.shared.keyWindow
-        let sheetView = CommonAlertSheetView.jq_loadNibView()
+        let sheetView = CommonAlertSheetView.jq_loadToolNibView()
         sheetView.handlerVC = vc
         sheetView.titles = titles
         sheetView.imgs = imgs
@@ -100,11 +100,11 @@ extension CommonAlertSheetView:UITableViewDelegate{
 
 
 extension CommonAlertSheetView:UITableViewDataSource{
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return titles.count
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "_CommonSheetTCell") as! CommonSheetTCell
         cell.btn.setTitle(titles[indexPath.row], for: .normal)
         if imgs != nil{

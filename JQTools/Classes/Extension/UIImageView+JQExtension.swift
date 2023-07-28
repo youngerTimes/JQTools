@@ -5,6 +5,7 @@
 //  Created by 杨锴 on 2020/3/15.
 //
 import QuartzCore
+import SDWebImage
 
 public extension UIImageView{
     /**
@@ -17,9 +18,15 @@ public extension UIImageView{
 
      - Returns A new image
      */
-    func jq_imageFromURL(_ url: String, placeholder: UIImage, fadeIn: Bool = true, shouldCacheImage: Bool = true, closure: ((_ image: UIImage?) -> ())? = nil)
+    func jq_imageFromURL(_ url: String?, placeholder: UIImage, fadeIn: Bool = true, shouldCacheImage: Bool = true, closure: ((_ image: UIImage?) -> ())? = nil)
     {
-        self.image = UIImage.image(fromURL: url, placeholder: placeholder, shouldCacheImage: shouldCacheImage) {
+        if url == nil{
+            self.image = placeholder
+//            closure?(placeholder)
+            return
+        }
+
+        self.image = UIImage.image(fromURL: url!, placeholder: placeholder, shouldCacheImage: shouldCacheImage) {
             (image: UIImage?) in
             if image == nil {
                 return
@@ -34,6 +41,10 @@ public extension UIImageView{
             }
             closure?(image)
         }
+    }
+
+    func jq_sdimage(url:String?,placeholderImage:UIImage? = nil,options:SDWebImageOptions = .queryDiskDataSync){
+        self.sd_setImage(with: URL(string: url ?? ""), placeholderImage: placeholderImage, options: options, completed: nil)
     }
 
     /// 加载JQTools中 Assets.xcassets中数据

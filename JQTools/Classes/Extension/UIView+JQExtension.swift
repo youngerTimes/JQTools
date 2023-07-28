@@ -348,10 +348,10 @@ public extension UIView{
         self.backgroundColor = UIColor.white.withAlphaComponent(0)
     }
 
-    func jq_addCorners(corner:UIRectCorner,radius:Double){
+    func jq_addCorners(corner:UIRectCorner,radius:Double,width:Double? = nil,height:Double? = nil){
         // 圆角位置
         //frame可以先计算完成  避免圆角拉伸
-        let rect = CGRect(x: 0, y: 0, width: jq_width, height: jq_height)
+        let rect = CGRect(x: 0, y: 0, width: (width == nil ? jq_width:width)!, height: (height == nil ? jq_height:height)!)
         let path: UIBezierPath = UIBezierPath(roundedRect: rect, byRoundingCorners: corner, cornerRadii: CGSize(width: radius, height: radius))
         let maskLayer: CAShapeLayer = CAShapeLayer()
         maskLayer.frame = rect

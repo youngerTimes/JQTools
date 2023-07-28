@@ -4,6 +4,7 @@
 //
 //  Created by 杨锴 on 2020/3/15.
 //
+import SDWebImage
 
 extension UIButton{
     public enum ButtonOriginType {
@@ -110,5 +111,9 @@ extension UIButton{
             images.append(image)
         }
         setImage(UIImage.animatedImage(with: images, duration: duration), for: .normal)
+    }
+
+    public func jq_loadImgUrl(_ url: String?,state:UIButton.State = .normal){
+        self.sd_setImage(with: URL(string: url ?? ""), for: state)
     }
 }

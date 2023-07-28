@@ -16,6 +16,14 @@ public extension UITableView {
         }
     }
 
+    func jq_registerTool(cellName: String, identifier: String? = nil){
+        if identifier == nil{
+            register(NIB(name: cellName,bundle: Bundle.jqBundle), forCellReuseIdentifier: "_\(cellName)")
+        }else{
+            register(NIB(name: cellName,bundle: Bundle.jqBundle), forCellReuseIdentifier: identifier!)
+        }
+    }
+
     func jq_register(viewName: String, identifier: String) {
         register(NIB(name: viewName), forHeaderFooterViewReuseIdentifier: identifier)
     }
@@ -24,8 +32,8 @@ public extension UITableView {
         register(NIB(name: headName), forHeaderFooterViewReuseIdentifier: identifier)
     }
 
-    private func NIB(name: String) -> UINib {
-        return UINib(nibName: name, bundle: nil)
+    private func NIB(name: String,bundle:Bundle? = nil) -> UINib {
+        return UINib(nibName: name, bundle: bundle)
     }
 }
 
