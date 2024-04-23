@@ -11,13 +11,13 @@ import UIKit
 class JQCircleLayer: UIView {
 
     var progress:CGFloat = 0.0
-    var lineWidth:CGFloat = 20*JQ_RateW
+    var lineWidth:CGFloat = 20
     var progressLayer:CAShapeLayer!
     var bgLayer:CAShapeLayer!
     var bgColor = UIColor.white
     
     lazy var label: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 100*JQ_RateW, height: 100*JQ_RateW))
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         label.textAlignment = .center
         label.textColor = UIColor(hexStr: "001411").withAlphaComponent(0.6)
         label.font = UIFont.systemFont(ofSize: 11)
@@ -50,7 +50,7 @@ class JQCircleLayer: UIView {
     func drawCycleProgress(){
         
         let center = CGPoint(x: self.bounds.size.width/2, y: self.bounds.size.width/2)
-        let radius = (self.bounds.size.width-40*JQ_RateW)/2
+        let radius = (self.bounds.size.width-40)/2
         let startA = -CGFloat.pi/2
         let endA = -CGFloat.pi/2+CGFloat.pi*2*progress
         

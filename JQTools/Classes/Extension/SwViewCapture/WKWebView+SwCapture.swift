@@ -13,7 +13,7 @@ import ObjectiveC
 ///【截图】
 public extension WKWebView {
     
-    public func swContentCapture(_ completionHandler:@escaping (_ capturedImage: UIImage?) -> Void) {
+	func swContentCapture(_ completionHandler:@escaping (_ capturedImage: UIImage?) -> Void) {
         
         self.isCapturing = true
         
@@ -50,7 +50,7 @@ public extension WKWebView {
         
         let bakFrame     = self.frame
         let bakSuperView = self.superview
-        let bakIndex     = self.superview?.subviews.index(of: self)
+		let bakIndex     = self.superview?.subviews.firstIndex(of: self)
         
         // remove WebView from superview & put container view
         self.removeFromSuperview()
@@ -106,7 +106,7 @@ public extension WKWebView {
 
     // Simulate People Action, all the `fixed` element will be repeate
     // SwContentCapture will capture all content without simulate people action, more perfect.
-    public func swContentScrollCapture (_ completionHandler: @escaping (_ capturedImage: UIImage?) -> Void) {
+	func swContentScrollCapture (_ completionHandler: @escaping (_ capturedImage: UIImage?) -> Void) {
         
         self.isCapturing = true
         

@@ -66,7 +66,7 @@ public class JQ_CommonWebViewController: JQ_BaseVC {
         view.addSubview(progressView)
         progressView.snp.makeConstraints { (make) in
             make.top.left.right.equalToSuperview()
-            make.height.equalTo(2 * JQ_RateW)
+            make.height.equalTo(2)
         }
         
         

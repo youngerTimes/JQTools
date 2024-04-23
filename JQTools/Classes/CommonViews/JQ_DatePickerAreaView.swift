@@ -58,7 +58,7 @@ public class JQ_DatePickerAreaView: UIView,JQNibView{
         
         
         UIView.animate(withDuration: 0.3, animations: {
-            weakSelf.centerView.transform = CGAffineTransform(translationX: 0, y: -266 * JQ_RateW + (jq_isDiffPhone ? 53*JQ_RateW : 0))
+            weakSelf.centerView.transform = CGAffineTransform(translationX: 0, y: -266  + (jq_isDiffPhone ? 53 : 0))
         }) { (value) in
             weakSelf.backgroundColor = UIColor.black.withAlphaComponent(0.15)
         }
@@ -124,7 +124,7 @@ extension JQ_DatePickerAreaView:UIPickerViewDataSource{
     }
     
     public func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return 36 * JQ_RateW
+        return 36 
     }
     
     public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {

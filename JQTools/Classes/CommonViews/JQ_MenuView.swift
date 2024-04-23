@@ -43,7 +43,7 @@ public class JQ_MenuView: UIView {
         tableView!.separatorStyle = .none
         tableView!.isScrollEnabled = false
         tableView!.register(MenuItemTCell.self, forCellReuseIdentifier: "_MenuItemTCell")
-        tableView!.jq_cornerRadius = 8 * JQ_RateW
+        tableView!.jq_cornerRadius = 8
         addSubview(tableView!)
 
         for item in items {
@@ -54,7 +54,7 @@ public class JQ_MenuView: UIView {
         if tapView == nil{
             tableView!.snp.makeConstraints {[weak self](make) in
                 guard let weakSelf = self else { return }
-                make.right.equalToSuperview().offset(-5 * JQ_RateW)
+                make.right.equalToSuperview().offset(-5)
                 make.top.equalToSuperview().offset(JQ_NavBarHeight)
                 make.width.equalTo(weakSelf.maxW)
                 make.height.equalTo(0)
@@ -63,7 +63,7 @@ public class JQ_MenuView: UIView {
             tableView!.snp.makeConstraints { [weak self] (make) in
                 guard let weakSelf = self else { return }
                 make.centerX.equalTo(tapView!)
-                make.top.equalTo(tapView!.snp.bottom).offset(5 * JQ_RateW)
+                make.top.equalTo(tapView!.snp.bottom).offset(5)
                 if tableWidth != 0 && tableWidth > weakSelf.maxW{
                     make.width.equalTo(tableWidth)
                 }else if tableWidth != 0 && tableWidth <= weakSelf.maxW{
@@ -80,16 +80,16 @@ public class JQ_MenuView: UIView {
             if tapView == nil{
                 self.tableView!.snp.remakeConstraints {[weak self] (make) in
                     guard let weakSelf = self else { return }
-                    make.right.equalToSuperview().offset(-5 * JQ_RateW)
+                    make.right.equalToSuperview().offset(-5)
                     make.top.equalToSuperview().offset(JQ_NavBarHeight)
                     make.width.equalTo(weakSelf.maxW)
-                    make.height.equalTo(CGFloat(46 * items.count) * JQ_RateW)
+                    make.height.equalTo(CGFloat(46 * items.count))
                 }
             }else{
                 self.tableView!.snp.remakeConstraints {[weak self](make) in
                     guard let weakSelf = self else { return }
                     make.centerX.equalTo(tapView!)
-                    make.top.equalTo(tapView!.snp.bottom).offset(5 * JQ_RateW)
+                    make.top.equalTo(tapView!.snp.bottom).offset(5)
                     if tableWidth != 0 && tableWidth > weakSelf.maxW{
                         make.width.equalTo(tableWidth)
                     }else if tableWidth != 0 && tableWidth <= weakSelf.maxW{
@@ -99,10 +99,10 @@ public class JQ_MenuView: UIView {
                     }
                     if weakSelf.maxH != nil{
                         weakSelf.tableView!.isScrollEnabled = true
-                        let h = min(weakSelf.maxH!, Double(46 * items.count) * JQ_RateW)
+                        let h = min(weakSelf.maxH!, Double(46 * items.count))
                         make.height.equalTo(h)
                     }else{
-                        make.height.equalTo(CGFloat(46 * items.count) * JQ_RateW)
+                        make.height.equalTo(CGFloat(46 * items.count))
                     }
                 }
             }
@@ -126,12 +126,14 @@ public class JQ_MenuView: UIView {
         tableView!.showsVerticalScrollIndicator = false
         tableView!.isScrollEnabled = false
         tableView!.register(MenuItemTCell.self, forCellReuseIdentifier: "_MenuItemTCell")
-        tableView!.jq_cornerRadius = 8 * JQ_RateW
+        tableView!.jq_cornerRadius = 8
+								tableView!.jq_borderColor = .gray.withAlphaComponent(0.3)
+								tableView!.jq_borderWidth = 1
         addSubview(tableView!)
         
         if tapView == nil{
             tableView!.snp.makeConstraints { (make) in
-                make.right.equalToSuperview().offset(-5 * JQ_RateW)
+                make.right.equalToSuperview().offset(-5)
                 make.top.equalToSuperview().offset(JQ_NavBarHeight)
                 if menuWidth != nil{
                     make.width.equalTo(menuWidth!)
@@ -143,7 +145,7 @@ public class JQ_MenuView: UIView {
         }else{
             tableView!.snp.makeConstraints { (make) in
                 make.centerX.equalTo(tapView!)
-                make.top.equalTo(tapView!.snp.bottom).offset(5 * JQ_RateW)
+                make.top.equalTo(tapView!.snp.bottom).offset(5)
                 if menuWidth != nil{
                     make.width.equalTo(menuWidth!)
                 }else{
@@ -158,7 +160,7 @@ public class JQ_MenuView: UIView {
             if tapView == nil{
                 self.tableView!.snp.remakeConstraints {[weak self] (make) in
                     guard let weakSelf = self else { return }
-                    make.right.equalToSuperview().offset(-5 * JQ_RateW)
+                    make.right.equalToSuperview().offset(-5)
                     make.top.equalToSuperview().offset(JQ_NavBarHeight)
                     if menuWidth != nil{
                         make.width.equalTo(menuWidth!)
@@ -168,22 +170,29 @@ public class JQ_MenuView: UIView {
 
                     if weakSelf.maxH != nil{
                         weakSelf.tableView!.isScrollEnabled = true
-                        let h = min(weakSelf.maxH!, Double(46 * items.count) * JQ_RateW)
+                        let h = min(weakSelf.maxH!, Double(46 * items.count))
                         make.height.equalTo(h)
                     }else{
-                        make.height.equalTo(CGFloat(46 * items.count) * JQ_RateW)
+                        make.height.equalTo(CGFloat(46 * items.count))
                     }
                 }
             }else{
-                self.tableView!.snp.remakeConstraints { (make) in
+                self.tableView!.snp.remakeConstraints {[weak self] (make) in
+					guard let weakSelf = self else { return }
                     make.centerX.equalTo(tapView!)
-                    make.top.equalTo(tapView!.snp.bottom).offset(5 * JQ_RateW)
+                    make.top.equalTo(tapView!.snp.bottom).offset(5)
                     if menuWidth != nil{
                         make.width.equalTo(menuWidth!)
                     }else{
                         make.width.equalTo(tapView!.jq_width)
                     }
-                    make.height.equalTo(CGFloat(46 * items.count) * JQ_RateW)
+					if weakSelf.maxH != nil{
+						weakSelf.tableView!.isScrollEnabled = true
+						let h = min(weakSelf.maxH!, Double(46 * items.count))
+						make.height.equalTo(h)
+					}else{
+						make.height.equalTo(CGFloat(46 * items.count))
+					}
                 }
             }
             self.layoutIfNeeded()
@@ -202,7 +211,7 @@ public class JQ_MenuView: UIView {
             if self.tapView == nil{
                 self.tableView!.snp.remakeConstraints {[weak self](make) in
                     guard let weakSelf = self else { return }
-                    make.right.equalToSuperview().offset(-5 * JQ_RateW)
+                    make.right.equalToSuperview().offset(-5)
                     make.top.equalToSuperview().offset(JQ_NavBarHeight)
                     make.width.equalTo(weakSelf.maxW)
                     make.height.equalTo(0)
@@ -211,8 +220,8 @@ public class JQ_MenuView: UIView {
                 self.tableView!.snp.remakeConstraints {[weak self](make) in
                     guard let weakSelf = self else { return }
                     make.centerX.equalTo(weakSelf.tapView!)
-                    make.top.equalTo(weakSelf.tapView!.snp.bottom).offset(5 * JQ_RateW)
-                    make.top.equalTo(weakSelf.tapView!.snp.bottom).offset(5 * JQ_RateW)
+                    make.top.equalTo(weakSelf.tapView!.snp.bottom).offset(5)
+                    make.top.equalTo(weakSelf.tapView!.snp.bottom).offset(5)
                     if weakSelf.tableWidth != 0 && weakSelf.tableWidth > weakSelf.maxW{
                         make.width.equalTo(weakSelf.tableWidth)
                     }else if weakSelf.tableWidth != 0 && weakSelf.tableWidth <= weakSelf.maxW{
@@ -237,7 +246,7 @@ public class JQ_MenuView: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        tableView?.jq_shadow(shadowColor: UIColor(hexStr: "#00575E"), corner: 16, opacity: 0.1)
+        tableView?.jq_shadow(shadowColor: UIColor(hexStr: "#00575E"), corner: 16, opacity: 0.5)
         tableView?.jq_masksToBounds = true
         if maxH != nil{
             tableView?.jq_borderColor = .gray
@@ -258,7 +267,7 @@ extension JQ_MenuView:UITableViewDelegate{
     }
 
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 46 * JQ_RateW
+        return 46
     }
 }
 
@@ -301,16 +310,16 @@ public class MenuItemTCell:UITableViewCell{
         contentView.addSubview(itemNameL)
         itemNameL.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview()
-            make.top.equalTo(10 * JQ_RateW)
-            make.bottom.equalTo(-10 * JQ_RateW)
+            make.top.equalTo(10)
+            make.bottom.equalTo(-10)
         }
         
         lineView = UIView()
         lineView.backgroundColor = UIColor(hexStr: "E9EBF2")
         contentView.addSubview(lineView)
         lineView.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 10 * JQ_RateW, bottom: 0, right: 10 * JQ_RateW))
-            make.height.equalTo(0.5 * JQ_RateW)
+            make.left.right.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
+            make.height.equalTo(0.5)
             make.bottom.equalToSuperview()
         }
     }

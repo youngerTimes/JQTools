@@ -19,7 +19,7 @@ public class JQ_SelectCitySectionHeaderView: UITableViewHeaderFooterView {
         indexL.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.medium)
         self.contentView.addSubview(indexL)
         indexL.snp.makeConstraints { (make) in
-            make.left.equalTo(15*JQ_RateW)
+            make.left.equalTo(15)
             make.centerY.equalTo(self.contentView)
         }
     }

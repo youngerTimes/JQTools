@@ -28,7 +28,7 @@ class JQ_PlayVedioView: UIView {
             player?.isMuted = true
             playerLayer = AVPlayerLayer(player: player)
             playerLayer?.videoGravity = .resizeAspectFill
-            playerLayer?.frame = CGRect(x: 0, y: 0, width: JQ_ScreenW-30*JQ_RateW, height: (JQ_ScreenW-30*JQ_RateW)*9.0/16.0)
+            playerLayer?.frame = CGRect(x: 0, y: 0, width: JQ_ScreenW-30, height: (JQ_ScreenW-30)*9.0/16.0)
             backImageV.layer.addSublayer(playerLayer!)
         }
     }
@@ -65,7 +65,7 @@ class JQ_PlayVedioView: UIView {
     }
     
     func uiSet() {
-        layer.cornerRadius = 4*JQ_RateW
+        layer.cornerRadius = 4
         backImageV.contentMode = .scaleAspectFill
         self.addSubview(backImageV)
         backImageV.snp.makeConstraints { (make) in
@@ -76,14 +76,14 @@ class JQ_PlayVedioView: UIView {
         self.addSubview(playBtn)
         weak var weakSelf = self
         playBtn.snp.makeConstraints { (make) in
-            make.width.height.equalTo(40*JQ_RateW)
+            make.width.height.equalTo(40)
             make.centerX.centerY.equalTo(weakSelf!)
         }
         timeL.textColor = .white
         timeL.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         self.addSubview(timeL)
         timeL.snp.makeConstraints { (make) in
-            make.bottom.right.equalTo(-10*JQ_RateW)
+            make.bottom.right.equalTo(-10)
         }
         let tap = UITapGestureRecognizer(target: self, action: #selector(fullPlayAction))
         self.addGestureRecognizer(tap)

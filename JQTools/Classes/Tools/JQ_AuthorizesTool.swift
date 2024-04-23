@@ -8,7 +8,7 @@
 import Foundation
 import Photos
 import AssetsLibrary
-import MediaPlayer
+//import MediaPlayer
 import CoreTelephony
 import CoreLocation
 import AVFoundation
@@ -18,7 +18,7 @@ import AVFoundation
 public class JQ_AuthorizesTool:NSObject{
     public static let `default` = JQ_AuthorizesTool()
     let manager = CLLocationManager()
-    
+
     public enum JQ_PermissionsType{
         /// 相机
         case camera
@@ -29,24 +29,24 @@ public class JQ_AuthorizesTool:NSObject{
         /// 网络
         case network
         /// 麦克风
-        case microphone
+//        case microphone
         /// 媒体库
-        case media
+//        case media
     }
-    
+
     override init() {
         super.init()
     }
-    
+
     /// 相册权限
     @discardableResult
     public func photoLibraryAuth()->Bool{
         let status = PHPhotoLibrary.authorizationStatus()
-        
+
         switch status {
             case .authorized:
                 return true
-            
+
             case .notDetermined:
                 // 请求授权
                 PHPhotoLibrary.requestAuthorization({ (status) -> Void in
@@ -54,7 +54,7 @@ public class JQ_AuthorizesTool:NSObject{
                         self.photoLibraryAuth()
                     })
                 })
-            
+
             default: ()
             DispatchQueue.main.async(execute: { () -> Void in
                 let alertController = UIAlertController(title: "照片访问受限",message: "点击“设置”，允许访问您的照片",preferredStyle: .alert)
@@ -65,14 +65,14 @@ public class JQ_AuthorizesTool:NSObject{
                     if let url = url, UIApplication.shared.canOpenURL(url) {
                         if #available(iOS 10, *) {
                             UIApplication.shared.open(url, options: [:],completionHandler: {(success) in
-                                
+
                             })
                         } else {
                             UIApplication.shared.openURL(url)
                         }
                     }
                 })
-                
+
                 alertController.addAction(cancelAction)
                 alertController.addAction(settingsAction)
                 JQ_currentViewController().present(alertController, animated: true, completion: nil)
@@ -80,17 +80,17 @@ public class JQ_AuthorizesTool:NSObject{
         }
         return false
     }
-    
+
     /// 麦克风，相机权限
     @discardableResult
     public func captureDeviceAuth(type:AVMediaType)->Bool{
 
         let status = AVCaptureDevice.authorizationStatus(for: type)
-        
+
         switch status {
             case .authorized:
                 return true
-            
+
             case .notDetermined:
                 // 请求授权
                 AVCaptureDevice.requestAccess(for: AVMediaType.audio, completionHandler: {
@@ -101,10 +101,10 @@ public class JQ_AuthorizesTool:NSObject{
                 })
             default: ()
             DispatchQueue.main.async(execute: { () -> Void in
-                
+
                 var title = ""
                 var message = ""
-                
+
                 if type == .audio{
                     title = "麦克风访问受限"
                     message = "点击“设置”，允许访问您的麦克风"
@@ -112,7 +112,7 @@ public class JQ_AuthorizesTool:NSObject{
                     title = "相机访问受限"
                     message = "点击“设置”，允许访问您的相机"
                 }
-                
+
                 let alertController = UIAlertController(title: title,message: message,preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title:"取消", style: .cancel, handler:nil)
                 let settingsAction = UIAlertAction(title:"设置", style: .default, handler: {
@@ -121,14 +121,14 @@ public class JQ_AuthorizesTool:NSObject{
                     if let url = url, UIApplication.shared.canOpenURL(url) {
                         if #available(iOS 10, *) {
                             UIApplication.shared.open(url, options: [:],completionHandler: {(success) in
-                                
+
                             })
                         } else {
                             UIApplication.shared.openURL(url)
                         }
                     }
                 })
-                
+
                 alertController.addAction(cancelAction)
                 alertController.addAction(settingsAction)
                 JQ_currentViewController().present(alertController, animated: true, completion: nil)
@@ -136,30 +136,30 @@ public class JQ_AuthorizesTool:NSObject{
         }
         return false
     }
-    
-    @available(iOS 9.3, *)
-    public func openMediaPlayerServiceWithBlock(_ isSet:Bool? = nil,_ action :@escaping ((Bool)->())) {
-        let authStatus = MPMediaLibrary.authorizationStatus()
-        if authStatus == MPMediaLibraryAuthorizationStatus.notDetermined {
-            MPMediaLibrary.requestAuthorization { (status) in
-                if (status == MPMediaLibraryAuthorizationStatus.authorized) {
-                    DispatchQueue.main.async {
-                        action(true)
-                    }
-                }else{
-                    DispatchQueue.main.async {
-                        action(false)
-                        if isSet == true {self.openURL(.media)}
-                    }
-                }
-            }
-        } else if authStatus == MPMediaLibraryAuthorizationStatus.authorized {
-            action(true)
-        } else {
-            action(false)
-             if isSet == true {openURL(.media)}
-        }
-    }
+
+//    @available(iOS 9.3, *)
+//    public func openMediaPlayerServiceWithBlock(_ isSet:Bool? = nil,_ action :@escaping ((Bool)->())) {
+//        let authStatus = MPMediaLibrary.authorizationStatus()
+//        if authStatus == MPMediaLibraryAuthorizationStatus.notDetermined {
+//            MPMediaLibrary.requestAuthorization { (status) in
+//                if (status == MPMediaLibraryAuthorizationStatus.authorized) {
+//                    DispatchQueue.main.async {
+//                        action(true)
+//                    }
+//                }else{
+//                    DispatchQueue.main.async {
+//                        action(false)
+////                        if isSet == true {self.openURL(.media)}
+//                    }
+//                }
+//            }
+//        } else if authStatus == MPMediaLibraryAuthorizationStatus.authorized {
+//            action(true)
+//        } else {
+//            action(false)
+////             if isSet == true {openURL(.media)}
+//        }
+//    }
 
     // MARK: - 检测是否开启联网
     /// 检测是否开启联网
@@ -212,7 +212,7 @@ public class JQ_AuthorizesTool:NSObject{
             action(true)
         }
     }
-    
+
     // MARK: - 检测是否开启相册
     /// 检测是否开启相册
     public func openAlbumServiceWithBlock(_ isSet:Bool? = nil,_ action :@escaping ((Bool)->())) {
@@ -227,21 +227,21 @@ public class JQ_AuthorizesTool:NSObject{
 
     // MARK: - 检测是否开启麦克风
     /// 检测是否开启麦克风
-    public func openRecordServiceWithBlock(_ isSet:Bool? = nil,_ action :@escaping ((Bool)->())) {
-        let permissionStatus = AVAudioSession.sharedInstance().recordPermission
-        if permissionStatus == AVAudioSession.RecordPermission.undetermined {
-            AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
-                action(granted)
-                if granted == false && isSet == true {self.openURL(.microphone)}
-            }
-        } else if permissionStatus == AVAudioSession.RecordPermission.denied || permissionStatus == AVAudioSession.RecordPermission.undetermined{
-            action(false)
-            if isSet == true {openURL(.microphone)}
-        } else {
-            action(true)
-        }
-    }
-    
+//    public func openRecordServiceWithBlock(_ isSet:Bool? = nil,_ action :@escaping ((Bool)->())) {
+//        let permissionStatus = AVAudioSession.sharedInstance().recordPermission
+//        if permissionStatus == AVAudioSession.RecordPermission.undetermined {
+//            AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
+//                action(granted)
+//                if granted == false && isSet == true {self.openURL(.microphone)}
+//            }
+//        } else if permissionStatus == AVAudioSession.RecordPermission.denied || permissionStatus == AVAudioSession.RecordPermission.undetermined{
+//            action(false)
+//            if isSet == true {openURL(.microphone)}
+//        } else {
+//            action(true)
+//        }
+//    }
+
     // MARK: - 跳转系统设置界面
     public func openURL(_ type: JQ_PermissionsType? = nil) {
         let title = "访问受限"
@@ -255,10 +255,10 @@ public class JQ_AuthorizesTool:NSObject{
             message = "请在iPhone的\"设置-隐私-定位服务\"选项中，允许\"\(appName)\"访问您的位置"
         } else if type == .network { // 网络
             message = "请在iPhone的\"设置-蜂窝移动网络\"选项中，允许\"\(appName)\"访问您的移动网络"
-        } else if type == .microphone { // 麦克风
-            message = "请在iPhone的\"设置-隐私-麦克风\"选项中，允许\"\(appName)\"访问您的麦克风"
-        } else if type == .media { // 媒体库
-            message = "请在iPhone的\"设置-隐私-媒体与Apple Music\"选项中，允许\"\(appName)\"访问您的媒体库"
+//        } else if type == .microphone { // 麦克风
+//            message = "请在iPhone的\"设置-隐私-麦克风\"选项中，允许\"\(appName)\"访问您的麦克风"
+//        } else if type == .media { // 媒体库
+//            message = "请在iPhone的\"设置-隐私-媒体与Apple Music\"选项中，允许\"\(appName)\"访问您的媒体库"
         }
         let url = URL(string: UIApplication.openSettingsURLString)
         let alertController = UIAlertController(title: title,

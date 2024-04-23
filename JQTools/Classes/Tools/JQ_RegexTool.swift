@@ -40,6 +40,7 @@ public struct JQ_RegexTool {
         case postCode = "^[0-8]\\\\d{5}(?!\\\\d)$" //邮政编码
         case taxCode = "[0-9]\\\\d{13}([0-9]|X)$" //工商税号
         case number = "^[1-9]\\d*$"
+		case markdownImgUrl = "!\\[([^]]*)]\\(([^)]*)\\)"
     }
  
     private let regularExpression: NSRegularExpression

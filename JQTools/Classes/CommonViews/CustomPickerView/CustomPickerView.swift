@@ -35,7 +35,7 @@ public class CustomPickerView: UIView {
         self.backgroundColor = UIColor(hexStr: "000000").withAlphaComponent(0.6)
         
         centerView.backgroundColor = UIColor.white
-        centerView.layer.cornerRadius = 8 * JQ_RateW
+        centerView.layer.cornerRadius = 8
         centerView.layer.masksToBounds = true
         
         cancelBtn.setTitle("取消", for: .normal)
@@ -48,24 +48,24 @@ public class CustomPickerView: UIView {
         completeBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         completeBtn.addTarget(self, action: #selector(completeAction), for: .touchUpInside)
         
-        centerView.frame = CGRect(x: 0, y: jq_height, width: JQ_ScreenW, height: 325 * JQ_RateW)
+        centerView.frame = CGRect(x: 0, y: jq_height, width: JQ_ScreenW, height: 325)
         
         addSubview(centerView)
         centerView.addSubview(cancelBtn)
         centerView.addSubview(completeBtn)
         
         cancelBtn.snp.makeConstraints { (make) in
-            make.top.equalTo(20 * JQ_RateW)
-            make.left.equalTo(20 * JQ_RateW)
-            make.width.equalTo(35 * JQ_RateW)
-            make.height.equalTo(20 * JQ_RateW)
+            make.top.equalTo(20)
+            make.left.equalTo(20)
+            make.width.equalTo(35)
+            make.height.equalTo(20)
         }
         
         completeBtn.snp.makeConstraints { (make) in
-            make.top.equalTo(20 * JQ_RateW)
-            make.right.equalTo(-20 * JQ_RateW)
-            make.width.equalTo(35 * JQ_RateW)
-            make.height.equalTo(20 * JQ_RateW)
+            make.top.equalTo(20)
+            make.right.equalTo(-20)
+            make.width.equalTo(35)
+            make.height.equalTo(20)
         }
         
         pickerView.dataSource = self
@@ -74,15 +74,15 @@ public class CustomPickerView: UIView {
         changesSpearatorLine()
         pickerView.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-20 * JQ_RateW)
-            make.top.equalToSuperview().offset(50 * JQ_RateW)
+            make.bottom.equalToSuperview().offset(-20)
+            make.top.equalToSuperview().offset(50)
         }
     }
     
    @objc public func hiden(){
     callbackSelect?(-1,"")
     UIView.animate(withDuration: 0.3, animations: {
-        self.centerView.frame = CGRect(x: 0, y: self.jq_height, width: JQ_ScreenW, height: 325 * JQ_RateW)
+        self.centerView.frame = CGRect(x: 0, y: self.jq_height, width: JQ_ScreenW, height: 325)
         }) { (complete) in
             self.removeFromSuperview()
         }
@@ -98,7 +98,7 @@ public class CustomPickerView: UIView {
         callbackSelect  = callback
     
         UIView.animate(withDuration: 0.6) {
-            self.centerView.frame = CGRect(x: 0, y: self.jq_height - 317 * JQ_RateW, width: JQ_ScreenW, height: 325 * JQ_RateW)
+            self.centerView.frame = CGRect(x: 0, y: self.jq_height - 317, width: JQ_ScreenW, height: 325)
         }
     }
     
@@ -107,8 +107,8 @@ public class CustomPickerView: UIView {
         for view in pickerView.subviews {
             if view.frame.size.height <= 1 {
                 view.backgroundColor = UIColor(hexStr: "E9E9E9")
-                view.frame.origin.x = view.frame.origin.x - 50 * JQ_RateW
-                view.frame.size.width = JQ_ScreenW - 100 * JQ_RateW
+                view.frame.origin.x = view.frame.origin.x - 50
+                view.frame.size.width = JQ_ScreenW - 100
             }
         }
     }
@@ -117,7 +117,7 @@ public class CustomPickerView: UIView {
     @objc private func completeAction(){
         
         UIView.animate(withDuration: 0.3, animations: {
-            self.centerView.frame = CGRect(x: 0, y: self.jq_height, width: JQ_ScreenW, height: 325 * JQ_RateW)
+            self.centerView.frame = CGRect(x: 0, y: self.jq_height, width: JQ_ScreenW, height: 325)
             }) { (complete) in
                 self.removeFromSuperview()
             }
@@ -149,7 +149,7 @@ extension CustomPickerView:UIPickerViewDataSource{
     }
     
     public  func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return 61 * JQ_RateW
+        return 61
     }
     
     public  func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {

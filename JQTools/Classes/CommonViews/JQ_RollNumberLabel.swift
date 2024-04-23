@@ -121,7 +121,7 @@ public class JQ_RollNumberLabel: UIView {
                 }
                 scrollView.contentSize = CGSize(width: 20, height: font.pointSize)
                 scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-                scrollView.contentInset = UIEdgeInsets(top: -6 * JQ_RateW, left: 0, bottom: 0, right: 0)
+                scrollView.contentInset = UIEdgeInsets(top: -6 , left: 0, bottom: 0, right: 0)
                 
             }else{
                 

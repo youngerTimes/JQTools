@@ -80,7 +80,7 @@ class JQ_StarRateView: UIView {
          */
         let width = (self.frame.size.width - 25.0 ) / CGFloat(count)
         for index in 0...count {
-            let imageView = UIImageView.init(frame: CGRect(x: CGFloat(index) * (width + 5.0),y: 0, width: 26 * JQ_RateW, height: 25 * JQ_RateW))
+            let imageView = UIImageView.init(frame: CGRect(x: CGFloat(index) * (width + 5.0),y: 0, width: 26, height: 25))
             imageView.image = UIImage(named: imageName)
             let blankView = UIView.init(frame: CGRect(x: CGFloat(index + 1 ) * width + CGFloat(index) * 5.0, y: 0, width: 5.0, height: self.bounds.size.height ))
             blankView.backgroundColor = UIColor.clear

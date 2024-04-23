@@ -19,8 +19,8 @@ public class JCommonSliderRoundView: UIView {
     private var centerView = UIView()
     private var sliderStartBtn = UIButton(type: .custom)
     private var sliderEndtBtn = UIButton(type: .custom)
-    private var sliderWidth:CGFloat = 22 * JQ_RateW
-    private var sliderPadding:CGFloat = 22 / 2 * JQ_RateW
+    private var sliderWidth:CGFloat = 22
+    private var sliderPadding:CGFloat = 22 / 2
     private var roundViewWidth:CGFloat = 0.0
     
     private var lineView = UIView()
@@ -46,7 +46,7 @@ public class JCommonSliderRoundView: UIView {
     
     private func setUI(){
         centerView.backgroundColor = UIColor(hexStr: "#D8DBDE")
-        centerView.jq_cornerRadius = 2 * JQ_RateW
+        centerView.jq_cornerRadius = 2
         centerView.jq_masksToBounds = true
         addSubview(centerView)
         
@@ -79,7 +79,7 @@ public class JCommonSliderRoundView: UIView {
     private func setContaint(){
         centerView.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview()
-            make.height.equalTo(3 * JQ_RateW)
+            make.height.equalTo(3)
             make.centerY.equalToSuperview()
         }
         
@@ -98,7 +98,7 @@ public class JCommonSliderRoundView: UIView {
     
     private func distanceWithSilder()->Bool{
          let distance = sliderEndtBtn.center.x - sliderStartBtn.center.x
-        return distance < 22 * JQ_RateW ? true : false
+        return distance < 22 ? true : false
     }
     
 //    “开始”滑动块

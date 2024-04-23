@@ -32,9 +32,9 @@ public class JQ_VerifyCodeView: UIView {
     /// 验证码数量
     public var codeViews: [JQ_VerifyCodeNumView] = []
     /// 验证码输入框距离两边的边距
-    public var padding: CGFloat = 28*JQ_RateW
+    public var padding: CGFloat = 28
     /// 每个验证码输入框间距
-    public var spacing: CGFloat = 10*JQ_RateW
+    public var spacing: CGFloat = 10
     /// 是否在输入中
     public var isInput = true
     

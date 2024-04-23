@@ -13,6 +13,7 @@ import QuartzCore
 import CoreGraphics
 import Accelerate
 import Photos
+import CommonCrypto
 
 /// 水印位置枚举
 public enum WaterMarkCorner{
@@ -1750,6 +1751,16 @@ public extension UIImage {
         }
     }
 
+				/// 获取Hash值
+				func jq_hash() -> String? {
+								guard let data = self.pngData() else { return nil }
+								var digest = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+								data.withUnsafeBytes {
+												_ = CC_SHA256($0.baseAddress, CC_LONG(data.count), &digest)
+								}
+								return digest.map { String(format: "%02x", $0) }.joined()
+				}
+
     // MARK: 3.2、按宽高比系数：等比缩放
     /// 按宽高比系数：等比缩放
     /// - Parameter scale: 要缩放的 宽高比 系数
@@ -2020,4 +2031,44 @@ public enum CompressionMode {
             return size
         }
     }
+}
+
+
+public extension UIImage{
+
+				enum UIImageType {
+								case jpg
+								case png
+								case unknown
+				}
+
+				func jq_base64(quality:Double = 1.0)->String{
+								var data:Data?
+								if self.jq_imageSuffixFormat == .jpg{
+												data = self.jpegData(compressionQuality: quality)
+								}else{
+												data = self.pngData()
+								}
+								let base64String = "data:image/jpeg;base64," + (data!.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0)))
+								return base64String
+				}
+
+				//判断图片是jpg还是png
+				var jq_imageSuffixFormat:UIImageType {
+								var data:Data = self.pngData()!
+								if data.count == 0 {
+												data = self.jpegData(compressionQuality: 1.0)!
+								}
+								var c:UInt8 = 0
+								data.copyBytes(to: &c, count: 1)
+								switch c {
+								case 0xFF:
+																return .jpg
+								case 0x89:
+																return .png
+								default:
+																return .unknown
+								}
+				}
+
 }

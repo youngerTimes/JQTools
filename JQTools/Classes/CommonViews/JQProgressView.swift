@@ -228,7 +228,7 @@ public class JQProgressView: UIView {
         
         addSubview(hintL)
         hintL.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 20 * JQ_RateW, bottom: 0, right: 20 * JQ_RateW))
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 20 , bottom: 0, right: 20 ))
         }
     }
     

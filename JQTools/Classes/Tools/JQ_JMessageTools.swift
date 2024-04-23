@@ -113,7 +113,7 @@ class JQ_JMessageTools{
         }
     }
     
-    /// 创建课程消息
+    /// 创建运动营消息
     func createClouseMessage(userName:String,json:String)->JMSGMessage{
         let customContent = JMSGCustomContent(customDictionary: nil)
         customContent.addStringValue(json, forKey: "content")

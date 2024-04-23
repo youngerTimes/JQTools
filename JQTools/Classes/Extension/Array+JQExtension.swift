@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import HandyJSON
+
 public extension Array{
 
     ///unicode编码问题
@@ -48,6 +50,7 @@ public extension Array{
 
 
     /// 将数组转化为字符串
+	@available(*,deprecated,message: "废弃")
     var jq_toJson:String{
         let data = try? JSONSerialization.data(withJSONObject: self, options: [])
         let result = String(data: data!, encoding: String.Encoding.utf8)
@@ -99,6 +102,23 @@ public extension Array{
         
         return sampleElements
     }
+
+	func jq_max(size:Int)->[Element]{
+		if self.count > size{
+			return Array(self[0..<size])
+		}
+		return self
+
+	}
+}
+
+extension Sequence where Iterator.Element:HandyJSON{
+				func jq_handyArrayToJson() -> String {
+								let data : NSData! = try? JSONSerialization.data(withJSONObject: map({$0.toJSON()}), options: []) as NSData
+								let JSONString = NSString(data:data as Data,encoding: String.Encoding.utf8.rawValue)
+								return JSONString! as String
+
+				}
 }
 
 /// 安全操作

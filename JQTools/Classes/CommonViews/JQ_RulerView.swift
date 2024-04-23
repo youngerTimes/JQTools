@@ -70,8 +70,8 @@ public class JQ_RulerView: UIScrollView {
             sliderImgView!.frame.origin.x = offset.x
         }
         
-        if offset.x < -5 * JQ_RateW {
-            sliderImgView!.frame.origin.x = -5 * JQ_RateW
+        if offset.x < -5  {
+            sliderImgView!.frame.origin.x = -5
         }
         
         if offset.x > lineViews.last!.center.x - sliderImgView!.jq_width/2{
@@ -98,15 +98,15 @@ public class JQ_RulerView: UIScrollView {
             if index == 0{
                 lineView.snp.remakeConstraints { (make) in
                     make.left.equalTo(contentInset.left)
-                    make.width.equalTo(1 * JQ_RateW)
-                    make.height.equalTo(index%step == 0 ? 10 * JQ_RateW : 8 * JQ_RateW)
-                    make.top.equalToSuperview().offset(40 * JQ_RateW)
+                    make.width.equalTo(1 )
+                    make.height.equalTo(index%step == 0 ? 10  : 8 )
+                    make.top.equalToSuperview().offset(40 )
                 }
             }else{
                 lineView.snp.remakeConstraints { (make) in
                     make.left.equalTo(lineViews[index - 1]).offset(w)
-                    make.width.equalTo(1 * JQ_RateW)
-                    make.height.equalTo(index%step == 0 ? 10 * JQ_RateW : 8 * JQ_RateW)
+                    make.width.equalTo(1 )
+                    make.height.equalTo(index%step == 0 ? 10  : 8 )
                     make.centerY.equalTo(lineViews[index - 1])
                 }
             }
@@ -121,15 +121,15 @@ public class JQ_RulerView: UIScrollView {
                 self.addSubview(label)
                 label.snp.makeConstraints { (make) in
                     make.centerX.equalTo(lineViews[index])
-                    make.bottom.equalTo(lineViews[index].snp.top).offset(-15 * JQ_RateW)
-                    make.height.equalTo(10 * JQ_RateW)
+                    make.bottom.equalTo(lineViews[index].snp.top).offset(-15 )
+                    make.height.equalTo(10 )
                 }
             }
         }
         
         self.addSubview(sliderImgView!)
         sliderImgView!.snp.remakeConstraints { (make) in
-            make.width.height.equalTo(30 * JQ_RateW)
+            make.width.height.equalTo(30 )
             make.center.equalTo(lineViews[self.value])
         }
         
@@ -142,8 +142,8 @@ public class JQ_RulerView: UIScrollView {
         yearL.snp.makeConstraints {(make) in
             make.bottom.equalTo(sliderImgView!.snp.top)
             make.centerX.equalTo(sliderImgView!)
-            make.height.equalTo(20 * JQ_RateW)
-            make.width.equalTo(60 * JQ_RateW)
+            make.height.equalTo(20 )
+            make.width.equalTo(60 )
         }
     }
     

@@ -22,7 +22,7 @@ public class JQ_MonitorTool:NSObject{
     private lazy var monitorView:JQ_MonitorView = {
         let monitorV = JQ_MonitorView.jq_loadToolNibView()
         monitorV.frame = CGRect(x: 0, y:UIDevice.jq_safeEdges.top, width: showBallSize.width, height: showBallSize.height)
-        monitorV.jq_cornerRadius = 5 * JQ_RateW
+        monitorV.jq_cornerRadius = 5
         monitorV.alpha = 0.6
         monitorV.isUserInteractionEnabled = true
         return monitorV
@@ -46,7 +46,7 @@ public class JQ_MonitorTool:NSObject{
     }()
 
     /// 小球的大小
-    private var showBallSize = CGSize(width: 280 * JQ_RateW, height: 50 * JQ_RateW)
+    private var showBallSize = CGSize(width: 280, height: 50)
 
     /// 吸附方向
     private var monitorAdsorbEnum:MonitorAdsorbEnum = .left

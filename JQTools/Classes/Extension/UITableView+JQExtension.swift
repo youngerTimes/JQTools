@@ -18,9 +18,9 @@ public extension UITableView {
 
     func jq_registerTool(cellName: String, identifier: String? = nil){
         if identifier == nil{
-            register(NIB(name: cellName,bundle: Bundle.jqBundle), forCellReuseIdentifier: "_\(cellName)")
+            register(NIB(name: cellName,bundle:  Bundle(for: JQTool.self)), forCellReuseIdentifier: "_\(cellName)")
         }else{
-            register(NIB(name: cellName,bundle: Bundle.jqBundle), forCellReuseIdentifier: identifier!)
+            register(NIB(name: cellName,bundle:  Bundle(for: JQTool.self)), forCellReuseIdentifier: identifier!)
         }
     }
 

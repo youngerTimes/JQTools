@@ -315,7 +315,7 @@ public extension UIView{
     func jq_gradientNibColor(colorArr:[CGColor],cornerRadius:CGFloat = 0) -> CAGradientLayer? {
         self.jq_masksToBounds = true
         let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = CGRect(x: 0, y: 0, width: self.frame.width*JQ_RateW, height: self.frame.height*JQ_RateH)
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
         gradientLayer.colors = colorArr
         gradientLayer.startPoint = CGPoint(x: 0, y: 1)
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)

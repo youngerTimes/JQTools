@@ -116,7 +116,7 @@ public class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource 
     }()
     
     public init(textField:UITextField,type:DatePickerType = .YMD,format:String = "YYYY-MM-dd HH:mm:ss") {
-        super.init(frame: CGRect(x: 0, y: 0, width: JQ_ScreenW, height: 259 * JQ_RateW))
+        super.init(frame: CGRect(x: 0, y: 0, width: JQ_ScreenW, height: 259))
         self.backgroundColor = UIColor.white
         self.textField = textField
         self.type = type
@@ -148,7 +148,7 @@ public class DatePickerView: UIView,UIPickerViewDelegate,UIPickerViewDataSource 
         addSubview(toolbar)
         toolbar.snp.makeConstraints { (make) in
             make.top.left.right.equalToSuperview()
-            make.height.equalTo(50 * JQ_RateW)
+            make.height.equalTo(50)
         }
         
         //加载闰月纪年

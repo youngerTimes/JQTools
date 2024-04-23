@@ -18,6 +18,7 @@ public class AttributedStringbuilder: NSObject {
     public func add(string: String,withFont: UIFont,withColor: UIColor,lineSpace: CGFloat) -> AttributedStringbuilder {
         let style = NSMutableParagraphStyle()
         style.lineSpacing = lineSpace
+								style.lineBreakMode = .byTruncatingTail
         mutableAttributedString.append(NSAttributedString(string: string, attributes: [NSAttributedString.Key.foregroundColor: withColor,NSAttributedString.Key.font: withFont, NSAttributedString.Key.paragraphStyle: style]))
         return self
     }
@@ -25,14 +26,22 @@ public class AttributedStringbuilder: NSObject {
     @discardableResult
     public  func add(string: String,withFont: UIFont,withColor: UIColor,backColor: UIColor) -> AttributedStringbuilder {
         let style = NSMutableParagraphStyle()
+								style.lineBreakMode = .byTruncatingTail
         mutableAttributedString.append(NSAttributedString(string: string, attributes: [NSAttributedString.Key.foregroundColor: withColor,NSAttributedString.Key.font: withFont,NSAttributedString.Key.backgroundColor: backColor, NSAttributedString.Key.paragraphStyle: style]))
         return self
     }
+
+	@discardableResult
+	public func addLink(string:String,url:URL,withFont: UIFont,linkColor: UIColor) -> AttributedStringbuilder {
+		mutableAttributedString.append(NSAttributedString(string: string, attributes: [NSAttributedString.Key.link:url,NSAttributedString.Key.foregroundColor:linkColor,NSAttributedString.Key.font:withFont]))
+		return self
+	}
 
     @discardableResult
     public func add(string: String,withFont: UIFont,withColor: UIColor,indent: CGFloat) -> AttributedStringbuilder {
         let style = NSMutableParagraphStyle()
         style.firstLineHeadIndent = indent
+								style.lineBreakMode = .byTruncatingTail
         mutableAttributedString.append(NSAttributedString(string: string, attributes: [NSAttributedString.Key.foregroundColor: withColor,NSAttributedString.Key.font: withFont, NSAttributedString.Key.paragraphStyle: style]))
         return self
     }
@@ -42,6 +51,7 @@ public class AttributedStringbuilder: NSObject {
         let style = NSMutableParagraphStyle()
         style.firstLineHeadIndent = indent
         style.lineSpacing = lineSpace
+								style.lineBreakMode = .byTruncatingTail
         mutableAttributedString.append(NSAttributedString(string: string, attributes: [NSAttributedString.Key.foregroundColor: withColor,NSAttributedString.Key.font: withFont, NSAttributedString.Key.paragraphStyle: style]))
         return self
     }

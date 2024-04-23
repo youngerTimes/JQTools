@@ -27,7 +27,7 @@ class Ys_CMPicture: NSObject,TZImagePickerControllerDelegate {
             imagePic!.selectedAssets = selectedAssets
         }
         // 设置竖屏下的裁剪尺寸
-        let left:CGFloat = 30*JQ_RateW
+        let left:CGFloat = 30
         let widthHeight:CGFloat = JQ_ScreenW - 2 * left;
         let top:CGFloat = (JQ_ScreenH - widthHeight)/2.0;
         imagePic!.cropRect = CGRect(x: left, y: top, width: widthHeight, height: widthHeight)

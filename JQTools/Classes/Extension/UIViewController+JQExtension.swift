@@ -48,6 +48,7 @@ public extension UIViewController{
     }
 
     func jq_push(vc:UIViewController,animated:Bool = true){
+		vc.hidesBottomBarWhenPushed = true
         JQ_currentNavigationController().pushViewController(vc, animated: animated)
     }
 

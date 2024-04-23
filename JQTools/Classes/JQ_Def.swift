@@ -31,8 +31,8 @@ public let JQ_ScreenW = UIScreen.main.bounds.size.width
 public let JQ_ScreenH = UIScreen.main.bounds.size.height
 
 /// 屏幕的适配比例，适配6s
-public let JQ_RateW   = JQ_ScreenW/375.0
-public let JQ_RateH   = JQ_ScreenH/667.0
+//public let JQ_RateW   = JQ_ScreenW/375.0
+//public let JQ_RateH   = JQ_ScreenH/667.0
 
 ///Nav高度
 public let JQ_NavBarHeight:CGFloat = (UIApplication.shared.statusBarFrame.size.height>20) ?88:64
@@ -60,6 +60,28 @@ public extension NSLayoutConstraint {
         super.awakeFromNib()
         self.constant = self.constant
     }
+
+				@discardableResult
+				func setMultiplier(multiplier:CGFloat) -> NSLayoutConstraint {
+
+								NSLayoutConstraint.deactivate([self])
+
+								let newConstraint = NSLayoutConstraint(
+												item: firstItem,
+												attribute: firstAttribute,
+												relatedBy: relation,
+												toItem: secondItem,
+												attribute: secondAttribute,
+												multiplier: multiplier,
+												constant: constant)
+
+								newConstraint.priority = priority
+								newConstraint.shouldBeArchived = self.shouldBeArchived
+								newConstraint.identifier = self.identifier
+
+								NSLayoutConstraint.activate([newConstraint])
+								return newConstraint
+				}
 }
 
 ///关联Associate封装
@@ -177,3 +199,22 @@ import RxSwift
 import RxCocoa
 public var JQ_disposeBag = DisposeBag()
 #endif
+
+
+public final class JQHeaper<Base>{
+	public let base:Base
+	public init(base: Base) {
+		self.base = base
+	}
+}
+
+public protocol JQHeaperCompletable{
+	associatedtype ComtatibleType
+	var jq:ComtatibleType{get}
+}
+
+public extension JQHeaperCompletable{
+	var jq:JQHeaper<Self>{
+		return JQHeaper(base: self)
+	}
+}

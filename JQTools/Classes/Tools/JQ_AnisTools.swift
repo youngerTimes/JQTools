@@ -112,46 +112,46 @@ public func JQ_AnimationTransition(fromView:UIView,type:CATransitionType,subType
 ///动画集合类
 public class JQ_AnisTools:NSObject{
 
-    static let BasicAni_Frame = "frame"
+    static public let BasicAni_Frame = "frame"
 
     //position
-    static let BasicAni_Position = "position"
-    static let BasicAni_PositionX = "position.x"
-    static let BasicAni_PositionY = "position.y"
+    static public let BasicAni_Position = "position"
+    static public let BasicAni_PositionX = "position.x"
+    static public let BasicAni_PositionY = "position.y"
 
-    static let BasicAni_Alpha = "opacity"
-    static let BasicAni_BgColor = "backgroundColor"
-    static let BasicAni_Radius = "cornerRadius"
-    static let BasicAni_OrderWidth = "borderWidth"
-    static let BasicAni_ShadowColor = "shadowColor"
-    static let BasicAni_Offset = "shadowOffset"
-    static let BasicAni_ShadowOpacity = "shadowOpacity"
-    static let BasicAni_ShadowRadius = "shadowRadius"
+    static public let BasicAni_Alpha = "opacity"
+    static public let BasicAni_BgColor = "backgroundColor"
+    static public let BasicAni_Radius = "cornerRadius"
+    static public let BasicAni_OrderWidth = "borderWidth"
+    static public let BasicAni_ShadowColor = "shadowColor"
+    static public let BasicAni_Offset = "shadowOffset"
+    static public let BasicAni_ShadowOpacity = "shadowOpacity"
+    static public let BasicAni_ShadowRadius = "shadowRadius"
 
     //rotation
     static let BasicAni_Rotation = "transform.rotation"
-    static let BasicAni_RotationX = "transform.rotation.x"
-    static let BasicAni_RotationY = "transform.rotation.y"
-    static let BasicAni_RotationZ = "transform.rotation.z"
+    static public let BasicAni_RotationX = "transform.rotation.x"
+    static public let BasicAni_RotationY = "transform.rotation.y"
+    static public let BasicAni_RotationZ = "transform.rotation.z"
 
     //scale
-    static let BasicAni_Scale = "transform.scale"
-    static let BasicAni_ScaleX = "transform.scale.x"
-    static let BasicAni_ScaleY = "transform.scale.y"
-    static let BasicAni_ScaleZ = "transform.scale.z"
+    static public let BasicAni_Scale = "transform.scale"
+    static public let BasicAni_ScaleX = "transform.scale.x"
+    static public let BasicAni_ScaleY = "transform.scale.y"
+    static public let BasicAni_ScaleZ = "transform.scale.z"
 
     //translation
-    static let BasicAni_Translation = "transform.translation"
-    static let BasicAni_TranslationX = "transform.translation.x"
-    static let BasicAni_TranslationY = "transform.translation.y"
-    static let BasicAni_TranslationZ = "transform.translation.z"
+    static public let BasicAni_Translation = "transform.translation"
+    static public let BasicAni_TranslationX = "transform.translation.x"
+    static public let BasicAni_TranslationY = "transform.translation.y"
+    static public let BasicAni_TranslationZ = "transform.translation.z"
 
     //CGrect
-    static let BasicAni_Size = "bounds.size"
-    static let BasicAni_SizeW = "bounds.size.width"
-    static let BasicAni_SizeH = "bounds.size.height"
-    static let BasicAni_OriginX = "bounds.origin.x"
-    static let BasicAni_OriginY = "bounds.origin.y"
+    static public let BasicAni_Size = "bounds.size"
+    static public let BasicAni_SizeW = "bounds.size.width"
+    static public let BasicAni_SizeH = "bounds.size.height"
+    static public let BasicAni_OriginX = "bounds.origin.x"
+    static public let BasicAni_OriginY = "bounds.origin.y"
 
     
     /// 字体动画
@@ -189,7 +189,20 @@ public class JQ_AnisTools:NSObject{
         basic.keyPath = JQ_AnisTools.BasicAni_Size
         return basic
     }
-    
+
+	public static func scaleAni(from:Int,to:Int,repeatCount:Float = 1,duration:Double = 0.3)->CABasicAnimation{
+		let basic = CABasicAnimation()
+		basic.fromValue = from
+		basic.toValue = to
+		basic.duration = duration
+		basic.repeatCount = repeatCount
+		basic.isRemovedOnCompletion = false
+		basic.autoreverses = true
+		basic.fillMode = .forwards
+		basic.keyPath = JQ_AnisTools.BasicAni_Scale
+		return basic
+	}
+
     /// Y轴动画
     /// - Parameter view: 需要变换的视图
     /// - Parameter offset: 偏移位置，负上浮，正下浮
@@ -230,9 +243,9 @@ public class JQ_AnisTools:NSObject{
     /// - Parameter repeatCount: 循环次数 1
     /// - Parameter ani1: 动画1
     /// - Parameter others: 其他的动画，可变参数
-    public static func groupAni(duration:Double = 0.3,repeatCount:Float = 1,ani1:CABasicAnimation,others:CABasicAnimation ...) -> CAAnimationGroup{
+	public static func groupAni(duration:Double = 0.3,repeatCount:Float = 1,autoreverses:Bool = true,ani1:CAAnimation,others:CAAnimation ...) -> CAAnimationGroup{
         let group = CAAnimationGroup()
-        var items = [CABasicAnimation]()
+        var items = [CAAnimation]()
         items.append(ani1)
         for ani in others {
             items.append(ani)
@@ -241,6 +254,7 @@ public class JQ_AnisTools:NSObject{
         group.duration = duration
         group.fillMode = .forwards
         group.repeatCount = repeatCount
+		group.autoreverses = autoreverses
         group.isRemovedOnCompletion = false
         
         return group

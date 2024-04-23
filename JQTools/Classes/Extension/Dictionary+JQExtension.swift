@@ -15,6 +15,24 @@ public extension Dictionary{
         return str
     }
 
+	func jq_toData() -> Data? {
+		if !JSONSerialization.isValidJSONObject(self) {
+			return nil
+		}
+		do {
+			let data = try JSONSerialization.data(withJSONObject: self, options: [])
+			return data
+		} catch let error {
+			return nil
+		}
+	}
+
+	func jq_base64String()->String{
+		return  ((jq_toData()?.base64EncodedString() ?? "")).replacingOccurrences(of: "+", with: "-")
+			.replacingOccurrences(of: "/", with: "_")
+			.replacingOccurrences(of: "=", with: "")
+	}
+
 
     /// 对字典进行排序转换为hash
     /// - Returns: 返回hash值
@@ -60,6 +78,14 @@ public extension Dictionary{
     var jq_unicodeDescription : String{
         return self.description.jq_stringByReplaceUnicode
     }
+}
+
+public extension Dictionary where Value: Equatable {
+
+		/// 根据值返回Key
+	func jq_key(forValue value: Value) -> Key? {
+		return first { $0.1 == value }?.0
+	}
 }
 
 

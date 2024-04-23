@@ -47,17 +47,17 @@ public class JQ_SelectCityVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        topH.constant = JQ_NavBarHeight+9*JQ_RateW
-        self.searchView.jq_cornerRadius = 8*JQ_RateW
-        self.cityL.jq_cornerRadius = 4*JQ_RateW
+        topH.constant = JQ_NavBarHeight+9
+        self.searchView.jq_cornerRadius = 8
+        self.cityL.jq_cornerRadius = 4
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 104*JQ_RateW, height: 40*JQ_RateW)
-        layout.minimumLineSpacing = 10*JQ_RateW
-        layout.minimumInteritemSpacing = 10*JQ_RateW
+        layout.itemSize = CGSize(width: 104, height: 40)
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
         collectionV.collectionViewLayout = layout
         collectionV.isUserInteractionEnabled = true
         
-        tableView.rowHeight = 50*JQ_RateW
+        tableView.rowHeight = 50
         tableView.register(JQ_SelectCitySectionHeaderView.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.sectionIndexBackgroundColor = UIColor.white.withAlphaComponent(0)
         tableView.sectionIndexColor = UIColor(hexStr: "0E1823")
@@ -112,7 +112,7 @@ public class JQ_SelectCityVC: UIViewController {
             }
         }
         collectionV.layoutIfNeeded()
-        headerV.frame = CGRect(x: 0, y: 0, width: JQ_ScreenW, height: 94*JQ_RateW+collectionV.contentSize.height)
+        headerV.frame = CGRect(x: 0, y: 0, width: JQ_ScreenW, height: 94+collectionV.contentSize.height)
         tableView.tableHeaderView = headerV
     }
     
@@ -192,9 +192,9 @@ public class JQ_SelectCityVC: UIViewController {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if ((self.searchTF.text?.count)! == 0) {
-            return 24*JQ_RateW
+            return 24
         }else {
-            return 40*JQ_RateW
+            return 40
         }
     }
     

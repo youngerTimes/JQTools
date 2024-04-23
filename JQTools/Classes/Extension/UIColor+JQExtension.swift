@@ -6,34 +6,43 @@
 //
 
 public extension UIColor{
-    ///ColorHex
-    convenience init(hexStr:String,darkStr:String? = nil) {
+				///ColorHex
+				convenience init(hexStr:String,darkStr:String? = nil,autoDart:Bool = false) {
 
-        var tempStr = hexStr
-        if darkStr != nil {
-            if #available(iOS 13.0, *) {
-                if UITraitCollection.current.userInterfaceStyle == .dark  {
-                    tempStr = darkStr!
-                }
-            }
-        }
+								var tempStr = hexStr
 
-        var cString:String = tempStr.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        if (cString.hasPrefix("#")) {
-            cString.remove(at: cString.startIndex)
-        }
-        if ((cString.count) != 6) {
-            self.init()
-        } else {
-            var rgbValue:UInt32 = 0
-            Scanner(string: cString).scanHexInt32(&rgbValue)
-            self.init(red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-                      green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-                      blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-                      alpha: 1)
-        }
-    }
-    
+								if autoDart {
+												if #available(iOS 13.0, *) {
+																if UITraitCollection.current.userInterfaceStyle == .dark  {
+																				tempStr = UIColor.darkenHexColorStr(hexStr)
+																}
+												}
+								}
+
+								if darkStr != nil {
+												if #available(iOS 13.0, *) {
+																if UITraitCollection.current.userInterfaceStyle == .dark  {
+																				tempStr = darkStr!
+																}
+												}
+								}
+
+								var cString:String = tempStr.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+								if (cString.hasPrefix("#")) {
+												cString.remove(at: cString.startIndex)
+								}
+								if ((cString.count) != 6) {
+												self.init()
+								} else {
+												var rgbValue:UInt32 = 0
+												Scanner(string: cString).scanHexInt32(&rgbValue)
+												self.init(red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+																						green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+																						blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+																						alpha: 1)
+								}
+				}
+
     convenience init(lr:CGFloat,lg:CGFloat,lb:CGFloat,dr:CGFloat? = nil,dg:CGFloat? = nil, db:CGFloat? = nil,alpha:CGFloat = 1.0) {
 
         var r:CGFloat = lr
@@ -86,5 +95,22 @@ public extension UIColor{
           self.getRed(&r, green: &g, blue: &b, alpha: nil)
           return UIColor(red:1.0-r, green: 1.0-g, blue: 1.0-b, alpha: 1)
       }
-    
+
+				private static func darkenHexColorStr(_ hexStr: String) -> String {
+								var cString: String = hexStr.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+								if (cString.hasPrefix("#")) {
+												cString.remove(at: cString.startIndex)
+								}
+								if ((cString.count) != 6) {
+												return hexStr
+								} else {
+												var rgbValue: UInt32 = 0
+												Scanner(string: cString).scanHexInt32(&rgbValue)
+												let r = max(CGFloat((rgbValue & 0xFF0000) >> 16) - 50.0, 0.0)
+												let g = max(CGFloat((rgbValue & 0x00FF00) >> 8) - 50.0, 0.0)
+												let b = max(CGFloat(rgbValue & 0x0000FF) - 50.0, 0.0)
+												return String(format: "%02lX%02lX%02lX", Int(r), Int(g), Int(b))
+								}
+				}
+
 }

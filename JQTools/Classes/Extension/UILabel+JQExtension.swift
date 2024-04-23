@@ -63,4 +63,35 @@ public extension UILabel{
         attribute.addAttribute(.shadow, value: shadow, range: NSRange(location: 0, length: self.text?.count ?? 0))
         attributedText = attribute
     }
+
+
+				/// 获取行数，和每行类容 【推荐】
+				/// - Returns: count为行数，item为每行类容
+				func jq_linesOfString() -> [String] {
+								var strings: [String] = []
+								guard let text = text,
+														let font = font else { return [] }
+								let attstr = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.font: font])
+
+								let paragraphStyle = NSMutableParagraphStyle()
+								paragraphStyle.lineBreakMode = .byWordWrapping
+								attstr.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, text.count))
+
+								let frameSetter = CTFramesetterCreateWithAttributedString(attstr as CFAttributedString)
+
+								let path = CGMutablePath()
+								path.addRect(CGRect(x: 0, y: 0, width: frame.size.width, height: 110))
+
+								let frame = CTFramesetterCreateFrame(frameSetter, CFRangeMake(0, 0), path, nil)
+
+								if let lines = CTFrameGetLines(frame) as? [CTLine] {
+												lines.forEach({
+																let linerange = CTLineGetStringRange($0)
+																let range = NSMakeRange(linerange.location, linerange.length)
+																let string = (text as NSString).substring(with: range)
+																strings.append(string)
+												})
+								}
+								return strings
+				}
 }

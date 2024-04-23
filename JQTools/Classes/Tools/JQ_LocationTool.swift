@@ -177,8 +177,8 @@ public class JQ_LocationTool:NSObject,CLLocationManagerDelegate{
             currentStatus = CLLocationManager.authorizationStatus()
         }
         switch currentStatus {
-            case .authorizedAlways,.authorizedWhenInUse:break
-//                manager.startUpdatingLocation()
+            case .authorizedAlways,.authorizedWhenInUse:
+                manager.startUpdatingLocation()
             case .restricted,.denied:
                 JQ_AuthorizesTool.default.openURL(.location)
             case .notDetermined:

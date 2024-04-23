@@ -137,15 +137,3 @@ public extension UIScrollView {
         }
     }
 }
-
-public extension UIWebView {
-
-    public func swContentCapture (_ completionHandler: @escaping (_ capturedImage: UIImage?) -> Void) {
-        self.scrollView.swContentCapture(completionHandler)
-    }
-
-    public func swContentScrollCapture (_ completionHandler: @escaping (_ capturedImage: UIImage?) -> Void) {
-        self.scrollView.swContentScrollCapture(completionHandler)
-    }
-
-}

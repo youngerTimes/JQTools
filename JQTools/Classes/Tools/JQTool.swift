@@ -335,7 +335,7 @@ public class JQTool{
         shapeLayer.anchorPoint = CGPoint(x: 0, y: 0)
         shapeLayer.strokeColor = lineColor.cgColor
         if type == .Vertical {
-            shapeLayer.lineWidth = lineView.frame.size.width * JQ_RateW
+            shapeLayer.lineWidth = lineView.frame.size.width
         }else {
             shapeLayer.lineWidth = lineView.frame.size.height
         }
@@ -350,7 +350,7 @@ public class JQTool{
         if type == .Vertical {
             path.addLine(to: CGPoint(x: 0, y: lineView.frame.size.height))
         }else {
-            path.addLine(to: CGPoint(x: lineView.frame.size.width * JQ_RateW, y: 0))
+            path.addLine(to: CGPoint(x: lineView.frame.size.width, y: 0))
         }
         shapeLayer.path = path
         lineView.layer.addSublayer(shapeLayer)
@@ -688,11 +688,7 @@ public class JQTool{
     public static func currentVersion()->String{
         let info = Bundle.main.infoDictionary
         var version = ""
-        #if DEBUG
-        version = "build: \(info!["CFBundleVersion"] as! String)"
-        #else
-        version = "\(info!["CFBundleShortVersionString"]  as! String)"
-        #endif
+								version = "\(info!["CFBundleShortVersionString"]  as! String)"
         return version
     }
     
@@ -722,11 +718,14 @@ public class JQTool{
                     do{
                         let dictionary = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! Dictionary<String, Any>
                         let versionModel = VersionModel(JSON: dictionary)
-                        if currentVersion() != versionModel?.results.last?.version{
-                            clouse?(true,versionModel?.results.last!,url)
-                        }else{
-                            clouse?(false,nil,url)
-                        }
+
+																								let currV = Int(currentVersion().replacingOccurrences(of: ".", with: "")) ?? 100
+																								let AppStoreV = Int(versionModel?.results.last?.version.replacingOccurrences(of: ".", with: "") ?? "100") ?? 100
+																								if AppStoreV > currV{
+																												clouse?(true,versionModel?.results.last!,url)
+																								}else{
+																												clouse?(false,nil,url)
+																								}
                     }catch{
                         clouse?(false,nil,url)
                     }

@@ -7,6 +7,15 @@
 
 import Foundation
 
+
+public extension Int{
+	static func jq_randomValue<T: BinaryInteger>(in range: ClosedRange<T>) -> T {
+		let length = range.upperBound - range.lowerBound + 1
+		let random = arc4random_uniform(UInt32(length))
+		return T(random) + range.lowerBound
+	}
+}
+
 public extension Double{
 
     //小数位截取
@@ -83,7 +92,7 @@ public extension Double{
     
     @available(*,deprecated,message: "废弃")
     var jq_ratioW:CGFloat{
-        return CGFloat(self) * JQ_RateW
+        return CGFloat(self)
     }
 }
 
@@ -138,6 +147,6 @@ public extension CGFloat{
     
     @available(*,deprecated,message: "废弃")
     var jq_ratioW:CGFloat{
-        return self * JQ_RateW
+        return self
     }
 }

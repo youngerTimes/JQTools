@@ -24,7 +24,7 @@ public extension String{
         case decode
     }
     
-    enum HMACAlgorithm {
+	enum HMACAlgorithm {
         case MD5, SHA1, SHA224, SHA256, SHA384, SHA512
         
         func toCCHmacAlgorithm() -> CCHmacAlgorithm {
@@ -281,12 +281,8 @@ public extension String{
     
     /// 获取子字符串的NSRange
     func jq_subRange(_ subText:String)->NSRange?{
-        let range = self.range(of: subText)
-        let from = range?.lowerBound.samePosition(in: utf16)
-        let to = range?.upperBound.samePosition(in: utf16)
-        guard from != nil && to != nil else {return nil}
-        return NSRange(location: utf16.distance(from: utf16.startIndex, to: from!),
-                       length: utf16.distance(from: from!, to: to!))
+								let range = (self as NSString).range(of: subText)
+								return range
     }
     
     /// 将字符串转换为字典类型
@@ -367,8 +363,8 @@ public extension String{
     }
     
     ///适配Web,填充HTML的完整
-    func jq_wrapHtml()-> String{
-        return "<html><head><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'><style>*{ width: 100%; margin: 0; padding: 0 3; box-sizing: border-box;} img{ width: 100%;}</style></head><body>\(self)</body></html>"
+				func jq_wrapHtml(edge:UIEdgeInsets = .zero)-> String{
+								return "<html><head><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'><style>*{ width: 100%; margin:0; padding-top:\(edge.top);padding-left:\(edge.left);padding-bottom:\(edge.bottom);padding-right:\(edge.right); box-sizing: border-box;line-height:1.5} img{ width: 100%;}</style></head><body>\(self)</body></html>"
     }
 
 
@@ -376,7 +372,7 @@ public extension String{
     /// /*
     ///  webView.evaluateJavaScript('')
     /// */
-    func jq_adaptJS()->String{
+				var jq_adaptJS:String{
         return """
 document.createElement('meta');script.name = 'viewport';script.content=\"width=device-width, initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\";document.getElementsByTagName('head')[0].appendChild(script);var style = document.createElement('style');style.type='text/css';style.innerHTML='body{width:100%;height:auto;margin:auto;background-color:#ffffff}img{max-width:100%}p{word-wrap: break-word;color: #222;list-style-position: inside;list-style-type: square;margin-top: 17px;font-size: 18px;line-height: 1.76;border: none;outline: none;display: block;margin-block-start: 1em;margin-block-end: 1em;margin-inline-start: 0px;margin-inline-end: 0px;} p img {margin-bottom: -9px}';document.body.appendChild(style);
 """
@@ -438,7 +434,7 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
     }
     
     ///获取子字符串
-    func jq_substingInRange(_ r: Range<Int>) -> String? {
+    func jq_substingInRange(_ r: ClosedRange<Int>) -> String? {
         if r.lowerBound < 0 || r.upperBound > self.count {
             return nil
         }
@@ -456,7 +452,8 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
     }
     
     /// 将HTML标签中<>去除
-    func jq_filterFromHTML(_ htmlString:String)->String{
+	@available(*,deprecated,message: "废弃")
+    static func jq_filterFromHTML(_ htmlString:String)->String{
         var html = htmlString
         let scanner = Scanner(string: htmlString)
         let text:String = ""
@@ -480,7 +477,8 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
     func jq_filterFromHTML_1()->String{
         do {
             let regularExpretion = try NSRegularExpression(pattern: "<[^>]*>|\n", options: .caseInsensitive)
-            let html = regularExpretion.stringByReplacingMatches(in: self, options: .reportProgress, range: NSRange(location: 0, length: self.count), withTemplate: "")
+            var html = regularExpretion.stringByReplacingMatches(in: self, options: .reportProgress, range: NSRange(location: 0, length: self.count), withTemplate: "")
+			html = html.replacingOccurrences(of: "&nbsp;", with: "")
             return html
         } catch {
             return ""
@@ -589,6 +587,7 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
 
     /// 精准身份证号码判断
     func jq_idCard()->Bool{
+		if self.count != 18{return false}
         let idArray = NSMutableArray()
         for i in 0..<18 {
             let range = NSMakeRange(i, 1);
@@ -609,6 +608,28 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
         let string = NSString(string: self).substring(from: 17)
         return str == string
     }
+
+				///获取身份证的年月日 YYYY-MM-dd
+				func jq_idCardBirthday(formatter:String = "")->String?{
+								guard self.count == 18 else {
+												return nil // 身份证长度不符合规定
+								}
+
+								let startIndex = self.index(self.startIndex, offsetBy: 6)
+								let endIndex = self.index(self.startIndex, offsetBy: 13)
+								let birthdaySubstring = self[startIndex...endIndex]
+
+								let formatter = DateFormatter()
+								formatter.dateFormat = "yyyyMMdd"
+
+								guard let date = formatter.date(from: String(birthdaySubstring)) else {
+												return nil // 无法解析生日日期
+								}
+
+								formatter.dateFormat = "yyyy-MM-dd"
+								return formatter.string(from: date)
+
+				}
 
     ///判断是否为汉字
     func jq_isValidateChinese() -> Bool {
@@ -647,27 +668,27 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
         return size
     }
 
-    func jq_hmac(algorithm: HMACAlgorithm, key: String) -> String {
-        let cKey = key.cString(using: String.Encoding.utf8)
-        let cData = self.cString(using: String.Encoding.utf8)
-        //        var result = [CUnsignedChar](count: Int(algorithm.digestLength()), repeatedValue: 0)
-        //        var hmacData:NSData = NSData(bytes: result, length: (Int(algorithm.digestLength())))
-        //        var hmacBase64 = hmacData.base64EncodedStringWithOptions(NSData.Base64EncodingOptions.Encoding76CharacterLineLength)
-        var result = [CUnsignedChar](repeating: 0, count: Int(algorithm.digestLength()))
-        CCHmac(algorithm.toCCHmacAlgorithm(), cKey!, strlen(cKey!), cData!, strlen(cData!), &result)
-
-        var hmacData: Data = Data(bytes: result, count: (Int(algorithm.digestLength())))
-
-
-        //        var str = String(data: hmacData, encoding: String.Encoding.utf8)!
-        //        str += "\(self)"
-        //        let data = str.data(using: String.Encoding.utf8)!
-
-        let data = self.data(using: String.Encoding.utf8)!
-        hmacData.append(data)
-        let hmacBase64 = hmacData.base64EncodedString(options: Data.Base64EncodingOptions.lineLength76Characters)
-        return String(hmacBase64)
-    }
+//    func jq_hmac(algorithm: HMACAlgorithm, key: String) -> String {
+//        let cKey = key.cString(using: String.Encoding.utf8)
+//        let cData = self.cString(using: String.Encoding.utf8)
+//        //        var result = [CUnsignedChar](count: Int(algorithm.digestLength()), repeatedValue: 0)
+//        //        var hmacData:NSData = NSData(bytes: result, length: (Int(algorithm.digestLength())))
+//        //        var hmacBase64 = hmacData.base64EncodedStringWithOptions(NSData.Base64EncodingOptions.Encoding76CharacterLineLength)
+//        var result = [CUnsignedChar](repeating: 0, count: Int(algorithm.digestLength()))
+//        CCHmac(algorithm.toCCHmacAlgorithm(), cKey!, strlen(cKey!), cData!, strlen(cData!), &result)
+//
+//        var hmacData: Data = Data(bytes: result, count: (Int(algorithm.digestLength())))
+//
+//
+//        //        var str = String(data: hmacData, encoding: String.Encoding.utf8)!
+//        //        str += "\(self)"
+//        //        let data = str.data(using: String.Encoding.utf8)!
+//
+//        let data = self.data(using: String.Encoding.utf8)!
+//        hmacData.append(data)
+//        let hmacBase64 = hmacData.base64EncodedString(options: Data.Base64EncodingOptions.lineLength76Characters)
+//        return String(hmacBase64)
+//    }
     
     
     // MARK: -- property
@@ -704,7 +725,17 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
         let isMatch:Bool = pred.evaluate(with: self)
         return isMatch
     }
-    
+
+				//是否是视频
+				var jq_isVideo:Bool{
+								let videoTypes = ["mp4","mov","rmvb","avi","flv","3gp","wmv","mkv"]
+								let type = self.components(separatedBy: ".").last?.lowercased()
+								if videoTypes.contains(type ?? "") {
+												return true
+								}
+								return false
+				}
+
     ///正则匹配用户密码6-18位数字和字母组合
     var jq_isComplexPassword:Bool{
         let pattern = "^(?![0-9]+$)(?![a-zA-Z]+$)[a-zA-Z0-9]{6,18}"
@@ -737,6 +768,32 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
         return isMatch;
     }
 
+				/// 判断摩斯密码
+				var jq_morseCode:Bool {
+								let pattern = "[\\s/.-]*"
+								let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
+								let isMatch:Bool = pred.evaluate(with: self)
+								return isMatch;
+				}
+
+
+				/// 匹配输入的字符符合摩斯密码的规则
+				var jq_morseOrigin:Bool{
+								let pattern = "[\\s/1-9A-Za-z?!,;:+-=]*"
+								let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
+								let isMatch:Bool = pred.evaluate(with: self)
+								return isMatch;
+				}
+
+				//包含数字的验证
+				var jq_morseNumber:Bool{
+								let pattern = "[\\s/1-9]*"
+								let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
+								let isMatch:Bool = pred.evaluate(with: self)
+								return isMatch;
+				}
+
+
         /// 判断是否是序列中文 比如： “1.中文”
     var jq_sequenceChinese1:Bool {
         let pattern = #"\p{Han}+g"#
@@ -757,6 +814,11 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
         let url = URL(string: self)
         return url != nil
     }
+
+				/// 判断是否是链接
+				var jq_isURLPrefix:Bool {
+								return self.hasPrefix("http://") || self.hasPrefix("https://")
+				}
 
     /// 返回字数
     var jq_count: Int {
@@ -793,10 +855,42 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
 }
 
 public extension String{
+
+		//public enum CryptoAlgorithm {
+		//	case MD5, SHA1, SHA224, SHA256, SHA384, SHA512
+		//
+		//	var HMACAlgorithm: CCHmacAlgorithm {
+		//		var result: Int = 0
+		//		switch self {
+		//			case .MD5: result = kCCHmacAlgMD5
+		//			case .SHA1: result = kCCHmacAlgSHA1
+		//			case .SHA224: result = kCCHmacAlgSHA224
+		//			case .SHA256: result = kCCHmacAlgSHA256
+		//			case .SHA384: result = kCCHmacAlgSHA384
+		//			case .SHA512: result = kCCHmacAlgSHA512
+		//		}
+		//		return CCHmacAlgorithm(result)
+		//	}
+		//
+		//	var digestLength: Int {
+		//		var result: Int32 = 0
+		//		switch self {
+		//			case .MD5: result = CC_MD5_DIGEST_LENGTH
+		//			case .SHA1: result = CC_SHA1_DIGEST_LENGTH
+		//			case .SHA224: result = CC_SHA224_DIGEST_LENGTH
+		//			case .SHA256: result = CC_SHA256_DIGEST_LENGTH
+		//			case .SHA384: result = CC_SHA384_DIGEST_LENGTH
+		//			case .SHA512: result = CC_SHA512_DIGEST_LENGTH
+		//		}
+		//		return Int(result)
+		//	}
+		//}
+
+
     enum CryptoAlgorithm {
         case MD5, SHA1, SHA224, SHA256, SHA384, SHA512
 
-        var HMACAlgorithm: CCHmacAlgorithm {
+        public var HMACAlgorithm: CCHmacAlgorithm {
             var result: Int = 0
             switch self {
                 case .MD5:      result = kCCHmacAlgMD5
@@ -809,7 +903,7 @@ public extension String{
             return CCHmacAlgorithm(result)
         }
 
-        var digestLength: Int {
+        public var digestLength: Int {
             var result: Int32 = 0
             switch self {
                 case .MD5:      result = CC_MD5_DIGEST_LENGTH

@@ -72,7 +72,7 @@ public class CustomDatePickerView: UIView {
         self.backgroundColor = UIColor(hexStr: "000000").withAlphaComponent(0.6)
         
         centerView.backgroundColor = UIColor.white
-        centerView.layer.cornerRadius = 8 * JQ_RateW
+        centerView.layer.cornerRadius = 8
         centerView.layer.masksToBounds = true
         
         cancelBtn.setTitle("取消", for: .normal)
@@ -85,24 +85,24 @@ public class CustomDatePickerView: UIView {
         completeBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         completeBtn.addTarget(self, action: #selector(completeAction), for: .touchUpInside)
         
-        centerView.frame = CGRect(x: 0, y: JQ_ScreenH, width: JQ_ScreenW, height: 325 * JQ_RateW)
+        centerView.frame = CGRect(x: 0, y: JQ_ScreenH, width: JQ_ScreenW, height: 325)
         
         addSubview(centerView)
         centerView.addSubview(cancelBtn)
         centerView.addSubview(completeBtn)
         
         cancelBtn.snp_makeConstraints { (make) in
-            make.top.equalTo(20 * JQ_RateW)
-            make.left.equalTo(20 * JQ_RateW)
-            make.width.equalTo(55 * JQ_RateW)
-            make.height.equalTo(25 * JQ_RateW)
+            make.top.equalTo(20)
+            make.left.equalTo(20)
+            make.width.equalTo(55)
+            make.height.equalTo(25)
         }
         
         completeBtn.snp_makeConstraints { (make) in
-            make.top.equalTo(20 * JQ_RateW)
-            make.right.equalTo(-20 * JQ_RateW)
-            make.width.equalTo(55 * JQ_RateW)
-            make.height.equalTo(25 * JQ_RateW)
+            make.top.equalTo(20)
+            make.right.equalTo(-20)
+            make.width.equalTo(55)
+            make.height.equalTo(25)
         }
         
         pickerView.dataSource = self
@@ -111,15 +111,15 @@ public class CustomDatePickerView: UIView {
         changesSpearatorLine()
         pickerView.snp_makeConstraints { (make) in
             make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-20 * JQ_RateW)
-            make.top.equalToSuperview().offset(50 * JQ_RateW)
+            make.bottom.equalToSuperview().offset(-20)
+            make.top.equalToSuperview().offset(50)
         }
     }
     
     @objc func hiden(){
         callbackHidden?()
         UIView.animate(withDuration: 0.3, animations: {
-            self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH, width: JQ_ScreenW, height: 325 * JQ_RateW)
+            self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH, width: JQ_ScreenW, height: 325)
         }) { (complete) in
             self.removeFromSuperview()
         }
@@ -158,7 +158,7 @@ public class CustomDatePickerView: UIView {
         }
         
         UIView.animate(withDuration: 0.6, animations: {
-            self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH - 317 * JQ_RateW, width: JQ_ScreenW, height: 325 * JQ_RateW)
+            self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH - 317, width: JQ_ScreenW, height: 325)
         }) { (status) in
             self.pickerView.selectRow(selectComentRow_1, inComponent: 0, animated: true)
             self.pickerView.selectRow(iM - 1, inComponent: 1, animated: true)
@@ -196,7 +196,7 @@ public class CustomDatePickerView: UIView {
         allYears.append("至今")
         
         UIView.animate(withDuration: 0.6, animations: {
-            self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH - 317 * JQ_RateW, width: JQ_ScreenW, height: 325 * JQ_RateW)
+            self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH - 317, width: JQ_ScreenW, height: 325)
         }) { (status) in
             self.pickerView.selectRow(selectComentRow_1, inComponent: 0, animated: true)
             self.pickerView.selectRow(rM - 1, inComponent: 1, animated: true)
@@ -236,7 +236,7 @@ public class CustomDatePickerView: UIView {
         
         
         UIView.animate(withDuration: 0.6, animations: {
-            self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH - 317 * JQ_RateW, width: JQ_ScreenW, height: 325 * JQ_RateW)
+            self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH - 317, width: JQ_ScreenW, height: 325)
         }) { (status) in
             self.pickerView.selectRow(selectComentRow_1, inComponent: 0, animated: true)
             self.pickerView.selectRow(inSM - 1, inComponent: 1, animated: true)
@@ -281,7 +281,7 @@ public class CustomDatePickerView: UIView {
         }
         
         UIView.animate(withDuration: 0.6, animations: {
-            self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH - 317 * JQ_RateW, width: JQ_ScreenW, height: 325 * JQ_RateW)
+            self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH - 317, width: JQ_ScreenW, height: 325)
         }) { (status) in
             self.pickerView.selectRow(selectComentRow_1, inComponent: 0, animated: true)
             self.pickerView.selectRow(outSM - 1, inComponent: 1, animated: true)
@@ -316,7 +316,7 @@ public class CustomDatePickerView: UIView {
         
         
         UIView.animate(withDuration: 0.6, animations: {
-            self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH - 317 * JQ_RateW, width: JQ_ScreenW, height: 325 * JQ_RateW)
+            self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH - 317, width: JQ_ScreenW, height: 325)
         }) { (status) in
             self.pickerView.selectRow(self.component_0_row, inComponent: 0, animated: true)
             self.component_1_row = self.selectMonth - 1
@@ -356,7 +356,7 @@ public class CustomDatePickerView: UIView {
         }
         
         UIView.animate(withDuration: 0.6, animations: {
-            self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH - 317 * JQ_RateW, width: JQ_ScreenW, height: 325 * JQ_RateW)
+            self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH - 317, width: JQ_ScreenW, height: 325)
         }) { (status) in
             self.pickerView.selectRow(self.component_0_row, inComponent: 0, animated: true)
             
@@ -399,7 +399,7 @@ public class CustomDatePickerView: UIView {
         }
         
         UIView.animate(withDuration: 0.6, animations: {
-            self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH - 317 * JQ_RateW, width: JQ_ScreenW, height: 325 * JQ_RateW)
+            self.centerView.frame = CGRect(x: 0, y: JQ_ScreenH - 317, width: JQ_ScreenW, height: 325)
         }) { (status) in
             self.pickerView.selectRow(selectComentRow_1, inComponent: 0, animated: true)
             self.pickerView.selectRow(self.selectMonth - 1, inComponent: 1, animated: true)
@@ -415,8 +415,8 @@ public class CustomDatePickerView: UIView {
         for view in pickerView.subviews {
             if view.frame.size.height <= 1 {
                 view.backgroundColor = UIColor(hexStr: "E9E9E9")
-                view.frame.origin.x = view.frame.origin.x - 50 * JQ_RateW
-                view.frame.size.width = JQ_ScreenW - 100 * JQ_RateW
+                view.frame.origin.x = view.frame.origin.x - 50
+                view.frame.size.width = JQ_ScreenW - 100
             }
         }
     }
@@ -554,7 +554,7 @@ extension CustomDatePickerView:UIPickerViewDataSource{
     }
     
     public  func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return 61 * JQ_RateW
+        return 61
     }
     
     public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {

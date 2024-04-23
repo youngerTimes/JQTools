@@ -13,7 +13,7 @@ import UIKit
 class JQ_Annularlayer: UIView {
 
     var progress:CGFloat = 0.0
-    var lineWidth:CGFloat = 10*JQ_RateW
+    var lineWidth:CGFloat = 10
     var progressLayer:CAShapeLayer!
     var gradientLayer:CALayer!
     var bgLayer:CAShapeLayer!
@@ -68,7 +68,7 @@ class JQ_Annularlayer: UIView {
         bgLayer = CAShapeLayer()
         bgLayer.frame = self.bounds
         bgLayer.fillColor = UIColor.white.withAlphaComponent(0).cgColor
-        bgLayer.lineWidth = 2*JQ_RateW
+        bgLayer.lineWidth = 2
         bgLayer.strokeColor = bgColor.cgColor
         bgLayer.strokeStart = 0;
         bgLayer.strokeEnd = 1;

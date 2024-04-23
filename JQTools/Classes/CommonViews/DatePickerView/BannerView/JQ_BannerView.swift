@@ -67,7 +67,7 @@ public class JQ_BannerView: UIView,UICollectionViewDataSource,UICollectionViewDe
     }
     
     public init(autoScroll:Bool = false) {
-        let rect = CGRect(x: 0, y: 0, width: JQ_ScreenW, height: 120 * JQ_RateW)
+        let rect = CGRect(x: 0, y: 0, width: JQ_ScreenW, height: 120 )
         super.init(frame:rect)
         collectionView.backgroundColor = self.backgroundColor
         addSubview(collectionView)
@@ -86,7 +86,7 @@ public class JQ_BannerView: UIView,UICollectionViewDataSource,UICollectionViewDe
         addSubview(pageControl!)
         pageControl!.snp.makeConstraints({ (make) in
             make.centerX.equalToSuperview()
-            make.bottom.equalTo(self).offset(-10 * JQ_RateH)
+            make.bottom.equalTo(self).offset(-10)
             make.height.equalTo(15)
             make.width.equalTo(JQ_ScreenW/2)
         })
