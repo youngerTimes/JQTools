@@ -63,14 +63,14 @@ public func JQ_AnnimationNumber(_ label:UILabel,maxNumber:Double){
 /// 放大显影：点击的时候，进行放大的动画
 /// - Parameter btn: 传入按钮
 public func JQ_AnimationScaleHuge(_ btn:UIButton){
-    let bgImg = UIImageView(image: btn.imageView?.image)
-    btn.addSubview(bgImg)
-    UIView.animate(withDuration: 0.6, animations: {
-        bgImg.alpha = 0
-        bgImg.transform = CGAffineTransform(scaleX: 2.0, y: 2.0)
-    }) { (complete) in
-        bgImg.removeFromSuperview()
-    }
+				let bgImg = UIImageView(image: btn.imageView?.image)
+				btn.addSubview(bgImg)
+				UIView.animate(withDuration: 0.6, animations: {
+								bgImg.alpha = 0
+								bgImg.transform = CGAffineTransform(scaleX: 2.0, y: 2.0)
+				}) { (complete) in
+								bgImg.removeFromSuperview()
+				}
 }
 
 /// 缩小显影：点击的时候，进行缩小的动画

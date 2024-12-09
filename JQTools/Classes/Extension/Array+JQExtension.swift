@@ -23,6 +23,18 @@ public extension Array{
         return self[randomIndex]
     }
 
+				static func splitArray<T>(_ array: [T], subArraySize: Int) -> [[T]] {
+								var result: [[T]] = []
+
+								for i in stride(from: 0, to: array.count, by: subArraySize) {
+												let value = array[i..<Swift.min(i + subArraySize,array.count)]
+												let chunk = Array<T>(value)
+												result.append(chunk)
+								}
+
+								return result
+				}
+
     /// 数组去重
     func jq_filterDuplicates<E: Equatable>(_ filter: (Element) -> E) -> [Element] {
         var result = [Element]()
@@ -110,6 +122,34 @@ public extension Array{
 		return self
 
 	}
+
+				/// 根据数量，生成合适的行数和列数，适用于UICollectionView
+				/// - Parameter count:
+				static func CalmulateCell(_ count:Int)->(Int,Int)?{
+
+								let sqr = Int(ceil(sqrt(Double(count))))
+
+								var tempInt = Array<(Int,Int)>()
+
+								for i in 1...10{
+												for j in 1...10{
+																if i * j >= count && (i == sqr || j == sqr){
+																				tempInt.append((i,j))
+																}
+												}
+								}
+
+								let a = tempInt.first?.0
+								let b = tempInt.first?.1
+
+								if a == nil || b == nil{return nil}
+
+								if a! == b! || a! > b!{
+												return (a!,b!)
+								}else{
+												return (b!,a!)
+								}
+				}
 }
 
 extension Sequence where Iterator.Element:HandyJSON{

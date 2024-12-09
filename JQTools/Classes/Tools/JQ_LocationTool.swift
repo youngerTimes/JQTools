@@ -111,6 +111,21 @@ public class JQ_MapNavigationTool{
         MKMapItem.openMaps(with: [currentLoc,distanceLoc], launchOptions: launchOpt)
     }
 
+
+				/// 百度地图坐标转换：GCJ-02 坐标系转 BD-09
+				public static func bdEncrypt(ggLng: Double, ggLat: Double) -> (Double,Double) {
+								let X_PI = Double.pi * 3000.0 / 180.0
+								let x = ggLng
+								let y = ggLat
+								let z = sqrt(x * x + y * y) + 0.00002 * sin(y * X_PI)
+								let theta = atan2(y, x) + 0.000003 * cos(x * X_PI)
+								let bdLng = z * cos(theta) + 0.0065
+								let bdLat = z * sin(theta) + 0.006
+								return (bdLat,bdLng)
+				}
+
+    
+
     public static func plaformMap(_ type:JQ_MapNavigationType,scheme:String,coor:CLLocationCoordinate2D,distanceName:String){
 
         var url = ""
@@ -118,7 +133,7 @@ public class JQ_MapNavigationTool{
             case .BaiduMap:
                 url = "baidumap://map/direction?origin={{我的位置}}&destination=latlng:\(coor.latitude),\(coor.longitude)|name=\(distanceName)&mode=driving&coord_type=gcj02"
             case .Amap:
-                url = "iosamap://navi?sourceApplication=导航&backScheme=\(scheme)&lat=\(coor.latitude)&lon=\(coor.longitude)&dev=0&style=2"
+                url = "iosamap://path?sourceApplication=导航&backScheme=\(scheme)&lat=\(coor.latitude)&lon=\(coor.longitude)&dev=0&style=2"
             case .GoogleMap:
                 url = "comgooglemaps://?x-source=导航&x-success=\(scheme)&saddr=&daddr=\(coor.latitude),\(coor.longitude)&directionsmode=driving"
             case .qqMap:
@@ -126,7 +141,7 @@ public class JQ_MapNavigationTool{
         }
         UIApplication.shared.open(URL(string: url.jq_urlEncoded())!, options: [:]) { (status) in
             if !status{
-                JQ_ShowError(errorStr: "导航失败,请选择其他导航APP")
+//                JQ_ShowError(errorStr: "导航失败,请选择其他导航APP")
             }
         }
     }

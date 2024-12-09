@@ -47,7 +47,7 @@ TODO: Add long description of the pod here.
    s.dependency 'SnapKit'
    s.dependency 'XCGLogger'
    s.dependency 'ObjectMapper'
-   s.dependency 'QMUIKit'
+   s.dependency 'QMUIKit','~>4.7.0'
    s.dependency 'IQKeyboardManagerSwift'
    s.dependency 'RxSwift'
    s.dependency 'RxCocoa'

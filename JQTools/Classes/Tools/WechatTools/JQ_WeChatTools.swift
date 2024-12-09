@@ -112,7 +112,7 @@ class JQ_WeChatTools{
     }
     
     /// 获取用资料
-    static func getUserInfo(access_token:String,openId:String,userInfo:WechatUserClosure?){
+    static func getUserInfo(access_token:String,openId:String,userLoginInfo:WechatUserClosure?){
         guard !access_token.isEmpty else {
             return
         }
@@ -131,9 +131,9 @@ class JQ_WeChatTools{
             do{
                 let dataAsJSON = try JSONSerialization.jsonObject(with: data!)
                 let model = Mapper<WechatUserInfoModel>().map(JSON: dataAsJSON as! [String : Any])
-                userInfo?(model)
+                userLoginInfo?(model)
             }catch{
-                userInfo?(nil)
+                userLoginInfo?(nil)
             }
         }
         task.resume()

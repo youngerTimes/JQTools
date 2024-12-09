@@ -9,6 +9,7 @@
 import UIKit
 
 #if canImport(SnapKit)
+import SnapKit
 public typealias SheetAlertClouse = (NSInteger)->Void
 
 public enum SheetAlertViewType {

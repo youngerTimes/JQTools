@@ -364,7 +364,7 @@ public extension String{
     
     ///适配Web,填充HTML的完整
 				func jq_wrapHtml(edge:UIEdgeInsets = .zero)-> String{
-								return "<html><head><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'><style>*{ width: 100%; margin:0; padding-top:\(edge.top);padding-left:\(edge.left);padding-bottom:\(edge.bottom);padding-right:\(edge.right); box-sizing: border-box;line-height:1.5} img{ width: 100%;}</style></head><body>\(self)</body></html>"
+								return "<html><head><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'><style>*{ width: 100%; margin:0; padding-top:\(edge.top)px;padding-left:\(edge.left)px;padding-bottom:\(edge.bottom)px;padding-right:\(edge.right)px; box-sizing: border-box;line-height:2.0} img{ width: 100%;}</style></head><body>\(self)</body></html>"
     }
 
 
@@ -420,7 +420,29 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
             return befor + "****" + last
         }
     }
-    
+
+    func jq_insertBlank() -> String{
+        // 首先移除字符串中的所有空格，确保输入是纯净的数字
+        var cleanedPhoneNumber = self.replacingOccurrences(of: " ", with: "")
+
+        // 检查输入是否有效（仅包含数字且长度合适）
+        guard cleanedPhoneNumber.count == 11,
+              let _ = Int(cleanedPhoneNumber) else {
+            return "Invalid phone number"
+        }
+
+        // 插入空格
+        var formattedPhoneNumber = ""
+        for (index, char) in cleanedPhoneNumber.enumerated() {
+            formattedPhoneNumber.append(char)
+            if index == 2 || index == 6 {
+                formattedPhoneNumber.append(" ")
+            }
+        }
+
+        return formattedPhoneNumber
+    }
+
     ///将原始的url编码为合法的url
     func jq_urlEncoded() -> String {
         let encodeUrlString = self.addingPercentEncoding(withAllowedCharacters:
@@ -583,6 +605,65 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
         }
         return result
     }
+
+				func jq_centeredText(with centerSubstring: String, rangeBeforeAfter: Int) -> String {
+								guard let range = self.range(of: centerSubstring) else {
+												return "" // 如果没有找到中心子字符串，返回nil
+								}
+
+								let startIndex = self.index(range.description.startIndex, offsetBy: -rangeBeforeAfter, limitedBy: self.startIndex) ?? self.startIndex
+								let endIndex = self.index(range.description.endIndex, offsetBy: rangeBeforeAfter, limitedBy: self.endIndex) ?? self.endIndex
+
+								// 确保范围不会超出文本的边界
+								let validStartIndex = max(startIndex, self.startIndex)
+								let validEndIndex = min(endIndex, self.endIndex)
+
+								if validStartIndex < validEndIndex {
+												return String(self[validStartIndex..<validEndIndex])
+								} else {
+												return "" // 如果范围无效（例如，当centerSubstring靠近字符串边界时），返回nil
+								}
+				}
+
+				func removeMarkdownFormatting() -> String {
+								var result = self
+
+								// 正则表达式匹配常见的Markdown格式化字符
+								let markdownPatterns: [String] = [
+												"\\*\\*(.+?)\\*\\*", // 粗体
+												"__(.+?)__", // 粗体
+												"~~(.+?)~~", // 删除线
+												"\\*(.+?)\\*", // 斜体
+												"_(.+?)_", // 斜体
+												"\\[(.+?)\\]\\(.+?\\)", // 链接
+												"\\[(.+?)\\]", // 图片
+												"\\[\\[(.*?)\\]\\]", // 内部链接
+												"\\>(.*)", // 引用
+												"\\n", // 换行
+												"\\|", // 表格分隔线
+												"\\-\\-\\-", // 水平分隔线
+												"\\#{1,6} \\S+", // 标题
+												"\\#{1,6}", // 标题
+												"\\`\\`\\`", // 代码块
+												"\\`(.*?)\\`", // 代码
+												"\\!\\[(.*?)\\]\\(.*?\\)", // 图片
+												"\\!\\[(.*?)\\]" // 图片
+								]
+
+								// 使用正则表达式替换Markdown格式化字符
+								for pattern in markdownPatterns {
+												do {
+																let regex = try NSRegularExpression(pattern: pattern, options: [])
+																result = regex.stringByReplacingMatches(in: result, options: [], range: NSRange(location: 0, length: result.utf16.count), withTemplate: "")
+												} catch {
+																// 错误处理
+																print("Invalid regex: \(error.localizedDescription)")
+												}
+								}
+
+								// 返回清除格式后的字符串
+								return result
+				}
 
 
     /// 精准身份证号码判断
@@ -751,7 +832,14 @@ document.createElement('meta');script.name = 'viewport';script.content=\"width=d
         let isMatch:Bool = pred.evaluate(with: self)
         return isMatch;
     }
-    
+
+				var jq_isDigit:Bool{
+								let pattern = "^[0-9]*$"
+								let pred = NSPredicate(format: "SELF MATCHES %@", pattern)
+								let isMatch:Bool = pred.evaluate(with: self)
+								return isMatch;
+				}
+
     /// 判断是否是中文
     var jq_isChinese:Bool {
         let pattern = "^[a-zA-Z\\u4E00-\\u9FA5]{1,20}"

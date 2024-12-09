@@ -17,7 +17,7 @@ extension UIBarButtonItem {
     ///   - target: target
     ///   - alignment: UIControl.ContentHorizontalAlignment
     ///   - action: Selector
-    open class func jq_creat(image:UIImage,title:String = "", target: Any?, alignment: UIControl.ContentHorizontalAlignment, action: Selector) -> (item:UIBarButtonItem, btn:UIButton) {
+				public class func jq_creat(image:UIImage,title:String = "", target: Any?, alignment: UIControl.ContentHorizontalAlignment, action: Selector) -> (item:UIBarButtonItem, btn:UIButton) {
         let btn = UIButton.init(type: .custom)
         btn.setImage(image, for: .normal)
         btn.setTitle(title, for: .normal)
@@ -35,7 +35,7 @@ extension UIBarButtonItem {
     ///   - color: 颜色
     ///   - target: target
     ///   - action: Selector
-    open class func jq_creat(title:String, _ font: UIFont = UIFont.systemFont(ofSize: 14), _ color:UIColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), target:Any?, action:Selector) -> (item:UIBarButtonItem, btn:UIButton) {
+				public class func jq_creat(title:String, _ font: UIFont = UIFont.systemFont(ofSize: 14), _ color:UIColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), target:Any?, action:Selector) -> (item:UIBarButtonItem, btn:UIButton) {
         let btn = UIButton.init(type: .custom)
         btn.setTitle(title, for: .normal)
         btn.titleLabel?.font = font

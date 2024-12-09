@@ -199,15 +199,35 @@ public class JQ_AuthorizesTool:NSObject{
     // MARK: - 检测是否开启摄像头
     /// 检测是否开启摄像头 (可用)
     public func openCaptureDeviceServiceWithBlock(_ isSet:Bool? = nil,_ action :@escaping ((Bool)->())) {
+
+								if AVCaptureDevice.default(for: .video) == nil{
+												let alertController = UIAlertController(title: "提示",
+																																																				message: "当前设备不支持摄像头",
+																																																				preferredStyle: .alert)
+												let cancelAction = UIAlertAction(title:"确定", style: .cancel, handler:nil)
+												alertController.addAction(cancelAction)
+												UIApplication.shared.keyWindow?.rootViewController?.present(alertController, animated: true, completion: nil)
+												return
+
+								}
+
         let authStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
         if authStatus == AVAuthorizationStatus.notDetermined {
             AVCaptureDevice.requestAccess(for: AVMediaType.video) { (granted) in
                 action(granted)
-                if granted == false && isSet == true {self.openURL(.camera)}
+																if granted == false && isSet == true {
+																				DispatchQueue.main.async {
+																								self.openURL(.camera)
+																				}
+																}
             }
         } else if authStatus == AVAuthorizationStatus.restricted || authStatus == AVAuthorizationStatus.denied {
             action(false)
-            if isSet == true {openURL(.camera)}
+            if isSet == true {
+																DispatchQueue.main.async {
+																				self.openURL(.camera)
+																}
+												}
         } else {
             action(true)
         }
@@ -220,7 +240,11 @@ public class JQ_AuthorizesTool:NSObject{
         let authStatus = PHPhotoLibrary.authorizationStatus()
         if authStatus == PHAuthorizationStatus.restricted || authStatus == PHAuthorizationStatus.denied {
             isOpen = false;
-            if isSet == true {openURL(.photo)}
+												if isSet == true {
+																DispatchQueue.main.async {
+																				self.openURL(.photo)
+																}
+												}
         }
         action(isOpen)
     }

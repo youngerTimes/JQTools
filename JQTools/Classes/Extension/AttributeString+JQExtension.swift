@@ -25,3 +25,14 @@ public extension NSMutableAttributedString {
         self.append(attrString)
     }
 }
+
+public extension NSAttributedString{
+    static func convertHtml(_ html: String) -> NSAttributedString? {
+        guard let data = html.data(using: .unicode) else { return nil }
+        do {
+            return try NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil)
+        } catch {
+            return nil
+        }
+    }
+}

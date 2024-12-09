@@ -215,6 +215,7 @@ public extension UIView{
 
     /// 切部分圆角
     /// - Returns: 返回阴影Layer,需要自定义颜色和范围
+				@discardableResult
     func jq_cornerPartWithShadow(byRoundingCorners corners: UIRectCorner, radii: CGFloat)->CALayer {
         let maskPath = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radii, height: radii))
         let maskLayer = CAShapeLayer()
@@ -299,14 +300,23 @@ public extension UIView{
     }
     
     ///设置渐变色(Frame)
-    func jq_gradientColor(colorArr:[CGColor],cornerRadius:CGFloat = 0,startPoint:CGPoint = CGPoint(x: 0, y: 1),endPoint:CGPoint = CGPoint(x: 1, y: 1),bounds:CGRect? = nil) {
+				func jq_gradientColor(colorArr:[CGColor],cornerRadius:CGFloat = 0,startPoint:CGPoint = CGPoint(x: 0, y: 1),endPoint:CGPoint = CGPoint(x: 1, y: 1),bounds:CGRect? = nil,locations:[NSNumber]? = nil,clear:Bool = false) {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = bounds == nil ? self.bounds : bounds!
         gradientLayer.colors = colorArr
         gradientLayer.startPoint = startPoint
         gradientLayer.endPoint = endPoint
         gradientLayer.cornerRadius = cornerRadius
+								gradientLayer.locations = locations
         if cornerRadius > 0 {gradientLayer.masksToBounds = true}
+
+								if clear{
+												for v in self.layer.sublayers ?? []{
+																if v is CAGradientLayer{
+																				v.removeFromSuperlayer()
+																}
+												}
+								}
         self.layer.insertSublayer(gradientLayer, at: 0)
     }
     

@@ -110,6 +110,22 @@ public extension JQNibView where Self : UIView{
     }
 }
 
+public extension JQNibView where Self : UICollectionViewCell{
+
+    @discardableResult
+    ///加载方式不同：用于非pod项目中，加载xib所使用
+    static func jq_loadNibView() -> Self {
+        return Bundle.main.loadNibNamed(Mirror(reflecting: self).description.replacingOccurrences(of: "Mirror for", with: "").replacingOccurrences(of: ".Type", with: "").trimmingCharacters(in: CharacterSet.whitespaces), owner: nil, options: nil)?.first as! Self
+    }
+
+    @discardableResult
+    ////加载方式不同：用于加载JQTools中的xib项目
+    static func jq_loadToolNibView()->Self{
+        let a = Bundle(for: JQTool.self)
+        return a.loadNibNamed(Mirror(reflecting: self).description.replacingOccurrences(of: "Mirror for", with: "").replacingOccurrences(of: ".Type", with: "").trimmingCharacters(in: CharacterSet.whitespaces), owner: nil, options: nil)?.first as! Self
+    }
+}
+
 //错误信息
 public func JQ_ErrorLog<T>(_ message:T,file:String = #file,funcName:String = #function,lineNum:Int = #line){
     #if DEBUG
@@ -478,11 +494,11 @@ public class JQTool{
         let productVC = SKStoreProductViewController()
         productVC.delegate = delegate
         productVC.loadProduct(withParameters: [SKStoreProductParameterITunesItemIdentifier:appleId]) { (status, error) in
-            JQ_HideAllView()
+//            JQ_HideAllView()
             if error == nil{
                 JQ_currentViewController().present(productVC, animated: true, completion: nil)
             }else{
-                JQ_ShowError(errorStr: error?.localizedDescription ?? "")
+//                JQ_ShowError(errorStr: error?.localizedDescription ?? "")
             }
             clouse(status,error)
         }
@@ -709,7 +725,7 @@ public class JQTool{
     ///   - appid: APP Store 的appid
     ///   - clouse: 返回数据，是否有更新
     public static func checkVersion(appid:String,_ clouse:((Bool,VersionResultModel?,URL?)->Void)? = nil){
-        if appid.isEmpty {JQ_ShowText(textStr:"请填写appid");return}
+        if appid.isEmpty {return}
         if let url = URL(string: "https://itunes.apple.com/cn/lookup?id=\(appid)"){
             let shareSession = URLSession.shared
             let request = URLRequest(url: url)

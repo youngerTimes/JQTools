@@ -91,7 +91,7 @@ public class JQ_VideoClipsCaptureTool: NSObject {
                 //启动session会话
                 self.captureSession.startRunning()
             }else{
-                JQ_ShowError(errorStr: "相机不可用")
+//                JQ_ShowError(errorStr: "相机不可用")
             }
         }
     }

@@ -53,7 +53,7 @@ extension UIButton{
     /// - Parameters:
     ///   - t: 倒计时时间 默认59秒
     ///   - defultTitle: 默认标题
-    public func jq_openCountDown(_ t:Int = 59,defultTitle:String = "获取验证码"){
+				public func jq_openCountDown(_ t:Int = 59,defultTitle:String = "获取验证码",sendingClouse:(()->Void)? = nil,completeClouse:(()->Void)? = nil){
         var time = t //倒计时时间
         let queue = DispatchQueue.global()
         let timer = DispatchSource.makeTimerSource(flags: [], queue: queue)
@@ -62,11 +62,13 @@ extension UIButton{
             if time <= 0 {
                 timer.cancel()
                 DispatchQueue.main.async(execute: {
+																				completeClouse?()
                     self.setTitle(defultTitle, for: .normal)
                     self.isUserInteractionEnabled = true
                 });
             }else {
                 DispatchQueue.main.async(execute: {
+																				sendingClouse?()
                     self.setTitle("\(time)s后可重新获取", for: .normal)
                     self.isUserInteractionEnabled = false
                 });
@@ -112,6 +114,37 @@ extension UIButton{
         }
         setImage(UIImage.animatedImage(with: images, duration: duration), for: .normal)
     }
+
+
+				public func jq_startLoading(color:UIColor,offset:Double = 0) {
+								// 创建活动指示器
+								if #available(iOS 13.0, *) {
+												let spinner = UIActivityIndicatorView(style: .medium)
+												spinner.translatesAutoresizingMaskIntoConstraints = false
+												spinner.color = color
+												spinner.startAnimating()
+												spinner.tag = 1202
+
+												// 添加到按钮上
+												self.addSubview(spinner)
+												spinner.snp.makeConstraints { make in
+																make.centerY.equalToSuperview()
+																make.centerX.equalToSuperview().offset(offset)
+												}
+
+												// 禁用按钮
+												self.isEnabled = false
+								} else {
+												// Fallback on earlier versions
+								}
+
+				}
+
+				public func jq_stopLoading() {
+								viewWithTag(1202)?.removeFromSuperview()
+								// 启用按钮
+								self.isEnabled = true
+				}
 
     public func jq_loadImgUrl(_ url: String?,state:UIButton.State = .normal){
         self.sd_setImage(with: URL(string: url ?? ""), for: state)

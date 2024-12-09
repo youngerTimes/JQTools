@@ -85,17 +85,16 @@ public class JQ_ImagePickerTool: NSObject{
 				}
 
 				/// 提示选择框
-				private func showAlert(title:String, _ clouse: @escaping (ChooseTypeEnum)->Void){
-								unowned let weakSelf = self
+				private func showAlert(title:String,button:UIButton? = nil, _ clouse: @escaping (ChooseTypeEnum)->Void){
 								let alertVC = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
 								let libaryAction = UIAlertAction(title: "相册", style: .default) { (_) in
-												weakSelf.authorizesTool.openAlbumServiceWithBlock(true) { (status) in
+            JQ_ImagePickerTool.getSharedInstance().authorizesTool.openAlbumServiceWithBlock(true) { (status) in
 																if status{clouse(.album)}
 												}
 								}
 
-								let cameraAction = UIAlertAction(title: "拍照", style: .default) { (_) in
-												weakSelf.authorizesTool.openCaptureDeviceServiceWithBlock(true) { (status) in
+        let cameraAction = UIAlertAction(title: "拍照", style: .default) { (_) in
+            JQ_ImagePickerTool.getSharedInstance().authorizesTool.openCaptureDeviceServiceWithBlock(true) { (status) in
 																if status{clouse(.camera)}
 												}
 								}
@@ -106,6 +105,13 @@ public class JQ_ImagePickerTool: NSObject{
 								alertVC.addAction(libaryAction)
 								alertVC.addAction(cancelAction)
 
+								if UIDevice.isIpad{
+												let popOver = alertVC.popoverPresentationController
+												popOver?.sourceView = button
+												popOver?.sourceRect = button?.bounds ?? .zero
+												popOver?.permittedArrowDirections = .any
+								}
+
 								JQ_currentViewController().present(alertVC, animated: true, completion: nil)
 				}
 
@@ -113,7 +119,7 @@ public class JQ_ImagePickerTool: NSObject{
 				/// - Parameters:
 				///   - clouse: 回调
 				///   - clipSize: 裁剪大小
-				public func profile(_ clouse:JQ_ImagePickerClouse, needClip:Bool = true){
+				public func profile(_ clouse:JQ_ImagePickerClouse,button:UIButton? = nil, needClip:Bool = true){
 								self.clouse = clouse
 								self.needClip = needClip
 								self.chooseMethodType = .profile
@@ -122,10 +128,9 @@ public class JQ_ImagePickerTool: NSObject{
 												self.clipSize = CGSize(width: JQ_ScreenW, height: JQ_ScreenW)
 								}
 
-								unowned let weakSelf = self
-								showAlert(title: "选择选取头像方式") { (type) in
+								showAlert(title: "选择选取头像方式",button: button) { (type) in
 												if type == .album{
-																let p = TZImagePickerController(maxImagesCount: 1, columnNumber: 4, delegate: self)
+																let p = TZImagePickerController(maxImagesCount: 1, columnNumber: 4, delegate: JQ_ImagePickerTool.getSharedInstance())
 																p!.modalPresentationStyle = .fullScreen
 																p!.allowTakeVideo = false
 																p!.allowTakePicture = false
@@ -133,14 +138,14 @@ public class JQ_ImagePickerTool: NSObject{
 																p!.allowPickingVideo = false
 																p!.maxImagesCount = 1
 																p!.allowCrop = needClip
-																p!.cropRect = weakSelf.clipFrame
+																p!.cropRect = JQ_ImagePickerTool.getSharedInstance().clipFrame
 																JQ_currentViewController().present(p!, animated: true, completion: nil)
 												}
 
 												if type == .camera{
 																DispatchQueue.main.async {
 																				let p = UIImagePickerController()
-																				p.delegate = self
+																				p.delegate = JQ_ImagePickerTool.getSharedInstance()
 																				p.modalPresentationStyle = .fullScreen
 																				p.allowsEditing = needClip
 																				p.sourceType = .camera
@@ -165,14 +170,14 @@ public class JQ_ImagePickerTool: NSObject{
 								showAlert(title: "选择选取图片方式") { (type) in
 												if type == .album{
 																let p = TZImagePickerController(maxImagesCount: 1, columnNumber: 5, delegate: self)
-																p!.modalPresentationStyle = .fullScreen
-																p!.allowTakeVideo = false
-																p!.allowTakePicture = false
-																p!.sortAscendingByModificationDate = true
-																p!.scaleAspectFillCrop = true
-																p!.allowPickingVideo = false
-																p!.maxImagesCount = 1
-																p!.allowCrop = weakSelf.needClip
+                p!.modalPresentationStyle = .fullScreen
+                p!.allowTakeVideo = false
+                p!.allowTakePicture = false
+                p!.sortAscendingByModificationDate = true
+                p!.scaleAspectFillCrop = true
+                p!.allowPickingVideo = false
+                p!.maxImagesCount = 1
+                p!.allowCrop = true
 
 																if weakSelf.needClip {
 																				p!.cropRect = weakSelf.clipFrame
@@ -187,8 +192,6 @@ public class JQ_ImagePickerTool: NSObject{
 																								self.cameraPicker.allowsEditing = false
 																								JQ_currentViewController().present(self.cameraPicker, animated: true, completion: nil)
 																				}
-																}else{
-																				JQ_ShowError(errorStr: "当前环境相机不可用")
 																}
 												}
 								}
@@ -225,7 +228,7 @@ public class JQ_ImagePickerTool: NSObject{
 																								JQ_currentViewController().present(self.cameraPicker, animated: true, completion: nil)
 																				}
 																}else{
-																				JQ_ShowError(errorStr: "当前环境相机不可用")
+//																				JQ_ShowError(errorStr: "当前环境相机不可用")
 																}
 												}
 								}
@@ -258,6 +261,19 @@ extension JQ_ImagePickerTool:TZImagePickerControllerDelegate{
 
 extension JQ_ImagePickerTool:UIImagePickerControllerDelegate{
 
+    public func imagePickerController(_ picker: TZImagePickerController!, didFinishPickingVideo coverImage: UIImage!, sourceAssets asset: PHAsset!) {
+
+
+
+
+    }
+
+    public func imagePickerController(_ picker: TZImagePickerController!, didFinishPickingGifImage animatedImage: UIImage!, sourceAssets asset: PHAsset!) {
+
+        
+
+    }
+
 				//取消
 				public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
 								unowned let weakSelf = self
@@ -270,20 +286,17 @@ extension JQ_ImagePickerTool:UIImagePickerControllerDelegate{
 
 				}
 
-				public func imagePickerController(_ picker: TZImagePickerController!, didSelect asset: PHAsset!, photo: UIImage!, isSelectOriginalPhoto: Bool) {
+//				public func imagePickerController(_ picker: TZImagePickerController!, didSelect asset: PHAsset!, photo: UIImage!, isSelectOriginalPhoto: Bool) {
+//
+//        clouse?(photo)
+//				}
 
-								if isSelectOriginalPhoto{
-
-								}else{
-
-								}
-				}
-
-				public func imagePickerController(_ picker: TZImagePickerController!, didFinishPickingPhotos photos: [UIImage]!, sourceAssets assets: [Any]!, isSelectOriginalPhoto: Bool, infos: [[AnyHashable : Any]]!) {
-
-
-
-				}
+//				public func imagePickerController(_ picker: TZImagePickerController!, didFinishPickingPhotos photos: [UIImage]!, sourceAssets assets: [Any]!, isSelectOriginalPhoto: Bool, infos: [[AnyHashable : Any]]!) {
+//
+//
+//        clouse?(photos.first!)
+//
+//				}
 
 				//成功选取
 				public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -298,7 +311,12 @@ extension JQ_ImagePickerTool:UIImagePickerControllerDelegate{
 												if image == nil{
 																image = (info[UIImagePickerController.InfoKey.originalImage] as! UIImage)
 												}
-												clouse!(image!)
+
+												if chooseMethodType == .profile || chooseMethodType == .single{
+																clouse?(image!)
+												}else{
+																mutiClouse?([image!], [image!])
+												}
 								}
 
 

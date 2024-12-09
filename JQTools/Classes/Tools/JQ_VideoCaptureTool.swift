@@ -56,7 +56,7 @@ public class JQ_VideoCaptureTool: NSObject{
                 //启动session会话
                 self.captureSession.startRunning()
             }else{
-                JQ_ShowError(errorStr: "相机不可用")
+//                JQ_ShowError(errorStr: "相机不可用")
             }
         }
     }
@@ -103,7 +103,7 @@ public class JQ_VideoCaptureTool: NSObject{
                 } else{
                     message = "保存失败：\(error!.localizedDescription)"
                 }
-                JQ_ShowText(textStr: message)
+//                JQ_ShowText(textStr: message)
             })
         }
     }

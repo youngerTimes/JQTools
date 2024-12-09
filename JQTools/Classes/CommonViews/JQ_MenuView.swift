@@ -8,6 +8,7 @@
 import UIKit
 
 #if canImport(SnapKit)
+import SnapKit
 
 /// 下拉列表框
 public class JQ_MenuView: UIView {

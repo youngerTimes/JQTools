@@ -14,6 +14,7 @@ import CoreGraphics
 import Accelerate
 import Photos
 import CommonCrypto
+import ImageIO
 
 /// 水印位置枚举
 public enum WaterMarkCorner{
@@ -2069,6 +2070,40 @@ public extension UIImage{
 								default:
 																return .unknown
 								}
+				}
+
+				static func splitPNGAnimation(base64String: String)->[UIImage]? {
+								// 将Base64字符串解码为Data
+								guard let imageData = Data(base64Encoded: base64String) else {
+												print("无效的Base64字符串")
+												return nil
+								}
+
+								// 从Data创建CGImageSource
+								guard let imageSource = CGImageSourceCreateWithData(imageData as CFData, nil) else {
+												print("无法从数据创建图像源")
+												return nil
+								}
+
+								let count = CGImageSourceGetCount(imageSource)
+								var imgsAsUIImages = [UIImage]()
+
+								for index in 0..<count {
+//												// 获取每一帧的延迟时间
+//												let properties = CGImageSourceCopyPropertiesAtIndex(imageSource, index, nil) as? [String: Any]
+//												if let delayTime = properties?[kCGImagePropertyGIFDictionary as String]?[kCGImagePropertyGIFUnclampedDelayTime as String] as? Double {
+//																let delaySeconds = delayTime / 100.0 // Convert from 1/100th of a second to seconds
+//																print("Frame \(index): Delay \(delaySeconds)s")
+//												}
+
+												// 从图像源中获取CGImage对象（如果需要）
+												if let cgImage = CGImageSourceCreateImageAtIndex(imageSource, index, nil) {
+																// 在这里可以对cgImage做进一步处理，例如转换为UIImage或保存为文件
+																let img = UIImage(cgImage: cgImage)
+																imgsAsUIImages.append(img)
+												}
+								}
+								return imgsAsUIImages
 				}
 
 }
