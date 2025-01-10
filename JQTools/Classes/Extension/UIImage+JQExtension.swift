@@ -2105,5 +2105,59 @@ public extension UIImage{
 								}
 								return imgsAsUIImages
 				}
+}
 
+public extension UIImage{
+    func rotateImage(degrees: CGFloat) -> UIImage? {
+        // 计算旋转角度对应的弧度
+        let radians = degrees * CGFloat.pi / 180
+
+        // 创建一个图形上下文
+        UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
+        if let context = UIGraphicsGetCurrentContext() {
+            // 移动到图像中心
+            context.translateBy(x: self.size.width / 2, y: self.size.height / 2)
+            // 旋转图像
+            context.rotate(by: radians)
+            // 画出图像
+            context.draw(self.cgImage!, in: CGRect(origin: CGPoint(x: -self.size.width / 2, y: -self.size.height / 2), size: self.size))
+
+            // 从图形上下文获取新的图像
+            let newImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return newImage
+        }
+        return nil
+    }
+}
+
+public extension CGImage {
+    func rotated(byDegrees degrees: CGFloat) -> CGImage? {
+        let radians = degrees * .pi / 180
+        let transform = CGAffineTransform(rotationAngle: radians)
+
+        var rect = CGRect(origin: .zero, size: CGSize(width: self.width, height: self.height))
+        rect = rect.applying(transform)
+
+        let colorSpace = self.colorSpace ?? CGColorSpaceCreateDeviceRGB()
+        let bitmapInfo = self.bitmapInfo
+
+        guard let context = CGContext(data: nil,
+                                      width: Int(rect.width),
+                                      height: Int(rect.height),
+                                      bitsPerComponent: self.bitsPerComponent,
+                                      bytesPerRow: 0,
+                                      space: colorSpace,
+                                      bitmapInfo: bitmapInfo.rawValue) else {
+            return nil
+        }
+
+        context.translateBy(x: rect.width / 2, y: rect.height / 2)
+        context.rotate(by: radians)
+        context.translateBy(x: -CGFloat(self.width) / 2, y: -CGFloat(self.height) / 2)
+
+        context.draw(self, in: CGRect(x: 0, y: 0, width: CGFloat(self.width), height: CGFloat(self.height)))
+
+        return context.makeImage()
+    }
 }
